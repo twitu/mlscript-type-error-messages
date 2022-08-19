@@ -40,7 +40,7 @@ a: B
 //│ ╟── but it flows into reference with expected type `B`
 //│ ║  l.33: 	a: B
 //│ ║        	^
-//│ ╟── Note: constraint arises from type reference:
+//│ ╟── Note: constraint arises from type reference!:
 //│ ║  l.33: 	a: B
 //│ ╙──      	   ^
 //│ res: B
@@ -57,7 +57,7 @@ a: C
 //│ ╟── but it flows into reference with expected type `C`
 //│ ║  l.50: 	a: C
 //│ ║        	^
-//│ ╟── Note: constraint arises from type reference:
+//│ ╟── Note: constraint arises from type reference!:
 //│ ║  l.50: 	a: C
 //│ ╙──      	   ^
 //│ res: C

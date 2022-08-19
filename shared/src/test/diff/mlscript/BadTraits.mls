@@ -15,7 +15,7 @@ T {}
 //│ ╟── record literal of type `anything` is not an instance of type `A`
 //│ ║  l.11: 	T {}
 //│ ║        	  ^^
-//│ ╟── Note: constraint arises from type reference:
+//│ ╟── Note: constraint arises from type reference!:
 //│ ║  l.7: 	trait T: A & B
 //│ ║       	         ^
 //│ ╟── from intersection type:
@@ -39,7 +39,7 @@ T a
 //│ ╟── but it flows into reference with expected type `B`
 //│ ║  l.32: 	T a
 //│ ║        	  ^
-//│ ╟── Note: constraint arises from type reference:
+//│ ╟── Note: constraint arises from type reference!:
 //│ ║  l.7: 	trait T: A & B
 //│ ║       	             ^
 //│ ╟── from intersection type:
@@ -63,7 +63,7 @@ T A
 //│ ╟── reference of type `anything -> A` is not an instance of type `A`
 //│ ║  l.56: 	T A
 //│ ║        	  ^
-//│ ╟── Note: constraint arises from type reference:
+//│ ╟── Note: constraint arises from type reference!:
 //│ ║  l.7: 	trait T: A & B
 //│ ║       	         ^
 //│ ╟── from intersection type:
@@ -83,7 +83,7 @@ T (B {})
 //│ ╟── application of type `B` is not an instance of type `A`
 //│ ║  l.79: 	T (B {})
 //│ ║        	   ^^^^
-//│ ╟── Note: constraint arises from type reference:
+//│ ╟── Note: constraint arises from type reference!:
 //│ ║  l.7: 	trait T: A & B
 //│ ║       	         ^
 //│ ╟── from intersection type:

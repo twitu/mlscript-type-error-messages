@@ -40,7 +40,7 @@ def c = Child(Parent1{name="A"})
 //│ ╟── application of type `Parent1 & {name: ?name}` is not an instance of type `Parent2`
 //│ ║  l.36: 	def c = Child(Parent1{name="A"})
 //│ ║        	              ^^^^^^^^^^^^^^^^^
-//│ ╟── Note: constraint arises from type reference:
+//│ ╟── Note: constraint arises from type reference!:
 //│ ║  l.18: 	def Child: (Parent1 & Parent2) -> Child
 //│ ║        	                      ^^^^^^^
 //│ ╟── from intersection type:
@@ -108,7 +108,7 @@ c: nothing
 //│ ╟── but it flows into reference with expected type `~Crazy[?a0]`
 //│ ║  l.101: 	c: nothing
 //│ ║         	^
-//│ ╟── Note: constraint arises from type reference:
+//│ ╟── Note: constraint arises from type reference!:
 //│ ║  l.101: 	c: nothing
 //│ ╙──       	   ^^^^^^^
 //│ res: nothing
@@ -226,7 +226,7 @@ E{} + 1
 //│ ║  l.211: 	E{}: int
 //│ ║         	^^^
 //│ ╟── application of type `E` is not an instance of type `int`
-//│ ╟── Note: constraint arises from type reference:
+//│ ╟── Note: constraint arises from type reference!:
 //│ ║  l.211: 	E{}: int
 //│ ║         	     ^^^
 //│ ╟── Note: class E is defined at:

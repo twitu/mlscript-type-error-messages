@@ -49,7 +49,7 @@ mib0.Map (fun _ -> "str")
 //│ ╟── string literal of type `"str"` is not an instance of type `int`
 //│ ║  l.45: 	mib0.Map (fun _ -> "str")
 //│ ║        	                   ^^^^^
-//│ ╟── Note: constraint arises from type reference:
+//│ ╟── Note: constraint arises from type reference!:
 //│ ║  l.8: 	class JustIntBox: { value: int }
 //│ ║       	                           ^^^
 //│ ╟── from application:

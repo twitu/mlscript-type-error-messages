@@ -1,0 +1,202 @@
+:NoJS
+:AllowTypeErrors
+
+:ex
+:d
+def succ: int -> int
+def succ x = x + 1
+//│ 1. Typing type Function(Tuple(List((None,Field(None,TypeName(int))))),TypeName(int))
+//│ | vars=Map() newDefsInfo=Map()
+//│ => (Int -> Int) | 
+//│ ⬤ Typed as: (Int -> Int)
+//│  where: 
+//│ succ: int -> int
+//│ 1. Typing term ((x,) => ((+ (x,)) (1,)))
+//│ | 1. Typing pattern (x,)
+//│ | | 1. Typing pattern x
+//│ | | 1. : α21'
+//│ | 1. : (α21',)
+//│ | 1. Typing term ((+ (x,)) (1,))
+//│ | | 1. Typing term (+ (x,))
+//│ | | | 1. Typing term +
+//│ | | | 1. : [(int<TypeName(number)> -> (int<TypeName(number)> -> int<TypeName(number)>))]Loc(36,37,test:+6)
+//│ | | | 1. Typing term (x,)
+//│ | | | | 1. Typing term x
+//│ | | | | 1. : [α21']Loc(34,35,test:+6)
+//│ | | | 1. : ([α21']Loc(34,35,test:+6),)
+//│ | | | CONSTRAIN [[(int<TypeName(number)> -> (int<TypeName(number)> -> int<TypeName(number)>))]Loc(36,37,test:+6)]Loc(36,37,test:+6) <! ([([α21']Loc(34,35,test:+6),)]Loc(34,35,test:+6) -> α22')
+//│ | | |   where 
+//│ | | | C [[(int<TypeName(number)> -> (int<TypeName(number)> -> int<TypeName(number)>))]Loc(36,37,test:+6)]Loc(36,37,test:+6) <! ([([α21']Loc(34,35,test:+6),)]Loc(34,35,test:+6) -> α22')    (0)
+//│ | | | | C [(int<TypeName(number)> -> (int<TypeName(number)> -> int<TypeName(number)>))]Loc(36,37,test:+6) <! ([([α21']Loc(34,35,test:+6),)]Loc(34,35,test:+6) -> α22')    (0)
+//│ | | | | | C (int<TypeName(number)> -> (int<TypeName(number)> -> int<TypeName(number)>)) <! ([([α21']Loc(34,35,test:+6),)]Loc(34,35,test:+6) -> α22')    (0)
+//│ | | | | | | C [([α21']Loc(34,35,test:+6),)]Loc(34,35,test:+6) <! (int<TypeName(number)>,)    (1)
+//│ | | | | | | | C ([α21']Loc(34,35,test:+6),) <! (int<TypeName(number)>,)    (1)
+//│ | | | | | | | | C [α21']Loc(34,35,test:+6) <! int<TypeName(number)>    (2)
+//│ | | | | | | | | | C α21' <! int<TypeName(number)>    (2)
+//│ | | | | | | C (int<TypeName(number)> -> int<TypeName(number)>) <! α22'    (3)
+//│ | | 1. : α22'
+//│ | | 1. Typing term (1,)
+//│ | | | 1. Typing term 1
+//│ | | | 1. : 1<TypeName(int),TypeName(number)>
+//│ | | 1. : (1<TypeName(int),TypeName(number)>,)
+//│ | | CONSTRAIN [α22']Loc(34,37,test:+6) <! ([(1<TypeName(int),TypeName(number)>,)]Loc(38,39,test:+6) -> α23')
+//│ | |   where 
+//│ 		α22' :> [(int<TypeName(number)> -> int<TypeName(number)>)]Loc(34,37,test:+6)
+//│ | | C [α22']Loc(34,37,test:+6) <! ([(1<TypeName(int),TypeName(number)>,)]Loc(38,39,test:+6) -> α23')    (0)
+//│ | | | C α22' <! ([(1<TypeName(int),TypeName(number)>,)]Loc(38,39,test:+6) -> α23')    (0)
+//│ | | | | C [(int<TypeName(number)> -> int<TypeName(number)>)]Loc(34,37,test:+6) <! ([(1<TypeName(int),TypeName(number)>,)]Loc(38,39,test:+6) -> α23')    (1)
+//│ | | | | | C (int<TypeName(number)> -> int<TypeName(number)>) <! ([(1<TypeName(int),TypeName(number)>,)]Loc(38,39,test:+6) -> α23')    (1)
+//│ | | | | | | C [(1<TypeName(int),TypeName(number)>,)]Loc(38,39,test:+6) <! (int<TypeName(number)>,)    (2)
+//│ | | | | | | | C (1<TypeName(int),TypeName(number)>,) <! (int<TypeName(number)>,)    (2)
+//│ | | | | | | | | C 1<TypeName(int),TypeName(number)> <! int<TypeName(number)>    (3)
+//│ | | | | | | C int<TypeName(number)> <! α23'    (4)
+//│ | 1. : α23'
+//│ 1. : (α21' -> α23')
+//│ ⬤ Typed as: (α21' -> α23')
+//│  where: 
+//│ 		α21' <: [[[int<TypeName(number)>]]Loc(34,35,test:+6)]
+//│ 		α23' :> [[int<TypeName(number)>]]Loc(34,39,test:+6)
+//│ ⬤ Typed as: (Int -> Int)
+//│  where: 
+//│ int -> int
+//│   <:  succ:
+//│ int -> int
+//│ CONSTRAIN (α26 -> α27) <! (Int -> Int)
+//│   where 
+//│ 		α26 <: [[[int<TypeName(number)>]]Loc(34,35,test:+6)]
+//│ 		α27 :> [[int<TypeName(number)>]]Loc(34,39,test:+6)
+//│ C (α26 -> α27) <! (Int -> Int)    (0)
+//│ | C (Int,) <! (α26,)    (1)
+//│ | | C Int <! α26    (2)
+//│ | | | C Int <! [[[int<TypeName(number)>]]Loc(34,35,test:+6)]    (3)
+//│ | | | | C Int <! [[int<TypeName(number)>]]Loc(34,35,test:+6)    (3)
+//│ | | | | | C Int <! [int<TypeName(number)>]    (3)
+//│ | | | | | | C Int <! int<TypeName(number)>    (3)
+//│ | | | | | | | C int<TypeName(number)> <! int<TypeName(number)>    (4)
+//│ | C α27 <! Int    (4)
+//│ | | C [[int<TypeName(number)>]]Loc(34,39,test:+6) <! Int    (5)
+//│ | | | C [int<TypeName(number)>] <! Int    (5)
+//│ | | | | C int<TypeName(number)> <! Int    (5)
+//│ | | | | | C int<TypeName(number)> <! int<TypeName(number)>    (6)
+
+
+:ex
+:d
+x1 = false
+x2 = x1
+x3 = x2
+//│ 1. Typing term false
+//│ 1. : [false<TypeName(bool)>]Loc(5,10,test:+85)
+//│ ⬤ Typed as: [false<TypeName(bool)>]Loc(5,10,test:+85)
+//│  where: 
+//│ x1: false
+//│ 1. Typing term x1
+//│ 1. : [[false<TypeName(bool)>]Loc(5,10,test:+85)]Loc(16,18,test:+85)
+//│ ⬤ Typed as: [[false<TypeName(bool)>]Loc(5,10,test:+85)]Loc(16,18,test:+85)
+//│  where: 
+//│ x2: false
+//│ 1. Typing term x2
+//│ 1. : [[[false<TypeName(bool)>]Loc(5,10,test:+85)]Loc(16,18,test:+85)]Loc(24,26,test:+85)
+//│ ⬤ Typed as: [[[false<TypeName(bool)>]Loc(5,10,test:+85)]Loc(16,18,test:+85)]Loc(24,26,test:+85)
+//│  where: 
+//│ x3: false
+
+:ex
+:d
+succ x3
+//│ 0. Typing term (succ (x3,))
+//│ | 0. Typing term succ
+//│ | 0. : [(Int -> Int)]Loc(0,4,test:+106)
+//│ | 0. Typing term (x3,)
+//│ | | 0. Typing term x3
+//│ | | 0. : [[[[false<TypeName(bool)>]Loc(5,10,test:+85)]Loc(16,18,test:+85)]Loc(24,26,test:+85)]Loc(5,7,test:+106)
+//│ | 0. : ([[[[false<TypeName(bool)>]Loc(5,10,test:+85)]Loc(16,18,test:+85)]Loc(24,26,test:+85)]Loc(5,7,test:+106),)
+//│ | CONSTRAIN [[(Int -> Int)]Loc(0,4,test:+106)]Loc(0,4,test:+106) <! ([([[[[false<TypeName(bool)>]Loc(5,10,test:+85)]Loc(16,18,test:+85)]Loc(24,26,test:+85)]Loc(5,7,test:+106),)]Loc(5,7,test:+106) -> α28)
+//│ |   where 
+//│ | C [[(Int -> Int)]Loc(0,4,test:+106)]Loc(0,4,test:+106) <! ([([[[[false<TypeName(bool)>]Loc(5,10,test:+85)]Loc(16,18,test:+85)]Loc(24,26,test:+85)]Loc(5,7,test:+106),)]Loc(5,7,test:+106) -> α28)    (0)
+//│ | | C [(Int -> Int)]Loc(0,4,test:+106) <! ([([[[[false<TypeName(bool)>]Loc(5,10,test:+85)]Loc(16,18,test:+85)]Loc(24,26,test:+85)]Loc(5,7,test:+106),)]Loc(5,7,test:+106) -> α28)    (0)
+//│ | | | C (Int -> Int) <! ([([[[[false<TypeName(bool)>]Loc(5,10,test:+85)]Loc(16,18,test:+85)]Loc(24,26,test:+85)]Loc(5,7,test:+106),)]Loc(5,7,test:+106) -> α28)    (0)
+//│ | | | | C [([[[[false<TypeName(bool)>]Loc(5,10,test:+85)]Loc(16,18,test:+85)]Loc(24,26,test:+85)]Loc(5,7,test:+106),)]Loc(5,7,test:+106) <! (Int,)    (1)
+//│ | | | | | C ([[[[false<TypeName(bool)>]Loc(5,10,test:+85)]Loc(16,18,test:+85)]Loc(24,26,test:+85)]Loc(5,7,test:+106),) <! (Int,)    (1)
+//│ | | | | | | C [[[[false<TypeName(bool)>]Loc(5,10,test:+85)]Loc(16,18,test:+85)]Loc(24,26,test:+85)]Loc(5,7,test:+106) <! Int    (2)
+//│ | | | | | | | C [[[false<TypeName(bool)>]Loc(5,10,test:+85)]Loc(16,18,test:+85)]Loc(24,26,test:+85) <! Int    (2)
+//│ | | | | | | | | C [[false<TypeName(bool)>]Loc(5,10,test:+85)]Loc(16,18,test:+85) <! Int    (2)
+//│ | | | | | | | | | C [false<TypeName(bool)>]Loc(5,10,test:+85) <! Int    (2)
+//│ | | | | | | | | | | C false<TypeName(bool)> <! Int    (2)
+//│ | | | | | | | | | | | C false<TypeName(bool)> <! int<TypeName(number)>    (3)
+//│ | | | | | | | | | | | | CONSTRAINT FAILURE: false<TypeName(bool)> <: int<TypeName(number)>
+//│ | | | | | | | | | | | | allVarPols: 
+//│ | | | | | | | | | | | | norm[+] false<TypeName(bool)>
+//│ | | | | | | | | | | | | | DNF: DNF(false<TypeName(bool)>{})
+//│ | | | | | | | | | | | | ~> false<TypeName(bool)>
+//│ | | | | | | | | | | | | allVarPols: 
+//│ | | | | | | | | | | | | norm[-] int<TypeName(number)>
+//│ | | | | | | | | | | | | | DNF: DNF(int<TypeName(number)>{})
+//│ | | | | | | | | | | | | ~> int<TypeName(number)>
+//│ | | | | | | | | | | | | allVarPols: 
+//│ | | | | | | | | | | | | norm[+] false<TypeName(bool)>
+//│ | | | | | | | | | | | | | DNF: DNF(false<TypeName(bool)>{})
+//│ | | | | | | | | | | | | ~> false<TypeName(bool)>
+//│ | | | | | | | | | | | | allVarPols: 
+//│ | | | | | | | | | | | | norm[+] [false<TypeName(bool)>]Loc(5,10,test:+85)
+//│ | | | | | | | | | | | | | DNF: DNF(false<TypeName(bool)>{})
+//│ | | | | | | | | | | | | ~> false<TypeName(bool)>
+//│ | | | | | | | | | | | | allVarPols: 
+//│ | | | | | | | | | | | | norm[+] [[false<TypeName(bool)>]Loc(5,10,test:+85)]Loc(16,18,test:+85)
+//│ | | | | | | | | | | | | | DNF: DNF(false<TypeName(bool)>{})
+//│ | | | | | | | | | | | | ~> false<TypeName(bool)>
+//│ | | | | | | | | | | | | allVarPols: 
+//│ | | | | | | | | | | | | norm[+] [[[false<TypeName(bool)>]Loc(5,10,test:+85)]Loc(16,18,test:+85)]Loc(24,26,test:+85)
+//│ | | | | | | | | | | | | | DNF: DNF(false<TypeName(bool)>{})
+//│ | | | | | | | | | | | | ~> false<TypeName(bool)>
+//│ | | | | | | | | | | | | allVarPols: 
+//│ | | | | | | | | | | | | norm[+] [[[[false<TypeName(bool)>]Loc(5,10,test:+85)]Loc(16,18,test:+85)]Loc(24,26,test:+85)]Loc(5,7,test:+106)
+//│ | | | | | | | | | | | | | DNF: DNF(false<TypeName(bool)>{})
+//│ | | | | | | | | | | | | ~> false<TypeName(bool)>
+//│ | | | | | | | | | | | | allVarPols: 
+//│ | | | | | | | | | | | | norm[-] Int
+//│ | | | | | | | | | | | | | DNF: DNF(int<TypeName(number)>{})
+//│ | | | | | | | | | | | | ~> int<TypeName(number)>
+//│ | | | | | | | | | | | | allVarPols: 
+//│ | | | | | | | | | | | | norm[-] int<TypeName(number)>
+//│ | | | | | | | | | | | | | DNF: DNF(int<TypeName(number)>{})
+//│ | | | | | | | | | | | | ~> int<TypeName(number)>
+//│ | | | | | | | | | | | | CONSTRAIN error<> <! α28
+//│ | | | | | | | | | | | |   where 
+//│ | | | | | | | | | | | | C error<> <! α28    (0)
+//│ ╔══[ERROR] Type mismatch in application:
+//│ ║  l.106: 	succ x3
+//│ ║         	^^^^^^^
+//│ ╟── reference of type `false` is not an instance of type `int`
+//│ ║  l.85: 	x1 = false
+//│ ║        	     ^^^^^
+//│ ╟── but it flows into reference with expected type `int`
+//│ ║  l.106: 	succ x3
+//│ ║         	     ^^
+//│ ╟── Note: constraint arises from type reference!:
+//│ ║  l.6: 	def succ: int -> int
+//│ ║       	          ^^^
+//│ ╟── ========= Additional explanations below =========
+//│ ╟── [info] LHS >> ‹type› : false
+//│ ╟── [info] LHS >> ‹reference:Loc(5,10,test:+85)› : false
+//│ ║  l.85: 	x1 = false
+//│ ║        	     ^^^^^
+//│ ╟── [info] LHS >> ‹reference:Loc(16,18,test:+85)› : false
+//│ ║  l.86: 	x2 = x1
+//│ ║        	     ^^
+//│ ╟── [info] LHS >> ‹reference:Loc(24,26,test:+85)› : false
+//│ ║  l.87: 	x3 = x2
+//│ ║        	     ^^
+//│ ╟── [info] LHS >> ‹reference:Loc(5,7,test:+106)› : false
+//│ ║  l.106: 	succ x3
+//│ ║         	     ^^
+//│ ╟── [info] RHS << ‹type reference!:Loc(10,13,test:+6)› : int
+//│ ║  l.6: 	def succ: int -> int
+//│ ║       	          ^^^
+//│ ╙── [info] RHS << [NO PROV] : int
+//│ | | | | C Int <! α28    (4)
+//│ 0. : α28
+//│ ⬤ Typed as: α28
+//│  where: 
+//│ 		α28 :> [[Int]Loc(17,20,test:+6)]Loc(0,7,test:+106) | [error<>]Loc(0,7,test:+106)
+//│ res: error | int

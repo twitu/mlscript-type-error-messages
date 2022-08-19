@@ -44,7 +44,7 @@ v0: int
 //│ ╟── but it flows into reference with expected type `int`
 //│ ║  l.37: 	v0: int
 //│ ║        	^^
-//│ ╟── Note: constraint arises from type reference:
+//│ ╟── Note: constraint arises from type reference!:
 //│ ║  l.37: 	v0: int
 //│ ╙──      	    ^^^
 //│ res: int

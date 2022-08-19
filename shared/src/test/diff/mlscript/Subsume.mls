@@ -79,7 +79,7 @@ def boom = 1
 //│ ╟── integer literal of type `1` does not match type `nothing`
 //│ ║  l.72: 	def boom = 1
 //│ ║        	           ^
-//│ ╟── Note: constraint arises from type reference:
+//│ ╟── Note: constraint arises from type reference!:
 //│ ║  l.67: 	def boom: nothing
 //│ ╙──      	          ^^^^^^^
 //│     = 1
@@ -170,7 +170,7 @@ def id (x: int) = x
 //│ ╟── type `'a` is not an instance of type `int`
 //│ ║  l.110: 	def id: 'a -> 'a
 //│ ║         	        ^^
-//│ ╟── Note: constraint arises from type reference:
+//│ ╟── Note: constraint arises from type reference!:
 //│ ║  l.163: 	def id (x: int) = x
 //│ ╙──       	           ^^^
 //│ ╔══[ERROR] Type mismatch in def definition:

@@ -199,7 +199,7 @@ abstract class TyperDatatypes extends TyperHelpers { self: Typer =>
   
   /** The sole purpose of ProvType is to store additional type provenance info. */
   case class ProvType(underlying: SimpleType)(val prov: TypeProvenance) extends ProxyType {
-    override def toString = s"[$underlying]"
+    override def toString = s"[$underlying]${prov.loco.mkString}"
     // override def toString = s"$underlying[${prov.desc.take(5)}]"
     // override def toString = s"$underlying[${prov.toString.take(5)}]"
     // override def toString = s"$underlying@${prov}"
@@ -218,6 +218,7 @@ abstract class TyperDatatypes extends TyperHelpers { self: Typer =>
   }
   
   type TR = TypeRef
+  // TODO: Type ref is reusing prov when it is being expanded
   case class TypeRef(defn: TypeName, targs: Ls[SimpleType])(val prov: TypeProvenance) extends SimpleType {
     def level: Int = targs.iterator.map(_.level).maxOption.getOrElse(0)
     def expand(implicit ctx: Ctx): SimpleType = expandWith(paramTags = true)
@@ -229,13 +230,13 @@ abstract class TyperDatatypes extends TyperHelpers { self: Typer =>
             val tvv = td.getVariancesOrDefault
             tparamField(defn, tp) -> FieldType(
               Some(if (tvv(tv).isCovariant) BotType else tv),
-              if (tvv(tv).isContravariant) TopType else tv)(prov)
+              if (tvv(tv).isContravariant) TopType else tv)(noProv)
           }.toList)(noProv)
         else TopType
       subst(td.kind match {
         case Als => td.bodyTy
-        case Cls => clsNameToNomTag(td)(prov, ctx) & td.bodyTy & tparamTags
-        case Trt => trtNameToNomTag(td)(prov, ctx) & td.bodyTy & tparamTags
+        case Cls => clsNameToNomTag(td)(noProv, ctx) & td.bodyTy & tparamTags
+        case Trt => trtNameToNomTag(td)(noProv, ctx) & td.bodyTy & tparamTags
       }, td.targs.lazyZip(targs).toMap) //.withProv(prov)
     }
     private var tag: Opt[Opt[ClassTag]] = N

@@ -76,7 +76,7 @@ aa: { a: int; a: string }
 //│ ╟── integer literal of type `1` is not an instance of type `string`
 //│ ║  l.49: 	aa = { a = 1; a = "oops" }
 //│ ║        	           ^
-//│ ╟── Note: constraint arises from type reference:
+//│ ╟── Note: constraint arises from type reference!:
 //│ ║  l.+1: 	aa: { a: int; a: string }
 //│ ╙──      	                 ^^^^^^
 //│ res: {a: int, a: string}
@@ -153,7 +153,7 @@ someRec: BadRec
 //│ ╟── Note: constraint arises from record type:
 //│ ║  l.121: 	type BadRec = { x: 'a; y: BadRec }
 //│ ║         	              ^^^^^^^^^^^^^^^^^^^^
-//│ ╟── from type reference:
+//│ ╟── from type reference!:
 //│ ║  l.+1: 	someRec: BadRec
 //│ ╙──      	         ^^^^^^
 //│ res: BadRec

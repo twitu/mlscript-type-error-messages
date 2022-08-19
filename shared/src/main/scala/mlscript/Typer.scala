@@ -284,7 +284,7 @@ class Typer(var dbg: Boolean, var verbose: Bool, var explainErrors: Bool)
         }
       case tn @ TypeName(name) =>
         val tyLoc = ty.toLoc
-        val tpr = tyTp(tyLoc, "type reference")
+        val tpr = tyTp(tyLoc, "type reference!")
         vars.get(name).getOrElse {
           typeNamed(tyLoc, name) match {
             case R((_, tpnum)) =>

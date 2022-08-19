@@ -289,7 +289,7 @@ sum t2
 //│ ╟── reference of type `true` is not an instance of type `int`
 //│ ║  l.282: 	t2 = (1,1,2,true)
 //│ ║         	            ^^^^
-//│ ╟── Note: constraint arises from type reference:
+//│ ╟── Note: constraint arises from type reference!:
 //│ ║  l.270: 	def sum: Array[int] -> int
 //│ ╙──       	               ^^^
 //│ res: error | int
@@ -342,7 +342,7 @@ a1._2
 //│ ╟── reference of type `true` is not an instance of type `int`
 //│ ║  l.332: 	a1 = (1,2,true,'hello')
 //│ ║         	          ^^^^
-//│ ╟── Note: constraint arises from type reference:
+//│ ╟── Note: constraint arises from type reference!:
 //│ ║  l.331: 	def a1: Array[int]
 //│ ╙──       	              ^^^
 //│ ╔══[ERROR] Type mismatch in def definition:
@@ -351,7 +351,7 @@ a1._2
 //│ ╟── string literal of type `"hello"` is not an instance of type `int`
 //│ ║  l.332: 	a1 = (1,2,true,'hello')
 //│ ║         	               ^^^^^^^
-//│ ╟── Note: constraint arises from type reference:
+//│ ╟── Note: constraint arises from type reference!:
 //│ ║  l.331: 	def a1: Array[int]
 //│ ╙──       	              ^^^
 //│   = [ 1, 2, true, 'hello' ]
@@ -595,7 +595,7 @@ inn2 v1
 //│ ╟── but it flows into reference with expected type `t2 | ~t1`
 //│ ║  l.587: 	inn (T1 v3)
 //│ ║         	        ^^
-//│ ╟── Note: constraint arises from type reference:
+//│ ╟── Note: constraint arises from type reference!:
 //│ ║  l.547: 	def inn: (T1 & T2 & Array['a]) -> 'a
 //│ ║         	               ^^
 //│ ╟── from intersection type:

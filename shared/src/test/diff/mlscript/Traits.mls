@@ -64,7 +64,7 @@ dv: nothing
 //│ ╟── but it flows into reference with expected type `nothing`
 //│ ║  l.57: 	dv: nothing
 //│ ║        	^^
-//│ ╟── Note: constraint arises from type reference:
+//│ ╟── Note: constraint arises from type reference!:
 //│ ║  l.57: 	dv: nothing
 //│ ╙──      	    ^^^^^^^
 //│ res: nothing
@@ -82,7 +82,7 @@ dv: A & B: nothing
 //│ ╟── type `A & B` does not match type `nothing`
 //│ ║  l.78: 	dv: A & B: nothing
 //│ ║        	    ^^^^^
-//│ ╟── Note: constraint arises from type reference:
+//│ ╟── Note: constraint arises from type reference!:
 //│ ║  l.78: 	dv: A & B: nothing
 //│ ╙──      	           ^^^^^^^
 //│ res: nothing
@@ -128,7 +128,7 @@ def t = T1 (A { x = 1 })
 //│ ╟── but it flows into application with expected type `C | ~a`
 //│ ║  l.121: 	def t = T1 (A { x = 1 })
 //│ ║         	            ^^^^^^^^^^^
-//│ ╟── Note: constraint arises from type reference:
+//│ ╟── Note: constraint arises from type reference!:
 //│ ║  l.117: 	trait T1: C & A
 //│ ║         	          ^
 //│ ╟── from intersection type:

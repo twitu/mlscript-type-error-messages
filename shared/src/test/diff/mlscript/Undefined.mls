@@ -70,7 +70,7 @@ sample2: bool
 //│ ╟── but it flows into reference with expected type `bool`
 //│ ║  l.62: 	sample: bool
 //│ ║        	^^^^^^
-//│ ╟── Note: constraint arises from type reference:
+//│ ╟── Note: constraint arises from type reference!:
 //│ ║  l.62: 	sample: bool
 //│ ╙──      	        ^^^^
 //│ res: bool
@@ -84,7 +84,7 @@ sample2: bool
 //│ ╟── but it flows into reference with expected type `bool`
 //│ ║  l.63: 	sample2: bool
 //│ ║        	^^^^^^^
-//│ ╟── Note: constraint arises from type reference:
+//│ ╟── Note: constraint arises from type reference!:
 //│ ║  l.63: 	sample2: bool
 //│ ╙──      	         ^^^^
 //│ res: bool
@@ -199,7 +199,7 @@ bypass = undefined
 //│ ╟── undefined literal of type `undefined` does not match type `nothing`
 //│ ║  l.192: 	bypass = undefined
 //│ ║         	         ^^^^^^^^^
-//│ ╟── Note: constraint arises from type reference:
+//│ ╟── Note: constraint arises from type reference!:
 //│ ║  l.186: 	def bypass: nothing
 //│ ╙──       	            ^^^^^^^
 //│       = undefined
