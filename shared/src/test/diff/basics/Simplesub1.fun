@@ -79,15 +79,15 @@ x => succ (not x)
 //│ ╔══[ERROR] Type mismatch in application:
 //│ ║  l.+1: 	(x => not x.f) { f: 123 }
 //│ ║        	^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── integer literal of type `123` is not an instance of type `bool`
+//│ ╟── integer literal of type `123` does not match type `?f`
 //│ ║  l.+1: 	(x => not x.f) { f: 123 }
 //│ ║        	                    ^^^
-//│ ╟── Note: constraint arises from argument:
+//│ ╟── Note: constraint arises from field selection:
 //│ ║  l.+1: 	(x => not x.f) { f: 123 }
-//│ ║        	          ^^^
-//│ ╟── from field selection:
+//│ ║        	           ^^
+//│ ╟── from argument:
 //│ ║  l.+1: 	(x => not x.f) { f: 123 }
-//│ ╙──      	           ^^
+//│ ╙──      	          ^^^
 //│ res: bool | error
 
 :e
@@ -95,7 +95,7 @@ x => succ (not x)
 //│ ╔══[ERROR] Type mismatch in application:
 //│ ║  l.+1: 	(f => x => not (f x.u)) false
 //│ ║        	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── reference of type `false` is not a function
+//│ ╟── reference of type `false` does not match type `?a`
 //│ ║  l.+1: 	(f => x => not (f x.u)) false
 //│ ║        	                        ^^^^^
 //│ ╟── Note: constraint arises from reference:
@@ -273,7 +273,7 @@ let rec x = (let rec y = {u: y, v: (x y)}; 0); 0
 //│ ╔══[ERROR] Type mismatch in binding of block of statements:
 //│ ║  l.+1: 	let rec x = (let rec y = {u: y, v: (x y)}; 0); 0
 //│ ║        	            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── integer literal of type `0` is not a function
+//│ ╟── integer literal of type `0` does not match type `?x`
 //│ ║  l.+1: 	let rec x = (let rec y = {u: y, v: (x y)}; 0); 0
 //│ ║        	                                           ^
 //│ ╟── Note: constraint arises from reference:

@@ -24,7 +24,7 @@
 //│ ╔══[ERROR] Type mismatch in operator application:
 //│ ║  l.20: 	1 + 2 / 2 + 3
 //│ ║        	^^^^^^^^^
-//│ ╟── operator application of type `number` is not an instance of type `int`
+//│ ╟── operator application of type `number` is not a 1-element tuple
 //│ ║  l.20: 	1 + 2 / 2 + 3
 //│ ╙──      	    ^^^^^
 //│ res: int
@@ -43,7 +43,7 @@
 //│ ╔══[ERROR] Type mismatch in operator application:
 //│ ║  l.36: 	1 |> 2 || 3
 //│ ║        	^^^^^^^^^^^
-//│ ╟── integer literal of type `3` is not an instance of type `bool`
+//│ ╟── integer literal of type `3` is not a 1-element tuple
 //│ ║  l.36: 	1 |> 2 || 3
 //│ ╙──      	          ^
 //│ res: bool | error

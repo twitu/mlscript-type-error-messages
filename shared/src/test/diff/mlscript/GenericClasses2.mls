@@ -21,18 +21,18 @@ b: Foo1[string]
 //│ ╔══[ERROR] Type mismatch in type ascription:
 //│ ║  l.20: 	b: Foo1[string]
 //│ ║        	^
-//│ ╟── integer literal of type `1` is not an instance of type `string`
+//│ ╟── integer literal of type `1` is not an instance of `Foo1[string]`
 //│ ║  l.15: 	b = Bar1{x = 1}
 //│ ║        	             ^
-//│ ╟── but it flows into reference with expected type `string`
+//│ ╟── but it flows into reference with expected type `Foo1[string]`
 //│ ║  l.20: 	b: Foo1[string]
 //│ ║        	^
-//│ ╟── Note: constraint arises from type reference:
+//│ ╟── Note: constraint arises from applied type reference:
 //│ ║  l.20: 	b: Foo1[string]
-//│ ║        	        ^^^^^^
-//│ ╟── from applied type reference:
+//│ ║        	   ^^^^^^^^^^^^
+//│ ╟── from type reference:
 //│ ║  l.20: 	b: Foo1[string]
-//│ ╙──      	   ^^^^^^^^^^^^
+//│ ╙──      	        ^^^^^^
 //│ res: Foo1[string]
 //│    = Bar1 { x: 1 }
 
@@ -112,18 +112,18 @@ c = b: Foo2[string]
 //│ ╔══[ERROR] Type mismatch in type ascription:
 //│ ║  l.111: 	c = b: Foo2[string]
 //│ ║         	    ^
-//│ ╟── type `int` is not an instance of type `string`
+//│ ╟── type `int` is not an instance of `Foo2[string]`
 //│ ║  l.42: 	class Bar2: Foo2[int] & { x: int }
 //│ ║        	                 ^^^
-//│ ╟── but it flows into reference with expected type `string`
+//│ ╟── but it flows into reference with expected type `Foo2[string]`
 //│ ║  l.111: 	c = b: Foo2[string]
 //│ ║         	    ^
-//│ ╟── Note: constraint arises from type reference:
+//│ ╟── Note: constraint arises from applied type reference:
 //│ ║  l.111: 	c = b: Foo2[string]
-//│ ║         	            ^^^^^^
-//│ ╟── from applied type reference:
+//│ ║         	       ^^^^^^^^^^^^
+//│ ╟── from type reference:
 //│ ║  l.111: 	c = b: Foo2[string]
-//│ ╙──       	       ^^^^^^^^^^^^
+//│ ╙──       	            ^^^^^^
 //│ c: Foo2[string]
 //│  = Bar2 { x: 1 }
 
@@ -148,18 +148,18 @@ d: Foo2[string]
 //│ ╔══[ERROR] Type mismatch in type ascription:
 //│ ║  l.147: 	d: Foo2[string]
 //│ ║         	^
-//│ ╟── type `int` is not an instance of type `string`
+//│ ╟── type `int` is not an instance of `Foo2[string]`
 //│ ║  l.42: 	class Bar2: Foo2[int] & { x: int }
 //│ ║        	                 ^^^
-//│ ╟── but it flows into reference with expected type `string`
+//│ ╟── but it flows into reference with expected type `Foo2[string]`
 //│ ║  l.147: 	d: Foo2[string]
 //│ ║         	^
-//│ ╟── Note: constraint arises from type reference:
+//│ ╟── Note: constraint arises from applied type reference:
 //│ ║  l.147: 	d: Foo2[string]
-//│ ║         	        ^^^^^^
-//│ ╟── from applied type reference:
+//│ ║         	   ^^^^^^^^^^^^
+//│ ╟── from type reference:
 //│ ║  l.147: 	d: Foo2[string]
-//│ ╙──       	   ^^^^^^^^^^^^
+//│ ╙──       	        ^^^^^^
 //│ res: Foo2[string]
 //│    = Bar2 { x: 1 }
 

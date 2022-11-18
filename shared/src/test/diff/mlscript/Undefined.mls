@@ -14,7 +14,7 @@ Undefined2 { x = "I am here to make a type mismatch." }
 //│ ╔══[ERROR] Type mismatch in application:
 //│ ║  l.13: 	Undefined2 { x = "I am here to make a type mismatch." }
 //│ ║        	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── string literal of type `"I am here to make a type mismatch."` does not match type `undefined`
+//│ ╟── string literal of type `"I am here to make a type mismatch."` does not match type `?x`
 //│ ║  l.13: 	Undefined2 { x = "I am here to make a type mismatch." }
 //│ ║        	                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 //│ ╟── Note: constraint arises from literal type:
@@ -110,15 +110,15 @@ bar "undefined"
 //│ ╔══[ERROR] Type mismatch in application:
 //│ ║  l.109: 	bar "undefined"
 //│ ║         	^^^^^^^^^^^^^^^
-//│ ╟── string literal of type `"undefined"` does not match type `undefined`
+//│ ╟── string literal of type `"undefined"` is not a 1-element tuple
 //│ ║  l.109: 	bar "undefined"
 //│ ║         	    ^^^^^^^^^^^
-//│ ╟── Note: constraint arises from literal type:
-//│ ║  l.35: 	type MoreOnTypes0 = undefined
-//│ ║        	                    ^^^^^^^^^
-//│ ╟── from reference:
+//│ ╟── Note: constraint arises from reference:
 //│ ║  l.101: 	def bar = fun sample -> (sample: MoreOnTypes0)
-//│ ╙──       	                         ^^^^^^
+//│ ║         	                         ^^^^^^
+//│ ╟── from literal type:
+//│ ║  l.35: 	type MoreOnTypes0 = undefined
+//│ ╙──      	                    ^^^^^^^^^
 //│ res: error | MoreOnTypes0
 //│    = 'undefined'
 
@@ -196,7 +196,7 @@ bypass = undefined
 //│ ╔══[ERROR] Type mismatch in def definition:
 //│ ║  l.192: 	bypass = undefined
 //│ ║         	^^^^^^^^^^^^^^^^^^
-//│ ╟── undefined literal of type `undefined` does not match type `nothing`
+//│ ╟── undefined literal of type `undefined` is not an instance of `nothing`
 //│ ║  l.192: 	bypass = undefined
 //│ ║         	         ^^^^^^^^^
 //│ ╟── Note: constraint arises from type reference:

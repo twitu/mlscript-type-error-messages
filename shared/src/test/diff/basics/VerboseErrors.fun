@@ -16,15 +16,15 @@ h / mkArg false
 //│ ╔══[ERROR] Type mismatch in application:
 //│ ║  l.15: 	h / mkArg false
 //│ ║        	^^^^^^^^^^^^^^^
-//│ ╟── reference of type `false` is not an instance of type `int`
+//│ ╟── reference of type `false` does not match type `?prop`
 //│ ║  l.15: 	h / mkArg false
 //│ ║        	          ^^^^^
-//│ ╟── Note: constraint arises from argument:
-//│ ║  l.7: 	  succ / f y
-//│ ║       	         ^^^
-//│ ╟── from field selection:
+//│ ╟── Note: constraint arises from field selection:
 //│ ║  l.5: 	  x.prop
-//│ ╙──     	   ^^^^^
+//│ ║       	   ^^^^^
+//│ ╟── from argument:
+//│ ║  l.7: 	  succ / f y
+//│ ╙──     	         ^^^
 //│ res: error | int
 
 :v
@@ -33,15 +33,15 @@ h / mkArg false
 //│ ╔══[ERROR] Type mismatch in application:
 //│ ║  l.32: 	(x => succ x) false
 //│ ║        	^^^^^^^^^^^^^^^^^^^
-//│ ╟── reference of type `false` is not an instance of type `int`
+//│ ╟── reference of type `false` does not match type `?a`
 //│ ║  l.32: 	(x => succ x) false
 //│ ║        	              ^^^^^
-//│ ╟── Note: constraint arises from argument:
+//│ ╟── Note: constraint arises from variable:
 //│ ║  l.32: 	(x => succ x) false
-//│ ║        	           ^
-//│ ╟── from variable:
+//│ ║        	 ^
+//│ ╟── from argument:
 //│ ║  l.32: 	(x => succ x) false
-//│ ╙──      	 ^
+//│ ╙──      	           ^
 //│ res: error | int
 
 
@@ -65,14 +65,14 @@ test arg2
 //│ ╔══[ERROR] Type mismatch in application:
 //│ ║  l.64: 	test arg2
 //│ ║        	^^^^^^^^^
-//│ ╟── application of type `bool` is not an instance of type `int`
+//│ ╟── application of type `bool` does not match type `?prop`
 //│ ║  l.51: 	let arg = {prop: not true}
 //│ ║        	                 ^^^^^^^^
-//│ ╟── Note: constraint arises from argument:
-//│ ║  l.54: 	  succ / f y.fld
-//│ ║        	         ^^^^^^^
-//│ ╟── from field selection:
+//│ ╟── Note: constraint arises from field selection:
 //│ ║  l.50: 	  x.prop
-//│ ╙──      	   ^^^^^
+//│ ║        	   ^^^^^
+//│ ╟── from argument:
+//│ ║  l.54: 	  succ / f y.fld
+//│ ╙──      	         ^^^^^^^
 //│ res: 'a -> (int | 'a) | error
 

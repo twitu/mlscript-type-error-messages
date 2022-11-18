@@ -150,19 +150,19 @@ l1 = Cons { tail = Cons { tail = Cons { tail = Nil {} } } }
 //│ ╔══[ERROR] Type mismatch in application:
 //│ ║  l.149: 	l1 = Cons { tail = Cons { tail = Cons { tail = Nil {} } } }
 //│ ║         	                                 ^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── record literal of type `{tail: ?a}` does not have field 'head'
+//│ ╟── record literal of type `{tail: ?a}` is not a 1-element tuple
 //│ ║  l.149: 	l1 = Cons { tail = Cons { tail = Cons { tail = Nil {} } } }
 //│ ╙──       	                                      ^^^^^^^^^^^^^^^^^
 //│ ╔══[ERROR] Type mismatch in application:
 //│ ║  l.149: 	l1 = Cons { tail = Cons { tail = Cons { tail = Nil {} } } }
 //│ ║         	                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── record literal of type `{tail: ?a}` does not have field 'head'
+//│ ╟── record literal of type `{tail: ?a}` is not a 1-element tuple
 //│ ║  l.149: 	l1 = Cons { tail = Cons { tail = Cons { tail = Nil {} } } }
 //│ ╙──       	                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 //│ ╔══[ERROR] Type mismatch in application:
 //│ ║  l.149: 	l1 = Cons { tail = Cons { tail = Cons { tail = Nil {} } } }
 //│ ║         	     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── record literal of type `{tail: ?a}` does not have field 'head'
+//│ ╟── record literal of type `{tail: ?a}` is not a 1-element tuple
 //│ ║  l.149: 	l1 = Cons { tail = Cons { tail = Cons { tail = Nil {} } } }
 //│ ╙──       	          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 //│ l1: (Cons[nothing] with {tail: (Cons[nothing] with {tail: (Cons[nothing] with {tail: Nil[?]}) | error}) | error}) | error

@@ -14,11 +14,23 @@ if true then tuple1 else tuple2
 //│    = [ 1, 2, 3 ]
 
 arr = tuple1 : Array[int]
-//│ arr: Array[int]
-//│    = [ 1, 2, 3 ]
+//│ /!!!\ Uncaught error: java.lang.Exception: Cannot update counter for uninitialized location
+//│ 	at: mlscript.ConstraintSolver$ErrorSimplifier.$anonfun$updateCounter$1(ConstraintSolver.scala:864)
+//│ 	at: scala.collection.mutable.HashMap.updateWith(HashMap.scala:154)
+//│ 	at: mlscript.ConstraintSolver$ErrorSimplifier.updateCounter(ConstraintSolver.scala:857)
+//│ 	at: mlscript.ConstraintSolver$ErrorSimplifier.$anonfun$updateChainCount$3(ConstraintSolver.scala:914)
+//│ 	at: mlscript.ConstraintSolver$ErrorSimplifier.$anonfun$updateChainCount$3$adapted(ConstraintSolver.scala:914)
+//│ 	at: scala.Option.foreach(Option.scala:437)
+//│ 	at: mlscript.ConstraintSolver$ErrorSimplifier.$anonfun$updateChainCount$2(ConstraintSolver.scala:914)
+//│ 	at: mlscript.ConstraintSolver$ErrorSimplifier.$anonfun$updateChainCount$2$adapted(ConstraintSolver.scala:914)
+//│ 	at: scala.collection.immutable.List.foreach(List.scala:333)
+//│ 	at: mlscript.ConstraintSolver$ErrorSimplifier.updateChainCount(ConstraintSolver.scala:914)
 
 if true then tuple1 else arr
-//│ res: Array[int]
+//│ ╔══[ERROR] identifier not found: arr
+//│ ║  l.29: 	if true then tuple1 else arr
+//│ ╙──      	                         ^^^
+//│ res: (1, 2, 3,) | error
 //│    = [ 1, 2, 3 ]
 
 
@@ -54,15 +66,15 @@ ls : NonEmptyList[int]
 :e // TODO improve error message
 ls : Cons[int, Cons[int, List[int]]]
 //│ ╔══[ERROR] Type mismatch in type ascription:
-//│ ║  l.55: 	ls : Cons[int, Cons[int, List[int]]]
+//│ ║  l.67: 	ls : Cons[int, Cons[int, List[int]]]
 //│ ║        	^^
-//│ ╟── expression of type `()` is not a record (expected a record with fields: h, t)
-//│ ╟── Note: constraint arises from record type:
-//│ ║  l.26: 	type Cons[H, T] = { h: H; t: T }
-//│ ║        	                  ^^^^^^^^^^^^^^
-//│ ╟── from applied type reference:
-//│ ║  l.55: 	ls : Cons[int, Cons[int, List[int]]]
-//│ ╙──      	               ^^^^^^^^^^^^^^^^^^^^
+//│ ╟── expression of type `()` is not an instance of `Cons[int, List[int]]`
+//│ ╟── Note: constraint arises from applied type reference:
+//│ ║  l.67: 	ls : Cons[int, Cons[int, List[int]]]
+//│ ║        	               ^^^^^^^^^^^^^^^^^^^^
+//│ ╟── from record type:
+//│ ║  l.38: 	type Cons[H, T] = { h: H; t: T }
+//│ ╙──      	                  ^^^^^^^^^^^^^^
 //│ res: Cons[int, Cons[int, List[int]]]
 //│    = { h: 1, t: { h: 2, t: [] } }
 
@@ -73,11 +85,11 @@ ls : { h: int; t: List[int] }
 :e
 ls : { h: int; t: { h: int; t: List[int] } }
 //│ ╔══[ERROR] Type mismatch in type ascription:
-//│ ║  l.74: 	ls : { h: int; t: { h: int; t: List[int] } }
+//│ ║  l.86: 	ls : { h: int; t: { h: int; t: List[int] } }
 //│ ║        	^^
 //│ ╟── expression of type `()` is not a record (expected a record with fields: h, t)
 //│ ╟── Note: constraint arises from record type:
-//│ ║  l.74: 	ls : { h: int; t: { h: int; t: List[int] } }
+//│ ║  l.86: 	ls : { h: int; t: { h: int; t: List[int] } }
 //│ ╙──      	                  ^^^^^^^^^^^^^^^^^^^^^^^^
 //│ res: {h: int, t: {h: int, t: List[int]}}
 //│    = { h: 1, t: { h: 2, t: [] } }

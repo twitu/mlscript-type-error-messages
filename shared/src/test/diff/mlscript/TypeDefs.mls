@@ -15,7 +15,7 @@ Test1 { x = "oops" }
 //│ ╔══[ERROR] Type mismatch in application:
 //│ ║  l.14: 	Test1 { x = "oops" }
 //│ ║        	^^^^^^^^^^^^^^^^^^^^
-//│ ╟── string literal of type `"oops"` is not an instance of `int`
+//│ ╟── string literal of type `"oops"` does not match type `?x`
 //│ ║  l.14: 	Test1 { x = "oops" }
 //│ ║        	            ^^^^^^
 //│ ╟── Note: constraint arises from type reference:
@@ -165,15 +165,15 @@ id: Runaway2
 //│ ╔══[ERROR] Type mismatch in type ascription:
 //│ ║  l.164: 	id: Runaway2
 //│ ║         	^^
-//│ ╟── type `{x: ?a -> ?a}` is not a function
+//│ ╟── type `{x: ?a -> ?a}` is not an instance of `Runaway2`
 //│ ║  l.133: 	type Lol = { x: 'a -> 'a }
 //│ ║         	           ^^^^^^^^^^^^^^^
-//│ ╟── Note: constraint arises from function type:
+//│ ╟── Note: constraint arises from type reference:
 //│ ║  l.160: 	type Runaway2 = Lol -> Runaway2
-//│ ║         	                ^^^^^^^^^^^^^^^
-//│ ╟── from type reference:
+//│ ║         	                       ^^^^^^^^
+//│ ╟── from function type:
 //│ ║  l.160: 	type Runaway2 = Lol -> Runaway2
-//│ ╙──       	                       ^^^^^^^^
+//│ ╙──       	                ^^^^^^^^^^^^^^^
 //│ res: Runaway2
 //│    = [Function: id]
 

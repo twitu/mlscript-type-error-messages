@@ -31,10 +31,10 @@ foo / foo / x => succ / succ / x
 //│ ╔══[ERROR] Type mismatch in application:
 //│ ║  l.30: 	foo / foo / x => succ / succ / x
 //│ ║        	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── application of type `int` is not a function
+//│ ╟── application of type `int` does not match type `?a`
 //│ ║  l.30: 	foo / foo / x => succ / succ / x
 //│ ║        	                 ^^^^^^^^^^^^^^^
-//│ ╟── but it flows into argument with expected type `1 -> ?a`
+//│ ╟── but it flows into application with expected type `?b`
 //│ ║  l.30: 	foo / foo / x => succ / succ / x
 //│ ║        	      ^^^^^^^^^^^^^^^^^^^^^^^^^^
 //│ ╟── Note: constraint arises from reference:
@@ -47,7 +47,7 @@ foo / foo
 //│ ╔══[ERROR] Type mismatch in application:
 //│ ║  l.46: 	foo / foo
 //│ ║        	^^^^^^^^^
-//│ ╟── argument of type `1` is not a function
+//│ ╟── integer literal of type `1` does not match type `?a`
 //│ ║  l.7: 	let foo = f => f 1
 //│ ║       	                 ^
 //│ ╟── Note: constraint arises from reference:

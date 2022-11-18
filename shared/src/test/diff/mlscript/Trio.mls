@@ -64,31 +64,31 @@ foo arg
 //│ ╔══[ERROR] Type mismatch in application:
 //│ ║  l.63: 	foo arg
 //│ ║        	^^^^^^^
-//│ ╟── type `A` does not have field 'payload'
+//│ ╟── type `A` is not a 1-element tuple
 //│ ║  l.31: 	def arg: A | B | C
 //│ ║        	         ^
-//│ ╟── but it flows into reference with expected type `{payload: ?payload}`
+//│ ╟── but it flows into reference with expected type `(?a,)`
 //│ ║  l.63: 	foo arg
 //│ ║        	    ^^^
-//│ ╟── Note: constraint arises from receiver:
-//│ ║  l.54: 	  | A -> add x.fA x.payload
-//│ ║        	                  ^
-//│ ╟── from reference:
+//│ ╟── Note: constraint arises from reference:
 //│ ║  l.53: 	def foo x = case x of {
-//│ ╙──      	                 ^
+//│ ║        	                 ^
+//│ ╟── from receiver:
+//│ ║  l.54: 	  | A -> add x.fA x.payload
+//│ ╙──      	                  ^
 //│ res: error | int | string | {l: bool, r: nothing}
 //│    = <no result>
 //│      arg is not implemented
 //│ constrain calls  : 45
 //│ annoying  calls  : 40
-//│ subtyping calls  : 123
+//│ subtyping calls  : 239
 
 :stats
 foo (arg with { payload = 1 })
 //│ res: int | string | {l: bool, r: 1}
 //│    = <no result>
 //│      arg is not implemented
-//│ constrain calls  : 42
+//│ constrain calls  : 43
 //│ annoying  calls  : 38
 //│ subtyping calls  : 128
 

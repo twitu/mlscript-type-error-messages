@@ -182,7 +182,7 @@ not (Cons 42 Nil).head
 //│ ╔══[ERROR] Type mismatch in application:
 //│ ║  l.181: 	not (Cons 42 Nil).head
 //│ ║         	^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── argument of type `42` is not an instance of type `bool`
+//│ ╟── integer literal of type `42` is not an instance of type `bool`
 //│ ║  l.181: 	not (Cons 42 Nil).head
 //│ ║         	          ^^
 //│ ╟── but it flows into application with expected type `bool`
@@ -212,15 +212,15 @@ Cons 1 2
 //│ ╔══[ERROR] Type mismatch in application:
 //│ ║  l.211: 	Cons 1 2
 //│ ║         	^^^^^^^^
-//│ ╟── argument of type `2` does not match type `Cons[?a] | Nil[?]`
+//│ ╟── integer literal of type `2` is not a 1-element tuple
 //│ ║  l.211: 	Cons 1 2
 //│ ║         	       ^
-//│ ╟── Note: constraint arises from union type:
-//│ ║  l.113: 	data type List a of
-//│ ║         	               ^
-//│ ╟── from tuple type:
+//│ ╟── Note: constraint arises from tuple type:
 //│ ║  l.115: 	  Cons (head: a) (tail: List a)
-//│ ╙──       	                        ^^^^^^
+//│ ║         	                        ^^^^^^
+//│ ╟── from union type:
+//│ ║  l.113: 	data type List a of
+//│ ╙──       	               ^
 //│ res: Cons[1] | error
 
 // TODO Allow method/field defintions in the same file (lose the let?):

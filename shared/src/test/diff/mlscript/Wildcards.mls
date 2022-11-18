@@ -38,18 +38,18 @@ E{} : E[?]
 //│ ╔══[ERROR] Type mismatch in type ascription:
 //│ ║  l.37: 	E{} : E[?]
 //│ ║        	^^^
-//│ ╟── type `anything` does not match type `nothing`
+//│ ╟── type `anything` is not an instance of `E[?]`
 //│ ║  l.37: 	E{} : E[?]
 //│ ║        	        ^
-//│ ╟── but it flows into application with expected type `nothing`
+//│ ╟── but it flows into application with expected type `E[?]`
 //│ ║  l.37: 	E{} : E[?]
 //│ ║        	^^^
-//│ ╟── Note: constraint arises from type wildcard:
+//│ ╟── Note: constraint arises from applied type reference:
 //│ ║  l.37: 	E{} : E[?]
-//│ ║        	        ^
-//│ ╟── from applied type reference:
+//│ ║        	      ^^^^
+//│ ╟── from type wildcard:
 //│ ║  l.37: 	E{} : E[?]
-//│ ╙──      	      ^^^^
+//│ ╙──      	        ^
 //│ res: E[?]
 //│    = E {}
 
@@ -127,10 +127,10 @@ q + 1
 //│ ╔══[ERROR] Type mismatch in operator application:
 //│ ║  l.126: 	q + 1
 //│ ║         	^^^
-//│ ╟── type `anything` is not an instance of type `int`
+//│ ╟── type `anything` is not a 1-element tuple
 //│ ║  l.115: 	def q: ?
 //│ ║         	       ^
-//│ ╟── but it flows into reference with expected type `int`
+//│ ╟── but it flows into reference with expected type `(int,)`
 //│ ║  l.126: 	q + 1
 //│ ╙──       	^
 //│ res: error | int

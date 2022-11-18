@@ -12,15 +12,15 @@ test1 1
 //│ ╔══[ERROR] Type mismatch in application:
 //│ ║  l.11: 	test1 1
 //│ ║        	^^^^^^^
-//│ ╟── argument of type `1 & #MyTrait | 1 & ~?a` does not have field 'value'
+//│ ╟── integer literal of type `1 & #MyTrait | 1 & ~?a` is not a 1-element tuple
 //│ ║  l.11: 	test1 1
 //│ ║        	      ^
-//│ ╟── Note: constraint arises from receiver:
+//│ ╟── Note: constraint arises from reference:
 //│ ║  l.6: 	def test1 x = case x of { MyTrait -> x.value | _ -> 0 }
-//│ ║       	                                     ^
-//│ ╟── from reference:
+//│ ║       	                   ^
+//│ ╟── from receiver:
 //│ ║  l.6: 	def test1 x = case x of { MyTrait -> x.value | _ -> 0 }
-//│ ╙──     	                   ^
+//│ ╙──     	                                     ^
 //│ res: 0 | error
 //│    = 0
 
@@ -53,15 +53,15 @@ test2 1
 //│ ╔══[ERROR] Type mismatch in application:
 //│ ║  l.52: 	test2 1
 //│ ║        	^^^^^^^
-//│ ╟── argument of type `1 & ~#MyTrait` does not have field 'default'
+//│ ╟── integer literal of type `1 & ~#MyTrait` is not a 1-element tuple
 //│ ║  l.52: 	test2 1
 //│ ║        	      ^
-//│ ╟── Note: constraint arises from receiver:
+//│ ╟── Note: constraint arises from reference:
 //│ ║  l.47: 	def test2 x = case x of { MyTrait -> x.value | _ -> x.default }
-//│ ║        	                                                    ^
-//│ ╟── from reference:
+//│ ║        	                   ^
+//│ ╟── from receiver:
 //│ ║  l.47: 	def test2 x = case x of { MyTrait -> x.value | _ -> x.default }
-//│ ╙──      	                   ^
+//│ ╙──      	                                                    ^
 //│ res: error
 //│    = undefined
 
@@ -70,15 +70,15 @@ test2 { value = 1 }
 //│ ╔══[ERROR] Type mismatch in application:
 //│ ║  l.69: 	test2 { value = 1 }
 //│ ║        	^^^^^^^^^^^^^^^^^^^
-//│ ╟── argument of type `{value: 1} & ~#MyTrait` does not have field 'default'
+//│ ╟── record literal of type `{value: 1} & ~#MyTrait` is not a 1-element tuple
 //│ ║  l.69: 	test2 { value = 1 }
 //│ ║        	      ^^^^^^^^^^^^^
-//│ ╟── Note: constraint arises from receiver:
+//│ ╟── Note: constraint arises from reference:
 //│ ║  l.47: 	def test2 x = case x of { MyTrait -> x.value | _ -> x.default }
-//│ ║        	                                                    ^
-//│ ╟── from reference:
+//│ ║        	                   ^
+//│ ╟── from receiver:
 //│ ║  l.47: 	def test2 x = case x of { MyTrait -> x.value | _ -> x.default }
-//│ ╙──      	                   ^
+//│ ╙──      	                                                    ^
 //│ res: 1 | error
 //│    = undefined
 
@@ -104,18 +104,18 @@ test2 (C2 { default = "oops" })
 //│ ╔══[ERROR] Type mismatch in application:
 //│ ║  l.103: 	test2 (C2 { default = "oops" })
 //│ ║         	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── application of type `C2 & {default: ?default}` does not have field 'value'
+//│ ╟── application of type `C2 & {default: ?default}` is not a 1-element tuple
 //│ ║  l.103: 	test2 (C2 { default = "oops" })
 //│ ║         	       ^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── but it flows into argument with expected type `{value: ?value}`
+//│ ╟── but it flows into argument with expected type `(?a,)`
 //│ ║  l.103: 	test2 (C2 { default = "oops" })
 //│ ║         	      ^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── Note: constraint arises from receiver:
+//│ ╟── Note: constraint arises from reference:
 //│ ║  l.47: 	def test2 x = case x of { MyTrait -> x.value | _ -> x.default }
-//│ ║        	                                     ^
-//│ ╟── from reference:
+//│ ║        	                   ^
+//│ ╟── from receiver:
 //│ ║  l.47: 	def test2 x = case x of { MyTrait -> x.value | _ -> x.default }
-//│ ╙──      	                   ^
+//│ ╙──      	                                     ^
 //│ res: "oops" | error
 //│    = 'oops'
 
@@ -129,18 +129,18 @@ test2 c2
 //│ ╔══[ERROR] Type mismatch in application:
 //│ ║  l.128: 	test2 c2
 //│ ║         	^^^^^^^^
-//│ ╟── application of type `C2 & {default: ?default}` does not have field 'value'
+//│ ╟── application of type `C2 & {default: ?default}` is not a 1-element tuple
 //│ ║  l.123: 	def c2 = C2 { value = 1; default = "oops" }
 //│ ║         	         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── but it flows into argument with expected type `{value: ?value}`
+//│ ╟── but it flows into reference with expected type `(?a,)`
 //│ ║  l.128: 	test2 c2
 //│ ║         	      ^^
-//│ ╟── Note: constraint arises from receiver:
+//│ ╟── Note: constraint arises from reference:
 //│ ║  l.47: 	def test2 x = case x of { MyTrait -> x.value | _ -> x.default }
-//│ ║        	                                     ^
-//│ ╟── from reference:
+//│ ║        	                   ^
+//│ ╟── from receiver:
 //│ ║  l.47: 	def test2 x = case x of { MyTrait -> x.value | _ -> x.default }
-//│ ╙──      	                   ^
+//│ ╙──      	                                     ^
 //│ res: "oops" | error
 //│    = 'oops'
 

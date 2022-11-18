@@ -91,18 +91,18 @@ addNTimes n 12
 //│ ╔══[ERROR] Type mismatch in application:
 //│ ║  l.+3: 	addNTimes n 12
 //│ ║        	^^^^^^^^^^^
-//│ ╟── integer literal of type `0` is not an instance of type `Num`
+//│ ╟── integer literal of type `0` is not a 1-element tuple
 //│ ║  l.+2: 	  if n < 0 then 0 else a.Add (addNTimes a (n - 1))
 //│ ║        	                ^
-//│ ╟── but it flows into reference with expected type `Num`
+//│ ╟── but it flows into reference with expected type `(?a,)`
 //│ ║  l.+3: 	addNTimes n 12
 //│ ║        	          ^
-//│ ╟── Note: constraint arises from type reference:
-//│ ║  l.7: 	class Num: Addable[Num] & { val: int }
-//│ ║       	                   ^^^
-//│ ╟── from reference:
+//│ ╟── Note: constraint arises from reference:
 //│ ║  l.+2: 	  if n < 0 then 0 else a.Add (addNTimes a (n - 1))
-//│ ╙──      	                       ^
+//│ ║        	                       ^
+//│ ╟── from type reference:
+//│ ║  l.7: 	class Num: Addable[Num] & { val: int }
+//│ ╙──     	                   ^^^
 //│ res: error
 
 rec def addNTimes a n =
@@ -119,20 +119,20 @@ addNTimes n 12
 //│ ╔══[ERROR] Type mismatch in application:
 //│ ║  l.+1: 	addNTimes n 12
 //│ ║        	^^^^^^^^^^^
-//│ ╟── function of type `?a -> ?b -> ?c` is not an instance of type `Num`
+//│ ╟── function of type `?a -> ?b -> ?c` is not a 1-element tuple
 //│ ║  l.108: 	rec def addNTimes a n =
 //│ ║         	                  ^^^^^
 //│ ║  l.109: 	  if n <= 0 then 0 else a.Add addNTimes a (n - 1)
 //│ ║         	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── but it flows into reference with expected type `Num`
+//│ ╟── but it flows into reference with expected type `(?d,)`
 //│ ║  l.+1: 	addNTimes n 12
 //│ ║        	          ^
-//│ ╟── Note: constraint arises from type reference:
-//│ ║  l.7: 	class Num: Addable[Num] & { val: int }
-//│ ║       	                   ^^^
-//│ ╟── from reference:
+//│ ╟── Note: constraint arises from reference:
 //│ ║  l.109: 	  if n <= 0 then 0 else a.Add addNTimes a (n - 1)
-//│ ╙──       	                        ^
+//│ ║         	                        ^
+//│ ╟── from type reference:
+//│ ║  l.7: 	class Num: Addable[Num] & { val: int }
+//│ ╙──     	                   ^^^
 //│ res: error
 
 addSame n n
@@ -151,18 +151,18 @@ addTwo s n
 //│ ╔══[ERROR] Type mismatch in application:
 //│ ║  l.+1: 	addTwo s n
 //│ ║        	^^^^^^^^^^
-//│ ╟── application of type `Num & {val: ?val}` is not an instance of type `Str`
+//│ ╟── application of type `Num & {val: ?val}` is not a 1-element tuple
 //│ ║  l.17: 	n = Num { val = 1 }
 //│ ║        	    ^^^^^^^^^^^^^^^
-//│ ╟── but it flows into reference with expected type `Str`
+//│ ╟── but it flows into reference with expected type `(?a,)`
 //│ ║  l.+1: 	addTwo s n
 //│ ║        	         ^
-//│ ╟── Note: constraint arises from type reference:
-//│ ║  l.12: 	class Str: Addable[Str] & { val: string }
-//│ ║        	                   ^^^
-//│ ╟── from reference:
+//│ ╟── Note: constraint arises from reference:
 //│ ║  l.30: 	def addTwo a0 a1 = a0.Add a1
-//│ ╙──      	                          ^^
+//│ ║        	                          ^^
+//│ ╟── from type reference:
+//│ ║  l.12: 	class Str: Addable[Str] & { val: string }
+//│ ╙──      	                   ^^^
 //│ res: error
 
 class Str_bad_0: Addable[Str_bad_0] & { val: string }
@@ -170,16 +170,16 @@ class Str_bad_0: Addable[Str_bad_0] & { val: string }
 //│ ╔══[ERROR] Type mismatch in operator application:
 //│ ║  l.+2: 	  method Add that = Str_bad_0 { val = this.val + that.val }
 //│ ║        	                                      ^^^^^^^^^^
-//│ ╟── type `string` is not an instance of type `int`
+//│ ╟── type `string` is not a 1-element tuple
 //│ ║  l.+1: 	class Str_bad_0: Addable[Str_bad_0] & { val: string }
 //│ ║        	                                             ^^^^^^
-//│ ╟── but it flows into reference with expected type `int`
+//│ ╟── but it flows into reference with expected type `(int,)`
 //│ ║  l.+2: 	  method Add that = Str_bad_0 { val = this.val + that.val }
 //│ ╙──      	                                      ^^^^
 //│ ╔══[ERROR] Type mismatch in application:
 //│ ║  l.+2: 	  method Add that = Str_bad_0 { val = this.val + that.val }
 //│ ║        	                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── operator application of type `int` is not an instance of `string`
+//│ ╟── operator application of type `int` does not match type `?val`
 //│ ║  l.+2: 	  method Add that = Str_bad_0 { val = this.val + that.val }
 //│ ║        	                                      ^^^^^^^^^^^^^^^^^^^
 //│ ╟── Note: constraint arises from type reference:
@@ -188,15 +188,15 @@ class Str_bad_0: Addable[Str_bad_0] & { val: string }
 //│ ╔══[ERROR] Type mismatch in method definition:
 //│ ║  l.+2: 	  method Add that = Str_bad_0 { val = this.val + that.val }
 //│ ║        	         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── type `string` is not an instance of type `int`
+//│ ╟── type `string` does not match type `?a`
 //│ ║  l.+1: 	class Str_bad_0: Addable[Str_bad_0] & { val: string }
 //│ ║        	                                             ^^^^^^
-//│ ╟── Note: constraint arises from field selection:
+//│ ╟── Note: constraint arises from reference:
 //│ ║  l.+2: 	  method Add that = Str_bad_0 { val = this.val + that.val }
-//│ ║        	                                                 ^^^^^^^^
-//│ ╟── from reference:
+//│ ║        	                                                 ^^^^
+//│ ╟── from argument:
 //│ ║  l.+2: 	  method Add that = Str_bad_0 { val = this.val + that.val }
-//│ ╙──      	                                                 ^^^^
+//│ ╙──      	                                                 ^^^^^^^^
 //│ Defined class Str_bad_0
 //│ Defined Str_bad_0.Add: Str_bad_0 -> {val: int} -> (error | (Str_bad_0 with {val: error | int}))
 

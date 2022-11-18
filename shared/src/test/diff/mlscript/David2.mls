@@ -61,18 +61,18 @@ addOne1 ((Integer { value = 1; addOne = id }) with { value = "oops!" })
 //│ ╔══[ERROR] Type mismatch in application:
 //│ ║  l.60: 	addOne1 ((Integer { value = 1; addOne = id }) with { value = "oops!" })
 //│ ║        	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── string literal of type `"oops!"` is not an instance of type `int`
+//│ ╟── string literal of type `"oops!"` does not match type `?a`
 //│ ║  l.60: 	addOne1 ((Integer { value = 1; addOne = id }) with { value = "oops!" })
 //│ ║        	                                                             ^^^^^^^
-//│ ╟── but it flows into application with expected type `int`
+//│ ╟── but it flows into application with expected type `?b`
 //│ ║  l.60: 	addOne1 ((Integer { value = 1; addOne = id }) with { value = "oops!" })
 //│ ║        	          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 //│ ╟── Note: constraint arises from type reference:
 //│ ║  l.2: 	class Integer: { value: int; addOne: Integer -> Integer }
-//│ ║       	                        ^^^
+//│ ║       	                                                ^^^^^^^
 //│ ╟── from type reference:
 //│ ║  l.2: 	class Integer: { value: int; addOne: Integer -> Integer }
-//│ ╙──     	                                                ^^^^^^^
+//│ ╙──     	                        ^^^
 //│ res: error | (Integer with {addOne: 'addOne, value: "oops!"}) | Integer
 //│   where
 //│     'addOne :> 'a -> 'a
@@ -149,18 +149,18 @@ rec def mkInteger_oops value = Integer { value; addOne = fun n -> mkInteger_oops
 //│ ╔══[ERROR] Type mismatch in def definition:
 //│ ║  l.141: 	rec def mkInteger_oops value = Integer { value; addOne = fun n -> mkInteger_oops (n.value + 1) }
 //│ ║         	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── operator application of type `int` is not an instance of type `'a`
+//│ ╟── operator application of type `int` does not match type `Integer\addOne with {value: 'a}`
 //│ ║  l.141: 	rec def mkInteger_oops value = Integer { value; addOne = fun n -> mkInteger_oops (n.value + 1) }
 //│ ║         	                                                                                  ^^^^^^^^^^^
-//│ ╟── but it flows into reference with expected type `'a`
+//│ ╟── but it flows into argument with expected type `Integer\addOne with {value: 'a}`
 //│ ║  l.141: 	rec def mkInteger_oops value = Integer { value; addOne = fun n -> mkInteger_oops (n.value + 1) }
-//│ ║         	                                         ^^^^^
-//│ ╟── Note: constraint arises from type variable:
+//│ ║         	                                                                                 ^^^^^^^^^^^^^
+//│ ╟── Note: constraint arises from intersection type:
 //│ ║  l.140: 	def mkInteger_oops: (int & 'a) -> (Integer & { value: 'a })
-//│ ║         	                                                      ^^
-//│ ╟── from intersection type:
+//│ ║         	                                  ^^^^^^^^^^^^^^^^^^^^^^^^^
+//│ ╟── from type variable:
 //│ ║  l.140: 	def mkInteger_oops: (int & 'a) -> (Integer & { value: 'a })
-//│ ╙──       	                                  ^^^^^^^^^^^^^^^^^^^^^^^^^
+//│ ╙──       	                                                      ^^
 //│               = [Function: mkInteger_oops]
 
 // * We may still want to retain the precise typing of the `value` part:
@@ -220,15 +220,15 @@ def mkIntegerPrecise3 = mkInteger
 //│ ╔══[ERROR] Type mismatch in def definition:
 //│ ║  l.212: 	def mkIntegerPrecise3 = mkInteger
 //│ ║         	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── operator application of type `int` is not an instance of type `'a`
+//│ ╟── operator application of type `int` does not match type `Integer\addOne with {value: 'a}`
 //│ ║  l.95: 	rec def mkInteger value = Integer { value; addOne = fun n -> mkInteger (n.value + 1) }
 //│ ║        	                                                                        ^^^^^^^^^^^
-//│ ╟── Note: constraint arises from type variable:
+//│ ╟── Note: constraint arises from intersection type:
 //│ ║  l.211: 	def mkIntegerPrecise3: (int & 'a) -> (Integer & { value: 'a })
-//│ ║         	                                                         ^^
-//│ ╟── from intersection type:
+//│ ║         	                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+//│ ╟── from type variable:
 //│ ║  l.211: 	def mkIntegerPrecise3: (int & 'a) -> (Integer & { value: 'a })
-//│ ╙──       	                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+//│ ╙──       	                                                         ^^
 //│                  = [Function: mkIntegerPrecise3]
 
 
@@ -237,9 +237,12 @@ addOne1 (Str { value = ""; addOne = error })
 //│ ╔══[ERROR] Type mismatch in application:
 //│ ║  l.236: 	addOne1 (Str { value = ""; addOne = error })
 //│ ║         	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── application of type `Str & {addOne: ?addOne, value: ?value}` does not match type `Integer & ?a`
+//│ ╟── application of type `Str & {addOne: ?addOne, value: ?value}` is not a 1-element tuple
 //│ ║  l.236: 	addOne1 (Str { value = ""; addOne = error })
 //│ ║         	         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+//│ ╟── but it flows into argument with expected type `(?a,)`
+//│ ║  l.236: 	addOne1 (Str { value = ""; addOne = error })
+//│ ║         	        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 //│ ╟── Note: constraint arises from reference:
 //│ ║  l.11: 	addOne1 x = case x of {
 //│ ╙──      	                 ^
