@@ -2,7 +2,7 @@ package mlscript
 
 import scala.collection.mutable
 import scala.collection.mutable.{Map => MutMap, Set => MutSet}
-import scala.collection.immutable.{SortedMap, SortedSet}
+import scala.collection.immutable.{SortedMap, SortedSet, HashMap}
 import scala.util.chaining._
 import scala.annotation.tailrec
 import mlscript.utils._
@@ -548,27 +548,9 @@ class Typer(var dbg: Boolean, var verbose: Bool, var explainErrors: Bool)
             con(typeTerm(trueArm, "`then` branch"), ret_ty, ret_ty)
             con(typeTerm(falseArm, "`else` branch"), ret_ty, ret_ty)
           case _ =>
-            // find constructor for each arm
-            // handle tuple arms differently
-            val adtData = body.flatMap(_.topLevelCtors).map {
-              case v@Var("Tup1") => TypeName("Tup") -> Ls(0) -> v
-              case v@Var("Tup2") => TypeName("Tup") -> Ls(0, 1) -> v
-              case v@Var("Tup3") => TypeName("Tup") -> Ls(0, 1, 2) -> v
-              case v@Var(name) => ctx.tyDefs.getOrElse(name, lastWords(s"could not find type definition ${name}"))
-                .adtData.getOrElse(lastWords(s"could not find adt data for type definition ${name}")) -> v
-            }
-            // find and retrieve the common adt for all the constructors
-            val ((adtName, argsPos), caseAdt) = adtData match {
-              case Nil => lastWords("match case without any arms")
-              case adt :: Nil => adt
-              case head :: tail =>
-                val adtName = head._1._1
-                tail.foreach(v => if (v._1._1 =/= adtName) lastWords(s"incompatible adt data for ${head} and ${v}"))
-                head
-            }
-            println(s"ADT name: $adtName")
-
-            val (adt_ty, newTargs) = adtName match {
+            // get type of adt and it's type variables from it's name, type variable position mapping
+            // and case where it comes from
+            def getAdtTyAndArgs(adtName: TypeName, argsPos: Ls[Int], caseAdt: Var): ST -> Ls[TV] = adtName match {
               case TypeName("Tup") =>
                 val elem_ty = argsPos.map(pos => {
                   val typ = TypeProvenance(caseAdt.toLoc, s"${pos} element of this tuple")
@@ -585,22 +567,64 @@ class Typer(var dbg: Boolean, var verbose: Bool, var explainErrors: Bool)
                 val newTargs = adtDef.targs.map(tv => freshVar(tv.prov, tv.nameHint))
                 // provenance for the first case expression from where we find the adt
                 val caseAdtTyp = TypeProvenance(caseAdt.toLoc, "case `expression`")
-                // TODO weird duplication in OcamlPresentation errors
                 val adt_ty = TypeRef(adtName, newTargs)(caseAdtTyp).withProv(TypeProvenance(cond.toLoc, "match `condition`"))
                 println(s"ADT type: $adt_ty")
                 (adt_ty, newTargs)
             }
 
+            // find constructor for each arm
+            // handle tuple arms differently
+//            val adtData = body.flatMap(_.topLevelCtors).map {
+//              case v@Var("Tup1") => TypeName("Tup") -> Ls(0) -> v
+//              case v@Var("Tup2") => TypeName("Tup") -> Ls(0, 1) -> v
+//              case v@Var("Tup3") => TypeName("Tup") -> Ls(0, 1, 2) -> v
+//              case v@Var(name) => ctx.tyDefs.getOrElse(name, lastWords(s"could not find type definition ${name}"))
+//                .adtData.getOrElse(lastWords(s"could not find adt data for type definition ${name}")) -> v
+//            }
+//            // find and retrieve the common adt for all the constructors
+//            if (adtData.isEmpty) lastWords("match case without any arms")
+//            val ((adtName, argsPos), caseAdt) = adtData match {
+//              case Nil => lastWords("match case without any arms")
+//              case adt :: Nil => adt
+//              case head :: tail =>
+//                val adtName = head._1._1
+//                tail.foreach(v => if (v._1._1 =/= adtName) lastWords(s"incompatible adt data for ${head} and ${v}"))
+//                head
+//            }
+//            println(s"ADT name: $adtName")
+
+//            val (adt_ty, newTargs) = getAdtTyAndArgs(adtName, argsPos, caseAdt)
+
             println(s"typed condition term ${cond}")
             val cond_ty = typeTerm(cond)
-            val ret_ty = freshVar(prov.copy(desc = "match expression"))
-            con(cond_ty, adt_ty, adt_ty)
+            val ret_ty = freshVar(prov.copy(desc = "match `expression`"))
+//            con(cond_ty, adt_ty, adt_ty)
 
             // the assumed shape of an IfBody is a List[IfThen, IfThen, IfElse] with an optional IfElse at the end
             body.zipWithIndex.foreach {
-              case (IfThen(Tup(fs), rhs), _) =>
-                assert(fs.length === newTargs.length)
+              case (IfElse(expr), _) => con(typeTerm(expr), ret_ty, ret_ty)
+              case (IfThen(Var("_"), rhs), _) =>
+                con(typeTerm(rhs), ret_ty, ret_ty)
+              case (IfThen(v@Var(name), rhs), _) =>
+                // update context with variables
+                ctx.tyDefs.get(name).map{ case tdef if tdef.adtData.isDefined => (tdef.nme, tdef.adtData.getOrElse(die)) }.fold
+                // case x -> expr catch all with a new variable in the context
+                {
+                  val newCtx = ctx.nest
+                  newCtx += name -> VarSymbol(cond_ty, v)
+                  con(typeTerm(rhs), ret_ty, ret_ty)
+                }
+                // case false -> expr where case is a variant of an adt with no type arguments
+                { case (_, (adtName, Nil)) =>
+                  val (adt_ty, _) = getAdtTyAndArgs(adtName, Nil, v)
+                  con(cond_ty, adt_ty, adt_ty)
+                  val newCtx = ctx.nest
+                  newCtx += name -> VarSymbol(cond_ty, v)
+                  con(typeTerm(rhs), ret_ty, ret_ty)
+                }
+              case (IfThen(tup@Tup(fs), rhs), _) =>
                 println(s"fields $fs")
+                val (adt_ty, newTargs) = getAdtTyAndArgs(TypeName("Tup"), fs.zipWithIndex.map(_._2), Var("tuple").withLoc(tup.toLoc))
                 val nestCtx = ctx.nest
                 // add any vars to nested context pattern
                 fs.zipWithIndex.foreach {
@@ -616,20 +640,16 @@ class Typer(var dbg: Boolean, var verbose: Bool, var explainErrors: Bool)
                     val argTy = typeTerm(argTerm)
                     con(fieldType, argTy, fieldType)
                 }
+
+                con(cond_ty, adt_ty, adt_ty)
                 // constraint match arm type with the return type of match expression
                 nestCtx |> { implicit ctx =>
                   con(typeTerm(rhs), ret_ty, ret_ty)
                 }
-              // case x -> expr catch all with a new variable in the context
-              case (IfThen(v@Var(name), rhs), _) =>
-                // update context with variables
-                val newCtx = ctx.nest
-                newCtx += name -> VarSymbol(cond_ty, v)
-                con(typeTerm(rhs), ret_ty, ret_ty)
               // case Left x -> expr or Left 2 -> expr the type variable for the adt is constrained
               // with the argument to the constructor Left in this case
               // case (IfThen(App(Var(ctorNme), Tup(fields)), rhs), index) =>
-              case (IfThen(App(Var(ctorNme), fs), rhs), index) =>
+              case (IfThen(App(caseAdt@Var(ctorNme), fs), rhs), index) =>
                 val fields = fs match {
                   case t: Tup => t.fields
                   case Bra(false, t: Tup) => t.fields
@@ -642,24 +662,30 @@ class Typer(var dbg: Boolean, var verbose: Bool, var explainErrors: Bool)
                   case _ => die
                 }
                 println(s"ctor type: ${ctorType}")
-                val (originalFieldTypes, ctorTargs) = ctorType.unwrapProxies match {
-                  case FunctionType(fieldTy, TypeRef(defn, targs)) =>
-                    assert(defn === adtName)
-                    (fieldTy match {
-                      case TupleType(fs) => fs.map(_._2.ub)
-                      case ty => ty :: Nil
-                    }) -> targs.map {
-                      case tv: TV => tv
-                      case _ => die
-                    }
-                  case _ => die
-                }
+//                val (originalFieldTypes, ctorTargs) = ctorType.unwrapProxies match {
+//                  case FunctionType(fieldTy, TypeRef(defn, targs)) =>
+//                    assert(defn === adtName)
+//                    (fieldTy match {
+//                      case TupleType(fs) => fs.map(_._2.ub)
+//                      case ty => ty :: Nil
+//                    }) -> targs.map {
+//                      case tv: TV => tv
+//                      case _ => die
+//                    }
+//                  case _ => die
+//                }
 
-                assert(ctorTargs.sizeCompare(newTargs) === 0)
-                val mapping = ctorTargs.zip(newTargs).toMap[ST, ST]
-                val fieldTypes = originalFieldTypes.map { ft => subst(ft, mapping) }
-                println(s"fieldTypes: $fieldTypes")
-                val adtArgIndex = adtData(index)._2
+                // override global adt_ty and args with custom
+                val (_, (adtName, argsPos)) = ctx.tyDefs.get(ctorNme).collect {
+                  case tdef if tdef.adtData.isDefined => (tdef.nme, tdef.adtData.getOrElse(die))
+                }.getOrElse(lastWords(s"${ctorNme} does not have adt data"))
+                val (adt_ty, newTargs) = getAdtTyAndArgs(adtName, argsPos, caseAdt)
+                con(cond_ty, adt_ty, cond_ty)
+
+//                assert(ctorTargs.sizeCompare(newTargs) === 0)
+//                val mapping = ctorTargs.zip(newTargs).toMap[ST, ST]
+//                val fieldTypes = originalFieldTypes.map { ft => subst(ft, mapping) }
+//                println(s"fieldTypes: $fieldTypes")
                 val nestCtx = ctx.nest
 
                 // type each match arm field and constraint with adt type variable
@@ -668,13 +694,13 @@ class Typer(var dbg: Boolean, var verbose: Bool, var explainErrors: Bool)
                   // in case of Left x also add x to nested scope
                   // case ((argTerm: Var, adtArgIndex), fieldIdx) =>
                   case (argTerm: Var, fieldIdx) =>
-                    println(s"Typing field $argTerm ($adtArgIndex)")
-                    val fieldType = fieldTypes(fieldIdx)
+                    println(s"Typing field $argTerm ($argsPos)")
+                    val fieldType = newTargs(fieldIdx)
                     println(s"Field $argTerm : $fieldType")
                     nestCtx += argTerm.name -> VarSymbol(fieldType, argTerm)
                   // in case of 0 :: tl the type of list must be constrained with 0
                   case (argTerm, fieldIdx) =>
-                    val fieldType = fieldTypes(fieldIdx)
+                    val fieldType = newTargs(fieldIdx)
                     val argTy = typeTerm(argTerm)
                     // TODO is the direction of constraint correct
                     con(fieldType, argTy, fieldType)
@@ -683,7 +709,6 @@ class Typer(var dbg: Boolean, var verbose: Bool, var explainErrors: Bool)
                 nestCtx |> { implicit ctx =>
                   con(typeTerm(rhs), ret_ty, ret_ty)
                 }
-              case (IfElse(expr), _) => con(typeTerm(expr), ret_ty, ret_ty)
               case ifbody => lastWords(s"Cannot handle case expression ${ifbody}")
             }
             ret_ty

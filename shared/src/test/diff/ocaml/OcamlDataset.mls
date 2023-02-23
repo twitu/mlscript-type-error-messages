@@ -19,26 +19,17 @@ let bigAdd l1 l2 =
     let args = failwith "to be implemented" in
     let (_,res) = List_fold_left f base args in res in
   removeZero (add (padZero l1 l2));;
-//│ cloneHelper: 'a -> int -> list['a] -> list['a]
-//│ clone: 'a -> int -> list['a]
-//│ padZero: list[?] -> list[?] -> (list[int], list[int],)
-//│ removeZero: list['a] -> list['a]
-//│ ╔══[ERROR] Type mismatch in if-else block:
-//│ ║  l.20: 	    let (_,res) = List_fold_left f base args in res in
-//│ ║        	    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── type `(?a, ?b) list` is not a 2-element tuple
-//│ ║  l.42: 	let List_combine: 'a list -> 'b list -> ('a * 'b) list
-//│ ║        	                                         ^^^^^^^^^^^^^
-//│ ╟── but it flows into reference with expected type `(?c, ?d)`
-//│ ║  l.20: 	    let (_,res) = List_fold_left f base args in res in
-//│ ║        	                                   ^^^^
-//│ ╟── Note: constraint arises from match `condition`:
-//│ ║  l.20: 	    let (_,res) = List_fold_left f base args in res in
-//│ ║        	                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── from case `expression`:
-//│ ║  l.20: 	    let (_,res) = List_fold_left f base args in res in
-//│ ╙──      	        ^^^^^^^
-//│ bigAdd: list[?] -> list[?] -> list[int]
+//│ /!!!\ Uncaught error: java.lang.IndexOutOfBoundsException: 1
+//│ 	at: scala.collection.LinearSeqOps.apply(LinearSeq.scala:131)
+//│ 	at: scala.collection.LinearSeqOps.apply$(LinearSeq.scala:128)
+//│ 	at: scala.collection.immutable.List.apply(List.scala:79)
+//│ 	at: mlscript.Typer.$anonfun$typeTerm$37(Typer.scala:698)
+//│ 	at: scala.collection.immutable.List.foreach(List.scala:333)
+//│ 	at: mlscript.Typer.$anonfun$typeTerm$22(Typer.scala:693)
+//│ 	at: scala.collection.immutable.List.foreach(List.scala:333)
+//│ 	at: mlscript.Typer.$anonfun$typeTerm$2(Typer.scala:604)
+//│ 	at: mlscript.TyperHelpers.trace(TyperHelpers.scala:31)
+//│ 	at: mlscript.Typer.typeTerm(Typer.scala:718)
 
 // file 67 mod
 type expr =
@@ -70,30 +61,33 @@ let rec eval (e,x,y) =
 //│ Defined class Average
 //│ Defined class Times
 //│ Defined class Thresh
-//│ VarX: expr
-//│ VarY: expr
-//│ Sine: expr -> expr
-//│ Cosine: expr -> expr
-//│ Average: (expr, expr,) -> expr
-//│ Times: (expr, expr,) -> expr
-//│ Thresh: (expr, expr, expr, expr,) -> expr
-//│ pi: float
-//│ ╔══[ERROR] Type mismatch in operator application:
-//│ ║  l.59: 	  | Average (e1,e2) -> ((eval (e, x, y)) +. (eval (e2, x, y))) /. 2
-//│ ║        	                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── integer literal of type `int` is not an instance of `float`
-//│ ║  l.59: 	  | Average (e1,e2) -> ((eval (e, x, y)) +. (eval (e2, x, y))) /. 2
-//│ ║        	                                                                  ^
-//│ ╟── Note: constraint arises from type reference:
-//│ ║  l.47: 	let ( /. ): float -> float -> float
-//│ ╙──      	                     ^^^^^
-//│ eval: (expr, float, float,) -> float
+//│ /!!!\ Uncaught error: java.lang.IndexOutOfBoundsException: 0
+//│ 	at: scala.collection.LinearSeqOps.apply(LinearSeq.scala:131)
+//│ 	at: scala.collection.LinearSeqOps.apply$(LinearSeq.scala:128)
+//│ 	at: scala.collection.immutable.List.apply(List.scala:79)
+//│ 	at: mlscript.Typer.$anonfun$typeTerm$37(Typer.scala:698)
+//│ 	at: scala.collection.immutable.List.foreach(List.scala:333)
+//│ 	at: mlscript.Typer.$anonfun$typeTerm$22(Typer.scala:693)
+//│ 	at: scala.collection.immutable.List.foreach(List.scala:333)
+//│ 	at: mlscript.Typer.$anonfun$typeTerm$2(Typer.scala:604)
+//│ 	at: mlscript.TyperHelpers.trace(TyperHelpers.scala:31)
+//│ 	at: mlscript.Typer.typeTerm(Typer.scala:718)
 
 // file 1087 mod
 let sqsum xs =
   let f a x = match x with | [] -> 0 | h::t -> 1 in
   let base = List_hd xs in List_fold_left f base xs;;
-//│ sqsum: list[list[?] | 'a] -> (int | 'a)
+//│ /!!!\ Uncaught error: java.lang.IndexOutOfBoundsException: 1
+//│ 	at: scala.collection.LinearSeqOps.apply(LinearSeq.scala:131)
+//│ 	at: scala.collection.LinearSeqOps.apply$(LinearSeq.scala:128)
+//│ 	at: scala.collection.immutable.List.apply(List.scala:79)
+//│ 	at: mlscript.Typer.$anonfun$typeTerm$37(Typer.scala:698)
+//│ 	at: scala.collection.immutable.List.foreach(List.scala:333)
+//│ 	at: mlscript.Typer.$anonfun$typeTerm$22(Typer.scala:693)
+//│ 	at: scala.collection.immutable.List.foreach(List.scala:333)
+//│ 	at: mlscript.Typer.$anonfun$typeTerm$2(Typer.scala:604)
+//│ 	at: mlscript.TyperHelpers.trace(TyperHelpers.scala:31)
+//│ 	at: mlscript.Typer.typeTerm(Typer.scala:718)
 
 
 // file 26 mod
@@ -104,32 +98,17 @@ let rec sepConcat sep sl =
       let f a x = a ^ (sep ^ x) in
       let base = h in let l = t in List_fold_left f base l;;
 let stringOfList f l = "[" ^ ((sepConcat "; " List_map (f, l)) ^ "]");;
-//│ sepConcat: string -> list[string] -> string
-//│ ╔══[ERROR] Type mismatch in application:
-//│ ║  l.106: 	let stringOfList f l = "[" ^ ((sepConcat "; " List_map (f, l)) ^ "]");;
-//│ ║         	                               ^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── type `(?b -> ?c) -> ?b list -> ?c list` is not an instance of `?a list`
-//│ ║  l.38: 	let List_map: ('a -> 'b) -> 'a list -> 'b list
-//│ ║        	               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── but it flows into reference with expected type `?a list`
-//│ ║  l.106: 	let stringOfList f l = "[" ^ ((sepConcat "; " List_map (f, l)) ^ "]");;
-//│ ║         	                                              ^^^^^^^^
-//│ ╟── Note: constraint arises from variable:
-//│ ║  l.100: 	let rec sepConcat sep sl =
-//│ ║         	                      ^^
-//│ ╟── from case `expression`:
-//│ ║  l.102: 	  | [] -> ""
-//│ ╙──       	    ^^
-//│ ╔══[ERROR] Type mismatch in application:
-//│ ║  l.106: 	let stringOfList f l = "[" ^ ((sepConcat "; " List_map (f, l)) ^ "]");;
-//│ ║         	                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── type `string` is not a function
-//│ ║  l.13: 	let (^): string -> string -> string
-//│ ║        	                             ^^^^^^
-//│ ╟── but it flows into application with expected type `(?a, ?b) -> ?c`
-//│ ║  l.106: 	let stringOfList f l = "[" ^ ((sepConcat "; " List_map (f, l)) ^ "]");;
-//│ ╙──       	                               ^^^^^^^^^^^^^^^^^^^^^^^
-//│ stringOfList: anything -> anything -> string
+//│ /!!!\ Uncaught error: java.lang.IndexOutOfBoundsException: 1
+//│ 	at: scala.collection.LinearSeqOps.apply(LinearSeq.scala:131)
+//│ 	at: scala.collection.LinearSeqOps.apply$(LinearSeq.scala:128)
+//│ 	at: scala.collection.immutable.List.apply(List.scala:79)
+//│ 	at: mlscript.Typer.$anonfun$typeTerm$37(Typer.scala:698)
+//│ 	at: scala.collection.immutable.List.foreach(List.scala:333)
+//│ 	at: mlscript.Typer.$anonfun$typeTerm$22(Typer.scala:693)
+//│ 	at: scala.collection.immutable.List.foreach(List.scala:333)
+//│ 	at: mlscript.Typer.$anonfun$typeTerm$2(Typer.scala:604)
+//│ 	at: mlscript.TyperHelpers.trace(TyperHelpers.scala:31)
+//│ 	at: mlscript.Typer.typeTerm(Typer.scala:718)
 
 // file 2376
 let getHead h = match h with | [] -> [] | h::t -> h;;
@@ -149,12 +128,17 @@ let palindrome w =
   match explode w with
   | [] -> true
   | h::t -> matchHeads (explode w) (listReverse (explode w));;
-//│ getHead: list['a] -> (list[nothing] | 'a)
-//│ getTail: list['a] -> list['a]
-//│ listReverse: list['a] -> list['a]
-//│ matchHeads: list[?] -> list[?] -> bool
-//│ explode: nothing -> list[undefined]
-//│ palindrome: nothing -> bool
+//│ /!!!\ Uncaught error: java.lang.IndexOutOfBoundsException: 1
+//│ 	at: scala.collection.LinearSeqOps.apply(LinearSeq.scala:131)
+//│ 	at: scala.collection.LinearSeqOps.apply$(LinearSeq.scala:128)
+//│ 	at: scala.collection.immutable.List.apply(List.scala:79)
+//│ 	at: mlscript.Typer.$anonfun$typeTerm$37(Typer.scala:698)
+//│ 	at: scala.collection.immutable.List.foreach(List.scala:333)
+//│ 	at: mlscript.Typer.$anonfun$typeTerm$22(Typer.scala:693)
+//│ 	at: scala.collection.immutable.List.foreach(List.scala:333)
+//│ 	at: mlscript.Typer.$anonfun$typeTerm$2(Typer.scala:604)
+//│ 	at: mlscript.TyperHelpers.trace(TyperHelpers.scala:31)
+//│ 	at: mlscript.Typer.typeTerm(Typer.scala:718)
 
 
 // file 1563
@@ -167,56 +151,17 @@ let rec digitsOfIntHelper n =
 let rec digitsOfInt n = digitsOfIntHelper n;;
 let rec sumList xs = sumListHelper 0 xs;;
 let rec additivePersistence n = sumList digitsOfInt n;;
-//│ sumListHelper: int -> list[int] -> int
-//│ ╔══[ERROR] Type mismatch in binding of lambda expression:
-//│ ║  l.163: 	let rec digitsOfIntHelper n =
-//│ ║         	                          ^^^
-//│ ║  l.164: 	  if n < 1
-//│ ║         	^^^^^^^^^^
-//│ ║  l.165: 	  then []
-//│ ║         	^^^^^^^^^
-//│ ║  l.166: 	  else if n >= 10 then (digitsOfIntHelper (n / 10)) @ [n mod 10] else [n];;
-//│ ║         	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── type `int` is not a function
-//│ ║  l.19: 	let ( / ): int -> int -> int
-//│ ║        	                         ^^^
-//│ ╟── but it flows into operator application with expected type `(int -> int -> int) -> ?a`
-//│ ║  l.166: 	  else if n >= 10 then (digitsOfIntHelper (n / 10)) @ [n mod 10] else [n];;
-//│ ║         	                                          ^^^^^^^^
-//│ ╟── Note: constraint arises from variable:
-//│ ║  l.163: 	let rec digitsOfIntHelper n =
-//│ ║         	                          ^
-//│ ╟── from reference:
-//│ ║  l.166: 	  else if n >= 10 then (digitsOfIntHelper (n / 10)) @ [n mod 10] else [n];;
-//│ ╙──       	                                                       ^
-//│ digitsOfIntHelper: nothing -> list[int]
-//│ digitsOfInt: nothing -> list[int]
-//│ sumList: list[int] -> int
-//│ ╔══[ERROR] Type mismatch in application:
-//│ ║  l.169: 	let rec additivePersistence n = sumList digitsOfInt n;;
-//│ ║         	                                ^^^^^^^^^^^^^^^^^^^
-//│ ╟── function of type `?b -> ?c` is not an instance of `?a list`
-//│ ║  l.167: 	let rec digitsOfInt n = digitsOfIntHelper n;;
-//│ ║         	                    ^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── but it flows into reference with expected type `?a list`
-//│ ║  l.169: 	let rec additivePersistence n = sumList digitsOfInt n;;
-//│ ║         	                                        ^^^^^^^^^^^
-//│ ╟── Note: constraint arises from variable:
-//│ ║  l.168: 	let rec sumList xs = sumListHelper 0 xs;;
-//│ ║         	                ^^
-//│ ╟── from case `expression`:
-//│ ║  l.162: 	  match xs with | [] -> total | hd::tail -> sumListHelper (total + hd) tail;;
-//│ ╙──       	                  ^^
-//│ ╔══[ERROR] Type mismatch in application:
-//│ ║  l.169: 	let rec additivePersistence n = sumList digitsOfInt n;;
-//│ ║         	                                ^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── integer literal of type `int` is not a function
-//│ ║  l.168: 	let rec sumList xs = sumListHelper 0 xs;;
-//│ ║         	                                   ^
-//│ ╟── but it flows into application with expected type `?a -> ?b`
-//│ ║  l.169: 	let rec additivePersistence n = sumList digitsOfInt n;;
-//│ ╙──       	                                ^^^^^^^^^^^^^^^^^^^
-//│ additivePersistence: anything -> nothing
+//│ /!!!\ Uncaught error: java.lang.IndexOutOfBoundsException: 1
+//│ 	at: scala.collection.LinearSeqOps.apply(LinearSeq.scala:131)
+//│ 	at: scala.collection.LinearSeqOps.apply$(LinearSeq.scala:128)
+//│ 	at: scala.collection.immutable.List.apply(List.scala:79)
+//│ 	at: mlscript.Typer.$anonfun$typeTerm$37(Typer.scala:698)
+//│ 	at: scala.collection.immutable.List.foreach(List.scala:333)
+//│ 	at: mlscript.Typer.$anonfun$typeTerm$22(Typer.scala:693)
+//│ 	at: scala.collection.immutable.List.foreach(List.scala:333)
+//│ 	at: mlscript.Typer.$anonfun$typeTerm$2(Typer.scala:604)
+//│ 	at: mlscript.TyperHelpers.trace(TyperHelpers.scala:31)
+//│ 	at: mlscript.Typer.typeTerm(Typer.scala:718)
 
 // file 8776
 // TODO list indexing here. skip this example?
@@ -230,167 +175,14 @@ let rec matchHeads x =
       if (getHeads (explode x)) = []
       then true
       else if [h] = (getHeads t) then matchHeads (loseTail t) else false;;
-//│ listReverse: list['a] -> list['a]
-//│ getHeads: list['a] -> list['a]
-//│ loseTail: list['a] -> list['a]
-//│ ╔══[ERROR] Type mismatch in binding of lambda expression:
-//│ ║  l.227: 	let rec matchHeads x =
-//│ ║         	                   ^^^
-//│ ║  l.228: 	  match explode x with
-//│ ║         	^^^^^^^^^^^^^^^^^^^^^^
-//│ ║  l.229: 	  | h::t ->
-//│ ║         	^^^^^^^^^^^
-//│ ║  l.230: 	      if (getHeads (explode x)) = []
-//│ ║         	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ║  l.231: 	      then true
-//│ ║         	^^^^^^^^^^^^^^^
-//│ ║  l.232: 	      else if [h] = (getHeads t) then matchHeads (loseTail t) else false;;
-//│ ║         	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── type `?a list` does not match type `?b Array`
-//│ ║  l.1: 	type 'a list = Cons of 'a * 'a list | Nil
-//│ ║       	     ^^^^^^^
-//│ ╟── but it flows into application with expected type `?b Array`
-//│ ║  l.232: 	      else if [h] = (getHeads t) then matchHeads (loseTail t) else false;;
-//│ ║         	                                                 ^^^^^^^^^^^^
-//│ ╟── Note: constraint arises from variable:
-//│ ║  l.227: 	let rec matchHeads x =
-//│ ║         	                   ^
-//│ ╟── from array access:
-//│ ║  l.146: 	    if i >= (String_length s) then [] else (s[i]) :: (go (i + 1)) in
-//│ ╙──       	                                           ^^^^^^
-//│ ╔══[ERROR] Type mismatch in binding of lambda expression:
-//│ ║  l.227: 	let rec matchHeads x =
-//│ ║         	                   ^^^
-//│ ║  l.228: 	  match explode x with
-//│ ║         	^^^^^^^^^^^^^^^^^^^^^^
-//│ ║  l.229: 	  | h::t ->
-//│ ║         	^^^^^^^^^^^
-//│ ║  l.230: 	      if (getHeads (explode x)) = []
-//│ ║         	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ║  l.231: 	      then true
-//│ ║         	^^^^^^^^^^^^^^^
-//│ ║  l.232: 	      else if [h] = (getHeads t) then matchHeads (loseTail t) else false;;
-//│ ║         	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── type `?a list` is not an instance of `string`
-//│ ║  l.1: 	type 'a list = Cons of 'a * 'a list | Nil
-//│ ║       	     ^^^^^^^
-//│ ╟── but it flows into application with expected type `string`
-//│ ║  l.232: 	      else if [h] = (getHeads t) then matchHeads (loseTail t) else false;;
-//│ ║         	                                                 ^^^^^^^^^^^^
-//│ ╟── Note: constraint arises from variable:
-//│ ║  l.227: 	let rec matchHeads x =
-//│ ║         	                   ^
-//│ ╟── from type reference:
-//│ ║  l.14: 	let String_length: string -> int
-//│ ╙──      	                   ^^^^^^
-//│ ╔══[ERROR] Type mismatch in binding of lambda expression:
-//│ ║  l.227: 	let rec matchHeads x =
-//│ ║         	                   ^^^
-//│ ║  l.228: 	  match explode x with
-//│ ║         	^^^^^^^^^^^^^^^^^^^^^^
-//│ ║  l.229: 	  | h::t ->
-//│ ║         	^^^^^^^^^^^
-//│ ║  l.230: 	      if (getHeads (explode x)) = []
-//│ ║         	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ║  l.231: 	      then true
-//│ ║         	^^^^^^^^^^^^^^^
-//│ ║  l.232: 	      else if [h] = (getHeads t) then matchHeads (loseTail t) else false;;
-//│ ║         	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── type `?a list` does not match type `?b Array`
-//│ ║  l.1: 	type 'a list = Cons of 'a * 'a list | Nil
-//│ ║       	     ^^^^^^^
-//│ ╟── but it flows into application with expected type `?b Array`
-//│ ║  l.232: 	      else if [h] = (getHeads t) then matchHeads (loseTail t) else false;;
-//│ ║         	                                                 ^^^^^^^^^^^^
-//│ ╟── Note: constraint arises from variable:
-//│ ║  l.227: 	let rec matchHeads x =
-//│ ║         	                   ^
-//│ ╟── from array access:
-//│ ║  l.146: 	    if i >= (String_length s) then [] else (s[i]) :: (go (i + 1)) in
-//│ ╙──       	                                           ^^^^^^
-//│ ╔══[ERROR] Type mismatch in binding of lambda expression:
-//│ ║  l.227: 	let rec matchHeads x =
-//│ ║         	                   ^^^
-//│ ║  l.228: 	  match explode x with
-//│ ║         	^^^^^^^^^^^^^^^^^^^^^^
-//│ ║  l.229: 	  | h::t ->
-//│ ║         	^^^^^^^^^^^
-//│ ║  l.230: 	      if (getHeads (explode x)) = []
-//│ ║         	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ║  l.231: 	      then true
-//│ ║         	^^^^^^^^^^^^^^^
-//│ ║  l.232: 	      else if [h] = (getHeads t) then matchHeads (loseTail t) else false;;
-//│ ║         	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── type `?a list` does not match type `?b Array`
-//│ ║  l.1: 	type 'a list = Cons of 'a * 'a list | Nil
-//│ ║       	                            ^^^^^^^
-//│ ╟── but it flows into application with expected type `?b Array`
-//│ ║  l.232: 	      else if [h] = (getHeads t) then matchHeads (loseTail t) else false;;
-//│ ║         	                                                 ^^^^^^^^^^^^
-//│ ╟── Note: constraint arises from variable:
-//│ ║  l.227: 	let rec matchHeads x =
-//│ ║         	                   ^
-//│ ╟── from array access:
-//│ ║  l.146: 	    if i >= (String_length s) then [] else (s[i]) :: (go (i + 1)) in
-//│ ╙──       	                                           ^^^^^^
-//│ ╔══[ERROR] Type mismatch in binding of lambda expression:
-//│ ║  l.227: 	let rec matchHeads x =
-//│ ║         	                   ^^^
-//│ ║  l.228: 	  match explode x with
-//│ ║         	^^^^^^^^^^^^^^^^^^^^^^
-//│ ║  l.229: 	  | h::t ->
-//│ ║         	^^^^^^^^^^^
-//│ ║  l.230: 	      if (getHeads (explode x)) = []
-//│ ║         	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ║  l.231: 	      then true
-//│ ║         	^^^^^^^^^^^^^^^
-//│ ║  l.232: 	      else if [h] = (getHeads t) then matchHeads (loseTail t) else false;;
-//│ ║         	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── type `?a list` is not an instance of `string`
-//│ ║  l.1: 	type 'a list = Cons of 'a * 'a list | Nil
-//│ ║       	                            ^^^^^^^
-//│ ╟── but it flows into application with expected type `string`
-//│ ║  l.232: 	      else if [h] = (getHeads t) then matchHeads (loseTail t) else false;;
-//│ ║         	                                                 ^^^^^^^^^^^^
-//│ ╟── Note: constraint arises from variable:
-//│ ║  l.227: 	let rec matchHeads x =
-//│ ║         	                   ^
-//│ ╟── from type reference:
-//│ ║  l.14: 	let String_length: string -> int
-//│ ╙──      	                   ^^^^^^
-//│ ╔══[ERROR] Type mismatch in binding of lambda expression:
-//│ ║  l.227: 	let rec matchHeads x =
-//│ ║         	                   ^^^
-//│ ║  l.228: 	  match explode x with
-//│ ║         	^^^^^^^^^^^^^^^^^^^^^^
-//│ ║  l.229: 	  | h::t ->
-//│ ║         	^^^^^^^^^^^
-//│ ║  l.230: 	      if (getHeads (explode x)) = []
-//│ ║         	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ║  l.231: 	      then true
-//│ ║         	^^^^^^^^^^^^^^^
-//│ ║  l.232: 	      else if [h] = (getHeads t) then matchHeads (loseTail t) else false;;
-//│ ║         	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── type `?a list` does not match type `?b Array`
-//│ ║  l.1: 	type 'a list = Cons of 'a * 'a list | Nil
-//│ ║       	                            ^^^^^^^
-//│ ╟── but it flows into application with expected type `?b Array`
-//│ ║  l.232: 	      else if [h] = (getHeads t) then matchHeads (loseTail t) else false;;
-//│ ║         	                                                 ^^^^^^^^^^^^
-//│ ╟── Note: constraint arises from variable:
-//│ ║  l.227: 	let rec matchHeads x =
-//│ ║         	                   ^
-//│ ╟── from array access:
-//│ ║  l.146: 	    if i >= (String_length s) then [] else (s[i]) :: (go (i + 1)) in
-//│ ╙──       	                                           ^^^^^^
-//│ matchHeads: nothing -> bool
+//│ /!!!\ Uncaught error: java.lang.IndexOutOfBoundsException: 1
 
 // TODO: parse correctly
 let explode s =
   let rec go i =
     if i >= (String.length s) then [] else (s.[i]) :: (go (i + 1)) in
   go 0;;
-//│ /!\ Parse error: Expected (Index ~ filter | Index ~ "("):3:47, found "[i]) :: (g" at l.391:47:     if i >= (String.length s) then [] else (s.[i]) :: (go (i + 1)) in
+//│ /!\ Parse error: Expected (Index ~ filter | Index ~ "("):3:47, found "[i]) :: (g" at l.183:47:     if i >= (String.length s) then [] else (s.[i]) :: (go (i + 1)) in
 
 // file 89
 // TODO: parse properly
@@ -406,7 +198,7 @@ let rec digitalRoot n =
   if (n / 10) <> 0
   then (print_int n; print_endline " "; digitalRoot)
   else digits;;
-//│ /!\ Parse error: Expected ")":4:29, found "; (digitsO" at l.400:29:   then ((n mod 10) :: return; (digitsOfInt (n / 10)) @ return)
+//│ /!\ Parse error: Expected ")":4:29, found "; (digitsO" at l.192:29:   then ((n mod 10) :: return; (digitsOfInt (n / 10)) @ return)
 
 // file 2361
 let rec digitsOfInt n =
@@ -417,42 +209,17 @@ let rec additivePersistence n =
   match digits n with
   | [] -> 0
   | h::t -> if (addNumbs (h :: t)) >= 10 then false else true;;
-//│ ╔══[ERROR] Type mismatch in binding of lambda expression:
-//│ ║  l.412: 	let rec digitsOfInt n =
-//│ ║         	                    ^^^
-//│ ║  l.413: 	  if n <= 0 then [] else (digitsOfInt (n / 10)) @ [n mod 10];;
-//│ ║         	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── type `int` is not a function
-//│ ║  l.19: 	let ( / ): int -> int -> int
-//│ ║        	                         ^^^
-//│ ╟── but it flows into operator application with expected type `(int -> int -> int) -> ?a`
-//│ ║  l.413: 	  if n <= 0 then [] else (digitsOfInt (n / 10)) @ [n mod 10];;
-//│ ║         	                                      ^^^^^^^^
-//│ ╟── Note: constraint arises from variable:
-//│ ║  l.412: 	let rec digitsOfInt n =
-//│ ║         	                    ^
-//│ ╟── from reference:
-//│ ║  l.413: 	  if n <= 0 then [] else (digitsOfInt (n / 10)) @ [n mod 10];;
-//│ ╙──       	                                                   ^
-//│ digitsOfInt: nothing -> list[nothing]
-//│ addNumbs: list[int] -> int
-//│ ╔══[ERROR] Type mismatch in application:
-//│ ║  l.415: 	let digits n = digitsOfInt (abs n);;
-//│ ║         	               ^^^^^^^^^^^^^^^^^^^
-//│ ╟── type `int` is not a function
-//│ ║  l.21: 	let abs: int -> int
-//│ ║        	                ^^^
-//│ ╟── but it flows into application with expected type `(int -> int -> int) -> ?a`
-//│ ║  l.415: 	let digits n = digitsOfInt (abs n);;
-//│ ║         	                           ^^^^^^^
-//│ ╟── Note: constraint arises from variable:
-//│ ║  l.412: 	let rec digitsOfInt n =
-//│ ║         	                    ^
-//│ ╟── from reference:
-//│ ║  l.413: 	  if n <= 0 then [] else (digitsOfInt (n / 10)) @ [n mod 10];;
-//│ ╙──       	                                                   ^
-//│ digits: int -> list[nothing]
-//│ additivePersistence: int -> (bool | int)
+//│ /!!!\ Uncaught error: java.lang.IndexOutOfBoundsException: 1
+//│ 	at: scala.collection.LinearSeqOps.apply(LinearSeq.scala:131)
+//│ 	at: scala.collection.LinearSeqOps.apply$(LinearSeq.scala:128)
+//│ 	at: scala.collection.immutable.List.apply(List.scala:79)
+//│ 	at: mlscript.Typer.$anonfun$typeTerm$37(Typer.scala:698)
+//│ 	at: scala.collection.immutable.List.foreach(List.scala:333)
+//│ 	at: mlscript.Typer.$anonfun$typeTerm$22(Typer.scala:693)
+//│ 	at: scala.collection.immutable.List.foreach(List.scala:333)
+//│ 	at: mlscript.Typer.$anonfun$typeTerm$2(Typer.scala:604)
+//│ 	at: mlscript.TyperHelpers.trace(TyperHelpers.scala:31)
+//│ 	at: mlscript.Typer.typeTerm(Typer.scala:718)
 
 // TODO
 // file 358 mod
@@ -469,7 +236,7 @@ let rec build (rand,depth) =
       if r = 0
       then buildSine build (rand, (d - 1))
       else buildCosine build (rand, (d - 1));;
-//│ /!!!\ Uncaught error: java.lang.Exception: Internal Error: could not find type definition d
+//│ /!!!\ Uncaught error: java.lang.Exception: Internal Error: Cannot handle case expression ((0) then if eq (r mod 2) 0(true) then buildX then (false) then buildY,0)
 
 // TODO file 1337 in separate file to avoid collisions
 
@@ -481,49 +248,17 @@ let rec mulByDigit i l =
   match List_rev l with
   | [] -> []
   | h::t -> [remainder x y] @ (mulByDigit i t);;
-//│ ╔══[ERROR] Type mismatch in application:
-//│ ║  l.477: 	let remainder x y = if (x * y) > 10 then (x * y) mod 10 else 0;;
-//│ ║         	                                         ^^^^^^^^^^^
-//│ ╟── type `int` is not a function
-//│ ║  l.18: 	let ( * ): int -> int -> int
-//│ ║        	                         ^^^
-//│ ╟── but it flows into operator application with expected type `(int -> int -> int) -> ?a`
-//│ ║  l.477: 	let remainder x y = if (x * y) > 10 then (x * y) mod 10 else 0;;
-//│ ╙──       	                                         ^^^^^^^
-//│ remainder: int -> int -> int
-//│ x: anything -> list[int] -> list[string]
-//│ y: list[int]
-//│ ╔══[ERROR] Type mismatch in application:
-//│ ║  l.483: 	  | h::t -> [remainder x y] @ (mulByDigit i t);;
-//│ ║         	             ^^^^^^^^^^^
-//│ ╟── function of type `?a -> ?b` is not an instance of `int`
-//│ ║  l.478: 	let x l = List_map string_of_int;;
-//│ ║         	      ^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── but it flows into reference with expected type `int`
-//│ ║  l.483: 	  | h::t -> [remainder x y] @ (mulByDigit i t);;
-//│ ║         	                       ^
-//│ ╟── Note: constraint arises from variable:
-//│ ║  l.477: 	let remainder x y = if (x * y) > 10 then (x * y) mod 10 else 0;;
-//│ ║         	              ^
-//│ ╟── from type reference:
-//│ ║  l.18: 	let ( * ): int -> int -> int
-//│ ╙──      	           ^^^
-//│ ╔══[ERROR] Type mismatch in application:
-//│ ║  l.483: 	  | h::t -> [remainder x y] @ (mulByDigit i t);;
-//│ ║         	             ^^^^^^^^^^^^^
-//│ ╟── type `?a list` is not an instance of `int`
-//│ ║  l.1: 	type 'a list = Cons of 'a * 'a list | Nil
-//│ ║       	     ^^^^^^^
-//│ ╟── but it flows into reference with expected type `int`
-//│ ║  l.483: 	  | h::t -> [remainder x y] @ (mulByDigit i t);;
-//│ ║         	                         ^
-//│ ╟── Note: constraint arises from variable:
-//│ ║  l.477: 	let remainder x y = if (x * y) > 10 then (x * y) mod 10 else 0;;
-//│ ║         	                ^
-//│ ╟── from type reference:
-//│ ║  l.18: 	let ( * ): int -> int -> int
-//│ ╙──      	                  ^^^
-//│ mulByDigit: anything -> list[?] -> list[int]
+//│ /!!!\ Uncaught error: java.lang.IndexOutOfBoundsException: 1
+//│ 	at: scala.collection.LinearSeqOps.apply(LinearSeq.scala:131)
+//│ 	at: scala.collection.LinearSeqOps.apply$(LinearSeq.scala:128)
+//│ 	at: scala.collection.immutable.List.apply(List.scala:79)
+//│ 	at: mlscript.Typer.$anonfun$typeTerm$37(Typer.scala:698)
+//│ 	at: scala.collection.immutable.List.foreach(List.scala:333)
+//│ 	at: mlscript.Typer.$anonfun$typeTerm$22(Typer.scala:693)
+//│ 	at: scala.collection.immutable.List.foreach(List.scala:333)
+//│ 	at: mlscript.Typer.$anonfun$typeTerm$2(Typer.scala:604)
+//│ 	at: mlscript.TyperHelpers.trace(TyperHelpers.scala:31)
+//│ 	at: mlscript.Typer.typeTerm(Typer.scala:718)
 
 
 // file 344 mod
@@ -536,13 +271,13 @@ let padZero l1 l2 =
 //│ clone: 'a -> int -> list['a]
 //│ padLength: list[?] -> list[?] -> int
 //│ ╔══[ERROR] Type mismatch in `else` branch:
-//│ ║  l.535: 	  else (clone 0 (padLength l1 l2)) l2;;
+//│ ║  l.270: 	  else (clone 0 (padLength l1 l2)) l2;;
 //│ ║         	       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 //│ ╟── type `?a list` is not a function
 //│ ║  l.1: 	type 'a list = Cons of 'a * 'a list | Nil
 //│ ║       	     ^^^^^^^
 //│ ╟── but it flows into application with expected type `?b -> ?c`
-//│ ║  l.535: 	  else (clone 0 (padLength l1 l2)) l2;;
+//│ ║  l.270: 	  else (clone 0 (padLength l1 l2)) l2;;
 //│ ╙──       	       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 //│ padZero: list[?] -> list[?] -> list[list[int]]
 
@@ -558,7 +293,7 @@ let rec addHelper (t,u) =
 //          if (h + h') > 10
 //          then (addHelper (t, t')) @ [(1 + h') + h]
 //          else (addHelper (t, t')) @ [h' + h];;
-//│ /!\ Parse error: Expected (Index ~ let | Index ~ letPatMat | Index ~ fun | Index ~ ite | Index ~ ocamlWithAsc | Index ~ _match):1:26, found ";// match " at l.551:26: let rec addHelper (t,u) =
+//│ /!\ Parse error: Expected (Index ~ let | Index ~ letPatMat | Index ~ fun | Index ~ ite | Index ~ ocamlWithAsc | Index ~ _match):1:26, found ";// match " at l.286:26: let rec addHelper (t,u) =
 
 // file 1948
 // TODO parse properly
@@ -572,50 +307,7 @@ let bigMul l1 l2 =
   let base = (0, []) in
   let args = l1 (tenEx 0 l2) in
   let (carry,res) = List_fold_left f base args in [carry] @ res;;
-//│ ╔══[ERROR] identifier not found: helper
-//│ ║  l.566: 	  match y with | [] -> [] | h::t -> (tenEx (x + 1) t) @ [(helper x) * h];;
-//│ ╙──       	                                                          ^^^^^^
-//│ tenEx: nothing -> list[int] -> list[int]
-//│ ╔══[ERROR] Type mismatch in application:
-//│ ║  l.571: 	    match x2 with | [] -> [] | h::t -> bigAdd ((mulByDigit h l1), res) in
-//│ ║         	                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── tuple literal of type `(?a, ?b)` is not an instance of `?c list`
-//│ ║  l.571: 	    match x2 with | [] -> [] | h::t -> bigAdd ((mulByDigit h l1), res) in
-//│ ║         	                                              ^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── Note: constraint arises from variable:
-//│ ║  l.15: 	let bigAdd l1 l2 =
-//│ ║        	           ^^
-//│ ╟── from applied type reference:
-//│ ║  l.42: 	let List_combine: 'a list -> 'b list -> ('a * 'b) list
-//│ ╙──      	                  ^^^^^^^
-//│ ╔══[ERROR] Type mismatch in application:
-//│ ║  l.574: 	  let (carry,res) = List_fold_left f base args in [carry] @ res;;
-//│ ║         	                    ^^^^^^^^^^^^^^^^
-//│ ╟── type `?a list` is not a 2-element tuple
-//│ ║  l.1: 	type 'a list = Cons of 'a * 'a list | Nil
-//│ ║       	     ^^^^^^^
-//│ ╟── Note: constraint arises from variable:
-//│ ║  l.568: 	  let f a x =
-//│ ║         	        ^
-//│ ╟── from case `expression`:
-//│ ║  l.570: 	    let (carry,res) = a in
-//│ ╙──       	        ^^^^^^^^^^^
-//│ ╔══[ERROR] Type mismatch in if-else block:
-//│ ║  l.574: 	  let (carry,res) = List_fold_left f base args in [carry] @ res;;
-//│ ║         	  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── type `?a list` is not a 2-element tuple
-//│ ║  l.1: 	type 'a list = Cons of 'a * 'a list | Nil
-//│ ║       	     ^^^^^^^
-//│ ╟── but it flows into application with expected type `(?b, ?c)`
-//│ ║  l.574: 	  let (carry,res) = List_fold_left f base args in [carry] @ res;;
-//│ ║         	                    ^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── Note: constraint arises from match `condition`:
-//│ ║  l.574: 	  let (carry,res) = List_fold_left f base args in [carry] @ res;;
-//│ ║         	                    ^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── from case `expression`:
-//│ ║  l.574: 	  let (carry,res) = List_fold_left f base args in [carry] @ res;;
-//│ ╙──       	      ^^^^^^^^^^^
-//│ bigMul: (list[?] & list[int] -> list[(anything, list[?],)]) -> list[int] -> list[int]
+//│ /!!!\ Uncaught error: java.lang.IndexOutOfBoundsException: 1
 
 // file 335
 // TODO fix type system
@@ -627,19 +319,19 @@ let fixpoint (f,b) = wwhile ((fixpointHelper f), b);;
 //│ fixpointHelper: ('a, bool,) -> ('a, bool,)
 //│ wwhile: ('a -> ('a & 'b, bool,), 'a,) -> 'b
 //│ ╔══[ERROR] Type mismatch in application:
-//│ ║  l.626: 	let fixpoint (f,b) = wwhile ((fixpointHelper f), b);;
+//│ ║  l.318: 	let fixpoint (f,b) = wwhile ((fixpointHelper f), b);;
 //│ ║         	                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 //│ ╟── tuple literal of type `(?a, bool)` is not a function
-//│ ║  l.623: 	  match f with | (num,expr) -> if expr then (num, true) else (num, false);;
+//│ ║  l.315: 	  match f with | (num,expr) -> if expr then (num, true) else (num, false);;
 //│ ║         	                                                             ^^^^^^^^^^^^
 //│ ╟── but it flows into application with expected type `?b -> ?c`
-//│ ║  l.626: 	let fixpoint (f,b) = wwhile ((fixpointHelper f), b);;
+//│ ║  l.318: 	let fixpoint (f,b) = wwhile ((fixpointHelper f), b);;
 //│ ║         	                             ^^^^^^^^^^^^^^^^^^
 //│ ╟── Note: constraint arises from variable:
-//│ ║  l.624: 	let rec wwhile (f,b) =
+//│ ║  l.316: 	let rec wwhile (f,b) =
 //│ ║         	                ^
 //│ ╟── from reference:
-//│ ║  l.625: 	  match f b with | (num,expr) -> if expr then wwhile (f, num) else num;;
+//│ ║  l.317: 	  match f b with | (num,expr) -> if expr then wwhile (f, num) else num;;
 //│ ╙──       	        ^
 //│ fixpoint: ((anything, bool,), anything,) -> nothing
 
@@ -671,19 +363,17 @@ let bigAdd l1 l2 =
     let args = List_rev (List_combine l1 l2) in
     let (_,res) = List_fold_left f base args in res in
   removeZero (add (padZero l1 l2));;
-//│ clone: 'a -> int -> list['a]
-//│ padZero: list[?] -> list[?] -> (list[int], list[int],)
-//│ removeZero: (list[int & 'a] & 'b) -> (list['a] | 'b)
-//│ ╔══[ERROR] Type mismatch in application:
-//│ ║  l.667: 	         let valueToAddToArray = intermediateValue mod 10 in
-//│ ║         	                                 ^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── type `int` is not a function
-//│ ║  l.16: 	let (+): int -> int -> int
-//│ ║        	                       ^^^
-//│ ╟── but it flows into reference with expected type `(int -> int -> int) -> ?a`
-//│ ║  l.667: 	         let valueToAddToArray = intermediateValue mod 10 in
-//│ ╙──       	                                 ^^^^^^^^^^^^^^^^^
-//│ bigAdd: list[?] -> list[?] -> list[int]
+//│ /!!!\ Uncaught error: java.lang.IndexOutOfBoundsException: 1
+//│ 	at: scala.collection.LinearSeqOps.apply(LinearSeq.scala:131)
+//│ 	at: scala.collection.LinearSeqOps.apply$(LinearSeq.scala:128)
+//│ 	at: scala.collection.immutable.List.apply(List.scala:79)
+//│ 	at: mlscript.Typer.$anonfun$typeTerm$37(Typer.scala:698)
+//│ 	at: scala.collection.immutable.List.foreach(List.scala:333)
+//│ 	at: mlscript.Typer.$anonfun$typeTerm$22(Typer.scala:693)
+//│ 	at: scala.collection.immutable.List.foreach(List.scala:333)
+//│ 	at: mlscript.Typer.$anonfun$typeTerm$2(Typer.scala:604)
+//│ 	at: mlscript.TyperHelpers.trace(TyperHelpers.scala:31)
+//│ 	at: mlscript.Typer.typeTerm(Typer.scala:718)
 
 // file 1935
 let rec clone x n = if n <= 0 then [] else x :: (clone x (n - 1));;
@@ -704,35 +394,17 @@ let bigAdd l1 l2 =
     let args = List_map addTuple (List_combine l1 l2) in
     let (_,res) = List_fold_left f base args in res in
   removeZero (add (padZero l1 l2));;
-//│ clone: 'a -> int -> list['a]
-//│ addTuple: (int, int,) -> int
-//│ padZero: list[?] -> list[?] -> (list[int], list[int],)
-//│ removeZero: list['a] -> list['a]
-//│ ╔══[ERROR] Type mismatch in application:
-//│ ║  l.702: 	    let f a x = (a + x) mod 10 in
-//│ ║         	                ^^^^^^^^^^^
-//│ ╟── type `int` is not a function
-//│ ║  l.16: 	let (+): int -> int -> int
-//│ ║        	                       ^^^
-//│ ╟── but it flows into operator application with expected type `(int -> int -> int) -> ?a`
-//│ ║  l.702: 	    let f a x = (a + x) mod 10 in
-//│ ╙──       	                ^^^^^^^
-//│ ╔══[ERROR] Type mismatch in if-else block:
-//│ ║  l.705: 	    let (_,res) = List_fold_left f base args in res in
-//│ ║         	    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── integer literal of type `int` is not a 2-element tuple
-//│ ║  l.703: 	    let base = 0 in
-//│ ║         	               ^
-//│ ╟── but it flows into reference with expected type `(?a, ?b)`
-//│ ║  l.705: 	    let (_,res) = List_fold_left f base args in res in
-//│ ║         	                                   ^^^^
-//│ ╟── Note: constraint arises from match `condition`:
-//│ ║  l.705: 	    let (_,res) = List_fold_left f base args in res in
-//│ ║         	                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── from case `expression`:
-//│ ║  l.705: 	    let (_,res) = List_fold_left f base args in res in
-//│ ╙──       	        ^^^^^^^
-//│ bigAdd: list[?] -> list[?] -> list[nothing]
+//│ /!!!\ Uncaught error: java.lang.IndexOutOfBoundsException: 1
+//│ 	at: scala.collection.LinearSeqOps.apply(LinearSeq.scala:131)
+//│ 	at: scala.collection.LinearSeqOps.apply$(LinearSeq.scala:128)
+//│ 	at: scala.collection.immutable.List.apply(List.scala:79)
+//│ 	at: mlscript.Typer.$anonfun$typeTerm$37(Typer.scala:698)
+//│ 	at: scala.collection.immutable.List.foreach(List.scala:333)
+//│ 	at: mlscript.Typer.$anonfun$typeTerm$22(Typer.scala:693)
+//│ 	at: scala.collection.immutable.List.foreach(List.scala:333)
+//│ 	at: mlscript.Typer.$anonfun$typeTerm$2(Typer.scala:604)
+//│ 	at: mlscript.TyperHelpers.trace(TyperHelpers.scala:31)
+//│ 	at: mlscript.Typer.typeTerm(Typer.scala:718)
 
 
 
@@ -743,16 +415,16 @@ let rec wwhile (f,b) =
   match f b with | (b',c') -> if c' then wwhile (f, b') else b';;
 //│ intboolf: ('a -> 'b) -> 'a -> ('b, bool,)
 //│ ╔══[ERROR] Type mismatch in application:
-//│ ║  l.741: 	let fixpoint (f,b) = wwhile (intboolf, b);;
+//│ ║  l.413: 	let fixpoint (f,b) = wwhile (intboolf, b);;
 //│ ║         	                     ^^^^^^^^^^^^^^^^^^^^
 //│ ╟── function of type `?a -> (?b, ?c)` is not a 2-element tuple
-//│ ║  l.740: 	let intboolf f x = ((f x), ((f x) < 1));;
+//│ ║  l.412: 	let intboolf f x = ((f x), ((f x) < 1));;
 //│ ║         	               ^^^^^^^^^^^^^^^^^^^^^^^^
 //│ ╟── Note: constraint arises from application:
-//│ ║  l.625: 	  match f b with | (num,expr) -> if expr then wwhile (f, num) else num;;
+//│ ║  l.317: 	  match f b with | (num,expr) -> if expr then wwhile (f, num) else num;;
 //│ ║         	        ^^^
 //│ ╟── from case `expression`:
-//│ ║  l.625: 	  match f b with | (num,expr) -> if expr then wwhile (f, num) else num;;
+//│ ║  l.317: 	  match f b with | (num,expr) -> if expr then wwhile (f, num) else num;;
 //│ ╙──       	                   ^^^^^^^^^^
 //│ fixpoint: (anything, nothing -> anything,) -> nothing
 //│ wwhile: ('a -> ('a & 'b, bool,), 'a,) -> 'b
@@ -784,7 +456,7 @@ let rec additivePersistence n =
   else
     (match n with
      | n -> let x_ = digitsOfInt n in sumList x_ additivePersistence n);;
-//│ /!!!\ Uncaught error: java.lang.Exception: Internal Error: could not find type definition x
+//│ /!!!\ Uncaught error: java.lang.IndexOutOfBoundsException: 1
 
 
 // file 1770
@@ -800,35 +472,17 @@ let removeDuplicates l =
         let seen' = h in
         let rest' = h :: (filter (t h)) in helper (seen', rest') in
   List_rev (helper ([], l));;
-//│ filter: list['a] -> anything -> list['a]
-//│ ╔══[ERROR] Type mismatch in application:
-//│ ║  l.801: 	        let rest' = h :: (filter (t h)) in helper (seen', rest') in
-//│ ║         	                                 ^^^^^
-//│ ╟── type `?a list` is not a function
-//│ ║  l.1: 	type 'a list = Cons of 'a * 'a list | Nil
-//│ ║       	                            ^^^^^^^
-//│ ╟── but it flows into reference with expected type `?a -> ?b`
-//│ ║  l.801: 	        let rest' = h :: (filter (t h)) in helper (seen', rest') in
-//│ ╙──       	                                  ^
-//│ ╔══[ERROR] Type mismatch in application:
-//│ ║  l.801: 	        let rest' = h :: (filter (t h)) in helper (seen', rest') in
-//│ ║         	                    ^^^^^^^^^^^^^^^^^^^
-//│ ╟── function of type `?a -> ?b` is not an instance of `?c list`
-//│ ║  l.791: 	let rec filter l a =
-//│ ║         	                 ^^^
-//│ ║  l.792: 	  match l with
-//│ ║         	^^^^^^^^^^^^^^
-//│ ║  l.793: 	  | [] -> []
-//│ ║         	^^^^^^^^^^^^
-//│ ║  l.794: 	  | h::t -> if a = h then filter t a else h :: (filter t a);;
-//│ ║         	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── but it flows into application with expected type `?c list`
-//│ ║  l.801: 	        let rest' = h :: (filter (t h)) in helper (seen', rest') in
-//│ ║         	                         ^^^^^^^^^^^^^^
-//│ ╟── Note: constraint arises from applied type reference:
-//│ ║  l.1: 	type 'a list = Cons of 'a * 'a list | Nil
-//│ ╙──     	                            ^^^^^^^
-//│ removeDuplicates: list[list['a]] -> list['a]
+//│ /!!!\ Uncaught error: java.lang.IndexOutOfBoundsException: 1
+//│ 	at: scala.collection.LinearSeqOps.apply(LinearSeq.scala:131)
+//│ 	at: scala.collection.LinearSeqOps.apply$(LinearSeq.scala:128)
+//│ 	at: scala.collection.immutable.List.apply(List.scala:79)
+//│ 	at: mlscript.Typer.$anonfun$typeTerm$37(Typer.scala:698)
+//│ 	at: scala.collection.immutable.List.foreach(List.scala:333)
+//│ 	at: mlscript.Typer.$anonfun$typeTerm$22(Typer.scala:693)
+//│ 	at: scala.collection.immutable.List.foreach(List.scala:333)
+//│ 	at: mlscript.Typer.$anonfun$typeTerm$2(Typer.scala:604)
+//│ 	at: mlscript.TyperHelpers.trace(TyperHelpers.scala:31)
+//│ 	at: mlscript.Typer.typeTerm(Typer.scala:718)
 
 
 // file 0221
@@ -846,7 +500,14 @@ let rec assoc (d,k,l) =
   match l with
   | [] -> d
   | h::t -> let (f,s) = h in if k = f then s h else assoc d k t;;
-//│ assoc: ('b, 'c, list[(anything, 'a -> 'd,) & 'a],) -> 'd
-//│   where
-//│     'b <: ('b, 'c, list[(anything, 'a -> 'd,) & 'a],) & 'd
-//│     'd <: 'c -> list['a] -> 'd
+//│ /!!!\ Uncaught error: java.lang.IndexOutOfBoundsException: 1
+//│ 	at: scala.collection.LinearSeqOps.apply(LinearSeq.scala:131)
+//│ 	at: scala.collection.LinearSeqOps.apply$(LinearSeq.scala:128)
+//│ 	at: scala.collection.immutable.List.apply(List.scala:79)
+//│ 	at: mlscript.Typer.$anonfun$typeTerm$37(Typer.scala:698)
+//│ 	at: scala.collection.immutable.List.foreach(List.scala:333)
+//│ 	at: mlscript.Typer.$anonfun$typeTerm$22(Typer.scala:693)
+//│ 	at: scala.collection.immutable.List.foreach(List.scala:333)
+//│ 	at: mlscript.Typer.$anonfun$typeTerm$2(Typer.scala:604)
+//│ 	at: mlscript.TyperHelpers.trace(TyperHelpers.scala:31)
+//│ 	at: mlscript.Typer.typeTerm(Typer.scala:718)
