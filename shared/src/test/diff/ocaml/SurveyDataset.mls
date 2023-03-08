@@ -83,6 +83,17 @@ let rec t = test (if true then 1 else t)
 //│ ╟── this `then` branch has type `int`
 //│ ║  l.3: 	let rec t = test (if true then 1 else t)
 //│ ╙──     	                               ^
+//│ ╔══[ERROR] Type `?a list` does not match `int`
+//│ ║  
+//│ ╟── this application has type `?a list`
+//│ ║  l.1: 	let wrap x = x :: []
+//│ ║       	             ^^^^^^^
+//│ ╟── this if-then-else expression has type `int`
+//│ ║  l.3: 	let rec t = test (if true then 1 else t)
+//│ ║       	                 ^^^^^^^^^^^^^^^^^^^^^^^
+//│ ╟── this `then` branch has type `int`
+//│ ║  l.3: 	let rec t = test (if true then 1 else t)
+//│ ╙──     	                               ^
 
 // med 2
 let remainder x y = if (x * y) > 10 then mod (x * y) 10 else 0
@@ -286,25 +297,6 @@ let bigAdd l1 l2 =
 //│ ╟── `?b * ?c` comes from this type expression
 //│ ║  builtin: 	let List.combine: 'a list -> 'b list -> ('a * 'b) list
 //│ ║           	                                         ^^^^^^^
-//│ ╟── this reference has type `?a list`
-//│ ║  l.19: 	      if x = []
-//│ ╙──      	             ^^
-//│ ╔══[ERROR] Type `?b * ?c` does not match `?a list`
-//│ ║  
-//│ ╟──        ?b * ?c <--- ?d ---> ?a list 
-//│ ║  
-//│ ╟── this pattern has type `?b * ?c`
-//│ ║  l.22: 	        (let (toSum1,toSum2) = x in
-//│ ║        	             ^^^^^^^^^^^^^^^
-//│ ╟── this reference has type `?b * ?c` and it flows from `?d`
-//│ ║  l.22: 	        (let (toSum1,toSum2) = x in
-//│ ║        	                               ^
-//│ ╟── this variable has type `?d`
-//│ ║  l.17: 	    let f a x =
-//│ ║        	            ^
-//│ ╟── this reference has type `?d` and it flows into `?a list`
-//│ ║  l.19: 	      if x = []
-//│ ║        	         ^
 //│ ╟── this reference has type `?a list`
 //│ ║  l.19: 	      if x = []
 //│ ╙──      	             ^^

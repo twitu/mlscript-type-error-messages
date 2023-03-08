@@ -319,26 +319,6 @@ let checkagain (v: (int, int, (int, int))) =
 //│ ╟── `int` comes from this type expression
 //│ ║  l.-229: 	let (+): int -> int -> int
 //│ ╙──        	                ^^^
-//│ ╔══[ERROR] Type `int` does not match `error`
-//│ ║  
-//│ ╟── `int` comes from this type expression
-//│ ║  l.1: 	let checkagain (v: (int, int, (int, int))) =
-//│ ║       	                                    ^^^
-//│ ╟── `int * int` comes from this type expression
-//│ ║  l.1: 	let checkagain (v: (int, int, (int, int))) =
-//│ ║       	                              ^^^^^^^^^^
-//│ ╟── this 2 element of this tuple has type `int * int`
-//│ ║  l.3: 	   (a, b, (c, d)) -> a + b + c + d
-//│ ║       	   ^^^^^^^^^^^^^^
-//│ ╟── this 2 element of this tuple has type `?a * error`
-//│ ║  l.3: 	   (a, b, (c, d)) -> a + b + c + d
-//│ ║       	   ^^^^^^^^^^^^^^
-//│ ╟── this tuple literal has type `?a * error`
-//│ ║  l.3: 	   (a, b, (c, d)) -> a + b + c + d
-//│ ║       	           ^^^^
-//│ ╟── this reference has type `error`
-//│ ║  l.3: 	   (a, b, (c, d)) -> a + b + c + d
-//│ ╙──     	              ^
 //│ ╔══[ERROR] identifier not found: d
 //│ ║  
 //│ ║  l.304: 	   (a, b, (c, d)) -> a + b + c + d

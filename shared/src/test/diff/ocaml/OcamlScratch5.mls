@@ -2,13 +2,46 @@
 let confluence z = if true then z else 5
 let mkpair x y = (x, confluence y)
 let conflict x = mkpair (not x) x
-//│ /!!!\ Uncaught error: scala.NotImplementedError: an implementation is missing
+//│ ╔══[ERROR] Type `int` does not match `bool`
+//│ ║  
+//│ ╟──        int ---> ?a <--- ?b ---> bool 
+//│ ║  
+//│ ╟── this `else` branch has type `int` and it flows into `?a`
+//│ ║  l.1: 	let confluence z = if true then z else 5
+//│ ║       	                                       ^
+//│ ╟── this if-then-else expression has type `?a`
+//│ ║  l.1: 	let confluence z = if true then z else 5
+//│ ║       	                   ^^^^^^^^^^^^^^^^^^^^^
+//│ ╟── this `then` branch has type `?a`
+//│ ║  l.1: 	let confluence z = if true then z else 5
+//│ ║       	                                ^
+//│ ╟── this variable has type `?a`
+//│ ║  l.1: 	let confluence z = if true then z else 5
+//│ ║       	               ^
+//│ ╟── this reference has type `?a` and it flows from `?b`
+//│ ║  l.2: 	let mkpair x y = (x, confluence y)
+//│ ║       	                                ^
+//│ ╟── this variable has type `?b`
+//│ ║  l.2: 	let mkpair x y = (x, confluence y)
+//│ ║       	             ^
+//│ ╟── this variable has type `?c`
+//│ ║  l.3: 	let conflict x = mkpair (not x) x
+//│ ║       	             ^
+//│ ╟── this reference has type `?c` and it flows into `bool`
+//│ ║  l.3: 	let conflict x = mkpair (not x) x
+//│ ║       	                             ^
+//│ ╟── this type reference has type `bool`
+//│ ║  builtin: 	let not: bool -> bool
+//│ ╙──         	         ^^^^
+//│ confluence: 'a -> (int | 'a)
+//│ mkpair: 'a -> 'b -> ('a, int | 'b,)
+//│ conflict: (bool & 'a) -> (bool, int | 'a,)
 
 // FIXME
 let sqsum xs =
   let f a x = match x with | [] -> 0 | h::t -> 1 in
   let base = List.hd xs in List.fold_left f base xs;;
-//│ /!!!\ Uncaught error: scala.NotImplementedError: an implementation is missing
+//│ sqsum: list[list[?] & 'a] -> (int | 'a)
 
 // TODO should give error but not giving because no type variable
 type expr =

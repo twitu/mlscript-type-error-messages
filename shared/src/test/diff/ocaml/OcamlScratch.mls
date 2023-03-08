@@ -70,7 +70,20 @@ let rec t = test (if true then 1 else t)
 //│ ╟── this `then` branch has type `int`
 //│ ║  l.1: 	let rec t = test (if true then 1 else t)
 //│ ╙──     	                               ^
-//│ /!!!\ Uncaught error: scala.NotImplementedError: an implementation is missing
+//│ ╔══[ERROR] Type `?a list` does not match `int`
+//│ ║  
+//│ ╟── this application has type `?a list`
+//│ ║  l.-59: 	let wrap x = x :: []
+//│ ║         	             ^^^^^^^
+//│ ╟── this if-then-else expression has type `int`
+//│ ║  l.1: 	let rec t = test (if true then 1 else t)
+//│ ║       	                 ^^^^^^^^^^^^^^^^^^^^^^^
+//│ ╟── this `then` branch has type `int`
+//│ ║  l.1: 	let rec t = test (if true then 1 else t)
+//│ ╙──     	                               ^
+//│ t: 't
+//│   where
+//│     't :> list[int | 't] | list[bool]
 
 
 
@@ -133,6 +146,6 @@ let rec digitsOfInt n =
 //│ ╙──     	                            ^^^^^^^^^
 //│ ╔══[ERROR] identifier not found: remainder
 //│ ║  
-//│ ║  l.108: 	  ((digitsOfInt n) / 10) @ [remainder];;
+//│ ║  l.121: 	  ((digitsOfInt n) / 10) @ [remainder];;
 //│ ╙──       	                            ^^^^^^^^^
 //│ digitsOfInt: anything -> list[error]

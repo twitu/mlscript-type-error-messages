@@ -28,6 +28,14 @@ trait UnificationSolver extends TyperDatatypes {
         unifyTypes(tv, ub)
         tv.new_unification += ((ub, reason))
       })
+
+      for {
+        (a, ur1) <- tv.new_unification
+        (b, ur2) <- tv.new_unification
+        if a != b
+      } {
+        unifyTypes(a, b, ur1 :: ur2 :: Nil)
+      }
     })
   }
 
@@ -64,7 +72,8 @@ trait UnificationSolver extends TyperDatatypes {
         if (tr1.defn === tr2.defn && tr1.targs.length === tr2.targs.length) {
           tr1.targs.zip(tr2.targs).zipWithIndex.foreach {
             case ((arg1, arg2), i) =>
-              traverseBounds(arg1, arg2, createProvs(arg1, arg2), S(createUnification(s"${i} index of type ref ${tr1.defn}")))
+              ()
+//              traverseBounds(arg1, arg2, createProvs(arg1, arg2), S(createUnification(s"${i} index of type ref ${tr1.defn}")))
           }
         } else {
           reportUnificationError(createUnification())
@@ -73,7 +82,8 @@ trait UnificationSolver extends TyperDatatypes {
         if (tup1.fields.length === tup2.fields.length) {
           tup1.fields.map(_._2.ub).zip(tup2.fields.map(_._2.ub)).zipWithIndex.foreach {
             case ((t1, t2), i) =>
-              traverseBounds(t1, t2, createProvs(t1, t2), S(createUnification(s"${i} index of tuple")))
+              ()
+//              traverseBounds(t1, t2, createProvs(t1, t2), S(createUnification(s"${i} index of tuple")))
           }
         } else {
           reportUnificationError(createUnification())
@@ -104,11 +114,10 @@ trait UnificationSolver extends TyperDatatypes {
     }
   }()
 
-  // provs already has provs for a and b
-  // this unification traverses bounds to reach a diverging or converging unification
-  def traverseBounds(a: ST, b: ST, provs: Ls[TypeProvenance] = Nil, nested: Opt[Unification] = N)
+  // catch level 0 errors
+  def traverseBounds(a: ST, b: ST, provs: Ls[TypeProvenance] = Nil)
                 (implicit cache: MutSet[(ST, ST)], ctx: Ctx, raise: Raise): Unit =
-    trace( s"UT ${a} <: ${b} len: ${provs.length} ${nested.mkStringOr("", "nested: ")}") {
+    trace( s"UT ${a} <: ${b} len: ${provs.length}") {
     val st1 = a.unwrapProvs
     val st2 = b.unwrapProvs
 
@@ -129,51 +138,17 @@ trait UnificationSolver extends TyperDatatypes {
         // so now we have provs for lb ---- tv ---- st in this order
         tv.lowerBounds.foreach(lb => {
           println(s"UT  ${lb} <: ${tv} <: ${st}")
-          traverseBounds(lb, b, lb.typeUseLocations reverse_::: provs, nested)
+          traverseBounds(lb, b, lb.typeUseLocations reverse_::: provs)
         })
-
-        if (tv.upperBounds.nonEmpty) println(s"UT  ${st} with")
-        val ur = UB(tv, b, provs)
-        ur.nested = nested
-        val reason = ur :: Nil
-        // tv <: ub
-        // tv <: st
-        // stop traversing and unify
-        tv.upperBounds.foreach(ub => {
-          tv.new_unification.get(ub).foreach { case (prevReason) =>
-            println(s"UT  ${tv} <: ${ub}  for ${prevReason}")
-            unifyTypes(ub, b, prevReason :: reason)
-          }
-        })
-        println(s"UT  ${tv} += ${(b, reason)}")
-        tv.new_unification += ((b, ur))
       case (st, tv: TypeVariable) =>
         if (tv.upperBounds.nonEmpty) println(s"UT  ${a} with")
         // st <: tv <: ub pass through tv and maintain constraining relation
         tv.upperBounds.foreach(ub => {
           println(s"UT  ${a} <: ${tv} <: ${ub}")
-          traverseBounds(a, ub, provs ::: ub.typeUseLocations, nested)
+          traverseBounds(a, ub, provs ::: ub.typeUseLocations)
         })
-
-        if (tv.lowerBounds.nonEmpty) println(s"UT  ${a} with")
-        val ur = LB(a, tv, provs)
-        ur.nested = nested
-        val reason = ur :: Nil
-        // lb <: tv
-        // st <: tv
-        // stop traversing and unify
-        tv.lowerBounds.foreach(lb => {
-          tv.new_unification.get(lb).foreach { case (prevReason) =>
-            println(s"UT  ${tv} :> ${lb.unwrapProvs} for ${prevReason}")
-            unifyTypes(lb, a, prevReason :: reason)
-          }
-        })
-
-        println(s"UT  ${tv} += ${(a, reason.reverse)}")  // reason is always from tv to st
-        tv.new_unification += ((a, ur))
       case _ =>
         val ur = LB(a, b, provs)
-        ur.nested = nested
         // skip cache because it hit the traverse bound cache
         // but will actually unified in the next function call
         unifyTypes(a, b, ur :: Nil, true)

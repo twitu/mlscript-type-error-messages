@@ -88,33 +88,7 @@ confluence true
 // FIXME: no common location found investigate
 let mkpair x y = (x, confluence y)
 let conflict x = mkpair (not x) x
-//│ ╔══[ERROR] Type `int` does not match `bool`
-//│ ║  
-//│ ╟──        int ---> ?a <--- ?b ---> bool 
-//│ ║  
-//│ ╟── this `else` branch has type `int` and it flows into `?a`
-//│ ║  l.-24: 	let confluence z = if true then z else 5
-//│ ║         	                                       ^
-//│ ╟── this if-then-else expression has type `?a`
-//│ ║  l.-24: 	let confluence z = if true then z else 5
-//│ ║         	                   ^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── this `then` branch has type `?c` and it flows from `?b`
-//│ ║  l.-24: 	let confluence z = if true then z else 5
-//│ ║         	                                ^
-//│ ╟── this variable has type `?b`
-//│ ║  l.-24: 	let confluence z = if true then z else 5
-//│ ║         	               ^
-//│ ╟── this variable has type `?d`
-//│ ║  l.2: 	let conflict x = mkpair (not x) x
-//│ ║       	             ^
-//│ ╟── this reference has type `?d` and it flows into `bool`
-//│ ║  l.2: 	let conflict x = mkpair (not x) x
-//│ ║       	                             ^
-//│ ╟── this type reference has type `bool`
-//│ ║  builtin: 	let not: bool -> bool
-//│ ╙──         	         ^^^^
-//│ mkpair: 'a -> 'b -> ('a, int | 'b,)
-//│ conflict: (bool & 'a) -> (bool, int | 'a,)
+//│ /!!!\ Uncaught error: scala.NotImplementedError: an implementation is missing
 
 
 
