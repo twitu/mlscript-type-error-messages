@@ -1,0 +1,272 @@
+// FIXME
+let confluence z = if true then z else 5
+let mkpair x y = (x, confluence y)
+let conflict x = mkpair (not x) x
+//│ /!!!\ Uncaught error: scala.NotImplementedError: an implementation is missing
+
+// FIXME
+let sqsum xs =
+  let f a x = match x with | [] -> 0 | h::t -> 1 in
+  let base = List.hd xs in List.fold_left f base xs;;
+//│ /!!!\ Uncaught error: scala.NotImplementedError: an implementation is missing
+
+// TODO should give error but not giving because no type variable
+type expr =
+    VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+  
+let pi = 4.0 *. (atan 1.0);;
+  
+//│ Defined type alias expr
+//│ Defined class VarX
+//│ Defined class VarY
+//│ Defined class Sine
+//│ Defined class Cosine
+//│ Defined class Average
+//│ Defined class Times
+//│ Defined class Thresh
+//│ VarX: expr
+//│ VarY: expr
+//│ Sine: expr -> expr
+//│ Cosine: expr -> expr
+//│ Average: (expr, expr,) -> expr
+//│ Times: (expr, expr,) -> expr
+//│ Thresh: (expr, expr, expr, expr,) -> expr
+//│ pi: float
+
+:d
+let rec eval (e,x,y) =
+  match e with
+  | Average (e1,e2) -> ((eval (e1, x, y)) +. (eval (e2, x, y))) /. "2"
+//│ 1. Typing term e, x, y, => if e(Average (e1, e2,)) then /. (+. (eval (e1, x, y,)) (eval (e2, x, y,))) "2"
+//│ | 1. Typing pattern e, x, y,
+//│ | | 1. Typing pattern e
+//│ | | 1. : α162'
+//│ | | 1. Typing pattern x
+//│ | | 1. : α163'
+//│ | | 1. Typing pattern y
+//│ | | 1. : α164'
+//│ | 1. : (α162', α163', α164',)
+//│ | 1. Typing term if e(Average (e1, e2,)) then /. (+. (eval (e1, x, y,)) (eval (e2, x, y,))) "2"
+//│ | | If(Var(e), List(IfThen(App(Var(Average), Tup(Var(e1), Var(e2))), App(App(Var(/.), App(App(Var(+.), App(Var(eval), Tup(Var(e1), Var(x), Var(y)))), App(Var(eval), Tup(Var(e2), Var(x), Var(y))))), StrLit(2))))
+//│ | | ADT name: TypeName(expr)
+//│ | | ADT type: [expr]
+//│ | | typed condition term e
+//│ | | 1. Typing term e
+//│ | | 1. : [α162']
+//│ | | CONSTRAIN [α162'] <! [expr]
+//│ | |   where 
+//│ | | C [α162'] <! [expr]    (0) where ProvType <: ProvType}
+//│ | | | C α162' <! [expr]    (0) where TypeVariable <: ProvType}
+//│ | | | | C α162' <! expr    (0) where TypeVariable <: TypeRef}
+//│ | | fields e1, e2, ~> List(e1, e2)
+//│ | | Typing case 0 (Average)
+//│ | | ctor type: ((expr, expr,) -> expr)
+//│ | | fieldTypes: List(expr, expr)
+//│ | | Typing field e1 (Average)
+//│ | | Field e1 : expr
+//│ | | Typing field e2 (Average)
+//│ | | Field e2 : expr
+//│ | | 1. Typing term /. (+. (eval (e1, x, y,)) (eval (e2, x, y,))) "2"
+//│ | | | 1. Typing term /. (+. (eval (e1, x, y,)) (eval (e2, x, y,)))
+//│ | | | | 1. Typing term /.
+//│ | | | | 1. : [(float -> (float -> float))]
+//│ | | | | 1. Typing term +. (eval (e1, x, y,)) (eval (e2, x, y,))
+//│ | | | | | 1. Typing term +. (eval (e1, x, y,))
+//│ | | | | | | 1. Typing term +.
+//│ | | | | | | 1. : [(float -> (float -> float))]
+//│ | | | | | | 1. Typing term eval (e1, x, y,)
+//│ | | | | | | | 1. Typing term eval
+//│ | | | | | | | 1. : [eval161']
+//│ | | | | | | | 1. Typing term e1, x, y,
+//│ | | | | | | | | 1. Typing term e1
+//│ | | | | | | | | 1. : [expr]
+//│ | | | | | | | | 1. Typing term x
+//│ | | | | | | | | 1. : [α163']
+//│ | | | | | | | | 1. Typing term y
+//│ | | | | | | | | 1. : [α164']
+//│ | | | | | | | 1. : ([expr], [α163'], [α164'],)
+//│ | | | | | | | CONSTRAIN [eval161'] <! (([expr], [α163'], [α164'],) -> α167')
+//│ | | | | | | |   where 
+//│ | | | | | | | C [eval161'] <! (([expr], [α163'], [α164'],) -> α167')    (0) where ProvType <: FunctionType}
+//│ | | | | | | | | C eval161' <! (([expr], [α163'], [α164'],) -> α167')    (0) where TypeVariable <: FunctionType}
+//│ | | | | | | 1. : α167'
+//│ | | | | | | CONSTRAIN [(float -> (float -> float))] <! (α167' -> α169')
+//│ | | | | | |   where 
+//│ | | | | | | C [(float -> (float -> float))] <! (α167' -> α169')    (0) where ProvType <: FunctionType}
+//│ | | | | | | | C (float -> (float -> float)) <! (α167' -> α169')    (0) where FunctionType <: FunctionType}
+//│ | | | | | | | | [nested] [α167']
+//│ | | | | | | | | C α167' <! float    (1) where TypeVariable <: TypeRef}
+//│ | | | | | | | | [nested] [(float -> float)]
+//│ | | | | | | | | C (float -> float) <! α169'    (2) where FunctionType <: TypeVariable}
+//│ | | | | | 1. : α169'
+//│ | | | | | 1. Typing term eval (e2, x, y,)
+//│ | | | | | | 1. Typing term eval
+//│ | | | | | | 1. : [eval161']
+//│ | | | | | | 1. Typing term e2, x, y,
+//│ | | | | | | | 1. Typing term e2
+//│ | | | | | | | 1. : [expr]
+//│ | | | | | | | 1. Typing term x
+//│ | | | | | | | 1. : [α163']
+//│ | | | | | | | 1. Typing term y
+//│ | | | | | | | 1. : [α164']
+//│ | | | | | | 1. : ([expr], [α163'], [α164'],)
+//│ | | | | | | CONSTRAIN [eval161'] <! (([expr], [α163'], [α164'],) -> α171')
+//│ | | | | | |   where 
+//│ 		eval161' <: [[(([expr], [α163'], [α164'],) -> α167')]]
+//│ 		α167' <: [[[float]]]
+//│ | | | | | | C [eval161'] <! (([expr], [α163'], [α164'],) -> α171')    (0) where ProvType <: FunctionType}
+//│ | | | | | | | C eval161' <! (([expr], [α163'], [α164'],) -> α171')    (0) where TypeVariable <: FunctionType}
+//│ | | | | | 1. : α171'
+//│ | | | | | CONSTRAIN α169' <! (α171' -> α173')
+//│ | | | | |   where 
+//│ 		α169' :> [[[(float -> float)]]]
+//│ | | | | | C α169' <! (α171' -> α173')    (0) where TypeVariable <: FunctionType}
+//│ | | | | | | C [[[(float -> float)]]] <! (α171' -> α173')    (1) where ProvType <: FunctionType}
+//│ | | | | | | | C [[(float -> float)]] <! (α171' -> α173')    (1) where ProvType <: FunctionType}
+//│ | | | | | | | | C [(float -> float)] <! (α171' -> α173')    (1) where ProvType <: FunctionType}
+//│ | | | | | | | | | C (float -> float) <! (α171' -> α173')    (1) where FunctionType <: FunctionType}
+//│ | | | | | | | | | | [nested] [α171']
+//│ | | | | | | | | | | C α171' <! float    (2) where TypeVariable <: TypeRef}
+//│ | | | | | | | | | | [nested] [float]
+//│ | | | | | | | | | | C float <! α173'    (3) where TypeRef <: TypeVariable}
+//│ | | | | 1. : α173'
+//│ | | | | CONSTRAIN [(float -> (float -> float))] <! (α173' -> α175')
+//│ | | | |   where 
+//│ 		α173' :> [[[float]]]
+//│ | | | | C [(float -> (float -> float))] <! (α173' -> α175')    (0) where ProvType <: FunctionType}
+//│ | | | | | C (float -> (float -> float)) <! (α173' -> α175')    (0) where FunctionType <: FunctionType}
+//│ | | | | | | [nested] [α173']
+//│ | | | | | | C α173' <! float    (1) where TypeVariable <: TypeRef}
+//│ | | | | | | | C [[[float]]] <! float    (2) where ProvType <: TypeRef}
+//│ | | | | | | [nested] [(float -> float)]
+//│ | | | | | | C (float -> float) <! α175'    (2) where FunctionType <: TypeVariable}
+//│ | | | 1. : α175'
+//│ | | | 1. Typing term "2"
+//│ | | | 1. : string
+//│ | | | CONSTRAIN α175' <! (string -> α177')
+//│ | | |   where 
+//│ 		α175' :> [[[(float -> float)]]]
+//│ | | | C α175' <! (string -> α177')    (0) where TypeVariable <: FunctionType}
+//│ | | | | C [[[(float -> float)]]] <! (string -> α177')    (1) where ProvType <: FunctionType}
+//│ | | | | | C [[(float -> float)]] <! (string -> α177')    (1) where ProvType <: FunctionType}
+//│ | | | | | | C [(float -> float)] <! (string -> α177')    (1) where ProvType <: FunctionType}
+//│ | | | | | | | C (float -> float) <! (string -> α177')    (1) where FunctionType <: FunctionType}
+//│ | | | | | | | | [nested] [string]
+//│ | | | | | | | | C string <! float    (2) where TypeRef <: TypeRef}
+//│ | | | | | | | | [nested] [float]
+//│ | | | | | | | | C float <! α177'    (3) where TypeRef <: TypeVariable}
+//│ | | 1. : α177'
+//│ | | CONSTRAIN α177' <! α165'
+//│ | |   where 
+//│ 		α177' :> [[[float]]]
+//│ | | C α177' <! α165'    (0) where TypeVariable <: TypeVariable}
+//│ | | | symmetric
+//│ | | | C [[[float]]] <! α165'    (1) where ProvType <: TypeVariable}
+//│ | | | | C [[float]] <! α165'    (1) where ProvType <: TypeVariable}
+//│ | | | | | C [float] <! α165'    (1) where ProvType <: TypeVariable}
+//│ | | | | | | C float <! α165'    (1) where TypeRef <: TypeVariable}
+//│ | 1. : α165'
+//│ 1. : ((α162', α163', α164',) -> α165')
+//│ CONSTRAIN ((α162', α163', α164',) -> α165') <! eval161'
+//│   where 
+//│ 		eval161' <: [[(([expr], [α163'], [α164'],) -> α171')]] & [[(([expr], [α163'], [α164'],) -> α167')]]
+//│ 		α162' <: [[[[expr]]]]
+//│ 		α165' :> [[α177']] | [[[[float]]]]
+//│ 		α167' <: [[[float]]]
+//│ 		α171' <: [[[float]]]
+//│ 		α177' :> [[[float]]] <: [[α165']]
+//│ C ((α162', α163', α164',) -> α165') <! eval161'    (0) where FunctionType <: TypeVariable}
+//│ | C ((α162', α163', α164',) -> α165') <! [[(([expr], [α163'], [α164'],) -> α171')]]    (1) where FunctionType <: ProvType}
+//│ | | C ((α162', α163', α164',) -> α165') <! [(([expr], [α163'], [α164'],) -> α171')]    (1) where FunctionType <: ProvType}
+//│ | | | C ((α162', α163', α164',) -> α165') <! (([expr], [α163'], [α164'],) -> α171')    (1) where FunctionType <: FunctionType}
+//│ | | | | [nested] [([expr], [α163'], [α164'],)]
+//│ | | | | C ([expr], [α163'], [α164'],) <! (α162', α163', α164',)    (2) where TupleType <: TupleType}
+//│ | | | | | [nested] [[expr]]
+//│ | | | | | C [expr] <! α162'    (3) where ProvType <: TypeVariable}
+//│ | | | | | | C expr <! α162'    (3) where TypeRef <: TypeVariable}
+//│ | | | | | | | C expr <! [[[[expr]]]]    (4) where TypeRef <: ProvType}
+//│ | | | | | [nested] [[α163']]
+//│ | | | | | C [α163'] <! α163'    (4) where ProvType <: TypeVariable}
+//│ | | | | | [nested] [[α164']]
+//│ | | | | | C [α164'] <! α164'    (4) where ProvType <: TypeVariable}
+//│ | | | | [nested] [α165']
+//│ | | | | C α165' <! α171'    (4) where TypeVariable <: TypeVariable}
+//│ | | | | | symmetric
+//│ | | | | | C [[α177']] <! α171'    (5) where ProvType <: TypeVariable}
+//│ | | | | | | C [α177'] <! α171'    (5) where ProvType <: TypeVariable}
+//│ | | | | | | | C α177' <! α171'    (5) where TypeVariable <: TypeVariable}
+//│ | | | | | | | | symmetric
+//│ | | | | | | | | C [[[float]]] <! α171'    (6) where ProvType <: TypeVariable}
+//│ | | | | | | | | | C [[float]] <! α171'    (6) where ProvType <: TypeVariable}
+//│ | | | | | | | | | | C [float] <! α171'    (6) where ProvType <: TypeVariable}
+//│ | | | | | | | | | | | C float <! α171'    (6) where TypeRef <: TypeVariable}
+//│ | | | | | | | | | | | | C float <! [[[float]]]    (7) where TypeRef <: ProvType}
+//│ | | | | | | | | C α177' <! [[[float]]]    (7) where TypeVariable <: ProvType}
+//│ | | | | | | | | | C α177' <! [[float]]    (7) where TypeVariable <: ProvType}
+//│ | | | | | | | | | | C α177' <! [float]    (7) where TypeVariable <: ProvType}
+//│ | | | | | | | | | | | C α177' <! float    (7) where TypeVariable <: TypeRef}
+//│ | | | | | | | | | | | | C [[[float]]] <! float    (8) where ProvType <: TypeRef}
+//│ | | | | | C [[[[float]]]] <! α171'    (8) where ProvType <: TypeVariable}
+//│ | | | | | | C [[[float]]] <! α171'    (8) where ProvType <: TypeVariable}
+//│ | | | | | | | C [[float]] <! α171'    (8) where ProvType <: TypeVariable}
+//│ | | | | | | | | C [float] <! α171'    (8) where ProvType <: TypeVariable}
+//│ | | | | | | | | | C float <! α171'    (8) where TypeRef <: TypeVariable}
+//│ | | | | | | | | | | Cached!
+//│ | | | | | C α165' <! [[[float]]]    (8) where TypeVariable <: ProvType}
+//│ | | | | | | C α165' <! [[float]]    (8) where TypeVariable <: ProvType}
+//│ | | | | | | | C α165' <! [float]    (8) where TypeVariable <: ProvType}
+//│ | | | | | | | | C α165' <! float    (8) where TypeVariable <: TypeRef}
+//│ | | | | | | | | | C [[α177']] <! float    (9) where ProvType <: TypeRef}
+//│ | | | | | | | | | | C [α177'] <! float    (9) where ProvType <: TypeRef}
+//│ | | | | | | | | | | | C α177' <! float    (9) where TypeVariable <: TypeRef}
+//│ | | | | | | | | | | | | Cached!
+//│ | | | | | | | | | C [[[[float]]]] <! float    (9) where ProvType <: TypeRef}
+//│ | C ((α162', α163', α164',) -> α165') <! [[(([expr], [α163'], [α164'],) -> α167')]]    (9) where FunctionType <: ProvType}
+//│ | | C ((α162', α163', α164',) -> α165') <! [(([expr], [α163'], [α164'],) -> α167')]    (9) where FunctionType <: ProvType}
+//│ | | | C ((α162', α163', α164',) -> α165') <! (([expr], [α163'], [α164'],) -> α167')    (9) where FunctionType <: FunctionType}
+//│ | | | | [nested] [([expr], [α163'], [α164'],)]
+//│ | | | | C ([expr], [α163'], [α164'],) <! (α162', α163', α164',)    (10) where TupleType <: TupleType}
+//│ | | | | | Cached!
+//│ | | | | [nested] [α165']
+//│ | | | | C α165' <! α167'    (10) where TypeVariable <: TypeVariable}
+//│ | | | | | symmetric
+//│ | | | | | C [[α177']] <! α167'    (11) where ProvType <: TypeVariable}
+//│ | | | | | | C [α177'] <! α167'    (11) where ProvType <: TypeVariable}
+//│ | | | | | | | C α177' <! α167'    (11) where TypeVariable <: TypeVariable}
+//│ | | | | | | | | symmetric
+//│ | | | | | | | | C [[[float]]] <! α167'    (12) where ProvType <: TypeVariable}
+//│ | | | | | | | | | C [[float]] <! α167'    (12) where ProvType <: TypeVariable}
+//│ | | | | | | | | | | C [float] <! α167'    (12) where ProvType <: TypeVariable}
+//│ | | | | | | | | | | | C float <! α167'    (12) where TypeRef <: TypeVariable}
+//│ | | | | | | | | | | | | C float <! [[[float]]]    (13) where TypeRef <: ProvType}
+//│ | | | | | | | | C α177' <! [[[float]]]    (13) where TypeVariable <: ProvType}
+//│ | | | | | | | | | C α177' <! [[float]]    (13) where TypeVariable <: ProvType}
+//│ | | | | | | | | | | C α177' <! [float]    (13) where TypeVariable <: ProvType}
+//│ | | | | | | | | | | | C α177' <! float    (13) where TypeVariable <: TypeRef}
+//│ | | | | | | | | | | | | Cached!
+//│ | | | | | C [[[[float]]]] <! α167'    (13) where ProvType <: TypeVariable}
+//│ | | | | | | C [[[float]]] <! α167'    (13) where ProvType <: TypeVariable}
+//│ | | | | | | | C [[float]] <! α167'    (13) where ProvType <: TypeVariable}
+//│ | | | | | | | | C [float] <! α167'    (13) where ProvType <: TypeVariable}
+//│ | | | | | | | | | C float <! α167'    (13) where TypeRef <: TypeVariable}
+//│ | | | | | | | | | | Cached!
+//│ | | | | | C α165' <! [[[float]]]    (13) where TypeVariable <: ProvType}
+//│ | | | | | | C α165' <! [[float]]    (13) where TypeVariable <: ProvType}
+//│ | | | | | | | C α165' <! [float]    (13) where TypeVariable <: ProvType}
+//│ | | | | | | | | C α165' <! float    (13) where TypeVariable <: TypeRef}
+//│ | | | | | | | | | Cached!
+//│ ⬤ Typed as: eval161'
+//│  where: 
+//│ 		eval161' :> [[((α162', α163', α164',) -> α165')]] <: [[(([expr], [α163'], [α164'],) -> α171')]] & [[(([expr], [α163'], [α164'],) -> α167')]]
+//│ 		α162' :> [[[[expr]]]] <: [[[[expr]]]]
+//│ 		α165' :> [[α177']] | [[[[float]]]] <: [[[α167']]] & [[[[[float]]]]] & [[[α171']]]
+//│ 		α167' :> [[[α165']]] | [[[[α177']]]] | [[[[[[float]]]]]] <: [[[float]]]
+//│ 		α171' :> [[[α165']]] | [[[[α177']]]] | [[[[[[float]]]]]] <: [[[float]]]
+//│ 		α177' :> [[[float]]] <: [[[[α167']]]] & [[[[[[float]]]]]] & [[[[α171']]]] & [[α165']]
+//│ eval: (expr, anything, anything,) -> float
