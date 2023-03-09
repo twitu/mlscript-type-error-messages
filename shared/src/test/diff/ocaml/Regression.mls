@@ -4,19 +4,37 @@ let test =
   (f 1 + f true)
   
 let test2 = let (a, b) = test in [[b]] + 1
-//│ ╔══[ERROR] Type `bool` does not match `int`
+//│ ╔══[ERROR] Type `?a list` does not match `int`
 //│ ║  
-//│ ╟──        bool ---> ?a <--- int 
+//│ ╟── this application has type `?a list`
+//│ ║  l.5: 	let test2 = let (a, b) = test in [[b]] + 1
+//│ ║       	                                  ^^^
+//│ ╟── `int` comes from this type expression
+//│ ║  builtin: 	let (+): int -> int -> int
+//│ ╙──         	         ^^^
+//│ ╔══[ERROR] Type `?a list * ?a0 list` does not match `?a1 * ?a1 list`
 //│ ║  
-//│ ╟── this reference has type `bool` and it flows into `?a`
+//│ ╟── this tuple has type `?a list * ?a0 list`
+//│ ║  l.5: 	let test2 = let (a, b) = test in [[b]] + 1
+//│ ╙──     	                                  ^^^
+//│ ╔══[ERROR] Type `?b * ?a list` does not match `?a0 * ?a0 list`
+//│ ║  
+//│ ╟── this tuple has type `?b * ?a list`
+//│ ║  l.5: 	let test2 = let (a, b) = test in [[b]] + 1
+//│ ╙──     	                                   ^
+//│ ╔══[ERROR] Type `int` does not match `bool`
+//│ ║  
+//│ ╟──        int ---> ?a <--- bool 
+//│ ║  
+//│ ╟── this integer literal has type `int` and it flows into `?a`
 //│ ║  l.3: 	  (f 1 + f true)
-//│ ║       	           ^^^^
+//│ ║       	     ^
 //│ ╟── this variable has type `?a`
 //│ ║  l.2: 	  let f x = x in
 //│ ║       	        ^
-//│ ╟── this integer literal has type `int` and it flows into `?a`
+//│ ╟── this reference has type `bool` and it flows into `?a`
 //│ ║  l.3: 	  (f 1 + f true)
-//│ ╙──     	     ^
+//│ ╙──     	           ^^^^
 //│ test: int
 //│ test2: int
 
@@ -26,81 +44,299 @@ let f x = x + 1
 not (f 1)
 //│ 1. Typing term x => + x 1
 //│ | 1. Typing pattern x
-//│ | 1. : α82'
+//│ | 1. : α90'
 //│ | 1. Typing term + x 1
 //│ | | 1. Typing term + x
 //│ | | | 1. Typing term +
 //│ | | | 1. : [(int -> (int -> int))]
 //│ | | | 1. Typing term x
-//│ | | | 1. : [α82']
-//│ | | | CONSTRAIN [α82'] <! int
+//│ | | | 1. : [α90']
+//│ | | | CONSTRAIN [α90'] <! α91'
 //│ | | |   where 
-//│ | | | C [α82'] <! int    (0) where ProvType <: TypeRef}
-//│ | | | | C α82' <! int    (0) where TypeVariable <: TypeRef}
+//│ | | | C [α90'] <! α91'    (0) where ProvType <: TypeVariable}
+//│ | | | | C α90' <! α91'    (0) where TypeVariable <: TypeVariable}
+//│ | | | | | symmetric
+//│ | | | CONSTRAIN α91' <! int
+//│ | | |   where 
+//│ 		α90' <: [[[α91']]]
+//│ 		α91' :> [[[α90']]]
+//│ | | | C α91' <! int    (0) where TypeVariable <: TypeRef}
+//│ | | | | C [[[α90']]] <! int    (1) where ProvType <: TypeRef}
+//│ | | | | | C [[α90']] <! int    (1) where ProvType <: TypeRef}
+//│ | | | | | | C [α90'] <! int    (1) where ProvType <: TypeRef}
+//│ | | | | | | | C α90' <! int    (1) where TypeVariable <: TypeRef}
 //│ | | 1. : [(int -> int)]
 //│ | | 1. Typing term 1
 //│ | | 1. : int
-//│ | | CONSTRAIN int <! int
+//│ | | CONSTRAIN int <! α93'
 //│ | |   where 
-//│ | | C int <! int    (0) where TypeRef <: TypeRef}
+//│ | | C int <! α93'    (0) where TypeRef <: TypeVariable}
+//│ | | CONSTRAIN α93' <! int
+//│ | |   where 
+//│ 		α93' :> [[int]]
+//│ | | C α93' <! int    (0) where TypeVariable <: TypeRef}
+//│ | | | C [[int]] <! int    (1) where ProvType <: TypeRef}
 //│ | 1. : [int]
-//│ 1. : (α82' -> [int])
-//│ ⬤ Typed as: (α82' -> [int])
+//│ 1. : (α90' -> [int])
+//│ ⬤ Typed as: (α90' -> [int])
 //│  where: 
-//│ 		α82' <: [[[int]]]
+//│ 		α90' <: [[[[int]]]] & [[[α91']]]
+//│ 		α91' :> [[[α90']]] <: [[int]]
 //│ 0. Typing term not (f 1)
 //│ | 0. Typing term not
 //│ | 0. : [(bool -> bool)]
 //│ | 0. Typing term f 1
 //│ | | 0. Typing term f
-//│ | | 0. : [(α86 -> [int])]
+//│ | | 0. : [(α97 -> [int])]
 //│ | | 0. Typing term 1
 //│ | | 0. : int
-//│ | | CONSTRAIN int <! α86
+//│ | | CONSTRAIN int <! α99
 //│ | |   where 
-//│ 		α86 <: [[[int]]]
-//│ | | C int <! α86    (0) where TypeRef <: TypeVariable}
-//│ | | | C int <! [[[int]]]    (1) where TypeRef <: ProvType}
+//│ | | C int <! α99    (0) where TypeRef <: TypeVariable}
+//│ | | CONSTRAIN α99 <! α97
+//│ | |   where 
+//│ 		α97 <: [[[[int]]]] & [[[α98]]]
+//│ 		α98 :> [[[α97]]] <: [[int]]
+//│ 		α99 :> [[int]]
+//│ | | C α99 <! α97    (0) where TypeVariable <: TypeVariable}
+//│ | | | symmetric
+//│ | | | C [[int]] <! α97    (1) where ProvType <: TypeVariable}
+//│ | | | | C [int] <! α97    (1) where ProvType <: TypeVariable}
+//│ | | | | | C int <! α97    (1) where TypeRef <: TypeVariable}
+//│ | | | | | | C int <! [[[[int]]]]    (2) where TypeRef <: ProvType}
+//│ | | | | | | C int <! [[[α98]]]    (2) where TypeRef <: ProvType}
+//│ | | | | | | | C int <! [[α98]]    (2) where TypeRef <: ProvType}
+//│ | | | | | | | | C int <! [α98]    (2) where TypeRef <: ProvType}
+//│ | | | | | | | | | C int <! α98    (2) where TypeRef <: TypeVariable}
+//│ | | | | | | | | | | C int <! [[int]]    (3) where TypeRef <: ProvType}
+//│ | | | C α99 <! [[[[int]]]]    (3) where TypeVariable <: ProvType}
+//│ | | | | C α99 <! [[[int]]]    (3) where TypeVariable <: ProvType}
+//│ | | | | | C α99 <! [[int]]    (3) where TypeVariable <: ProvType}
+//│ | | | | | | C α99 <! [int]    (3) where TypeVariable <: ProvType}
+//│ | | | | | | | C α99 <! int    (3) where TypeVariable <: TypeRef}
+//│ | | | | | | | | C [[int]] <! int    (4) where ProvType <: TypeRef}
+//│ | | | C α99 <! [[[α98]]]    (4) where TypeVariable <: ProvType}
+//│ | | | | C α99 <! [[α98]]    (4) where TypeVariable <: ProvType}
+//│ | | | | | C α99 <! [α98]    (4) where TypeVariable <: ProvType}
+//│ | | | | | | C α99 <! α98    (4) where TypeVariable <: TypeVariable}
+//│ | | | | | | | symmetric
+//│ | | | | | | | C [[int]] <! α98    (5) where ProvType <: TypeVariable}
+//│ | | | | | | | | C [int] <! α98    (5) where ProvType <: TypeVariable}
+//│ | | | | | | | | | C int <! α98    (5) where TypeRef <: TypeVariable}
+//│ | | | | | | | | | | Cached!
+//│ | | | | | | | C α99 <! [[int]]    (5) where TypeVariable <: ProvType}
+//│ | | | | | | | | C α99 <! [int]    (5) where TypeVariable <: ProvType}
+//│ | | | | | | | | | C α99 <! int    (5) where TypeVariable <: TypeRef}
+//│ | | | | | | | | | | Cached!
 //│ | 0. : [[int]]
-//│ | CONSTRAIN [[int]] <! bool
+//│ | CONSTRAIN [[int]] <! α101
 //│ |   where 
-//│ | C [[int]] <! bool    (0) where ProvType <: TypeRef}
-//│ | | C [int] <! bool    (0) where ProvType <: TypeRef}
-//│ | | | C int <! bool    (0) where TypeRef <: TypeRef}
+//│ | C [[int]] <! α101    (0) where ProvType <: TypeVariable}
+//│ | | C [int] <! α101    (0) where ProvType <: TypeVariable}
+//│ | | | C int <! α101    (0) where TypeRef <: TypeVariable}
+//│ | CONSTRAIN α101 <! bool
+//│ |   where 
+//│ 		α101 :> [[[[int]]]]
+//│ | C α101 <! bool    (0) where TypeVariable <: TypeRef}
+//│ | | C [[[[int]]]] <! bool    (1) where ProvType <: TypeRef}
+//│ | | | C [[[int]]] <! bool    (1) where ProvType <: TypeRef}
+//│ | | | | C [[int]] <! bool    (1) where ProvType <: TypeRef}
+//│ | | | | | C [int] <! bool    (1) where ProvType <: TypeRef}
+//│ | | | | | | C int <! bool    (1) where TypeRef <: TypeRef}
 //│ 0. : [bool]
 //│ ⬤ Typed as: [bool]
 //│  where: 
-//│ α88 bounds
-//│ α87 bounds
-//│ α86 bounds
-//│ U α86 <: [[int]] with 3 provs
-//│ U α86 = [[int]] because lb([[int]] <: α86) ()
-//│ U α86 += ([[int]],lb([[int]] <: α86))
-//│ U α86 :> [[[int]]] with 4 provs
-//│ U α86 = [[[int]]] because ub(α86 <: [[[int]]]) ()
-//│ | U Cached α86 = int
-//│ U α86 += ([[[int]]],ub(α86 <: [[[int]]]))
-//│ α84' bounds
-//│ α83' bounds
-//│ α82' bounds
-//│ U α82' :> [[[int]]] with 4 provs
-//│ U α82' = [[[int]]] because ub(α82' <: [[[int]]]) ()
-//│ U α82' += ([[[int]]],ub(α82' <: [[[int]]]))
-//│ unified α88 with:
-//│ unified α87 with:
-//│ unified α86 with:
-//│   [[int]]: ub(α86 <: [[[int]]])
-//│ unified α84' with:
-//│ unified α83' with:
-//│ unified α82' with:
-//│   [[[int]]]: ub(α82' <: [[[int]]])
-//│ ╔══[WARNING] ?a is unified with int because ub(α86 <: [[[int]]]))
+//│ α102 bounds
+//│ α101 bounds
+//│ U α101 <: [[[[int]]]] with 5 provs
+//│ U α101 = [[[[int]]]] because lb([[[[int]]]] <: α101) ()
+//│ U α101 += ([[[[int]]]],lb([[[[int]]]] <: α101))
+//│ U α101 :> [[bool]] with 3 provs
+//│ U α101 = [[bool]] because ub(α101 <: [[bool]]) ()
+//│ | U   bool with
+//│ |     α101 = [[[[int]]]] for lb([[[[int]]]] <: α101)
+//│ | U [[[[int]]]] = bool because lb([[[[int]]]] <: α101), ub(α101 <: [[bool]]) ()
+//│ | | UERR  [[[[int]]]] = bool because lb([[[[int]]]] <: α101),ub(α101 <: [[bool]])
+//│ ╔══[ERROR] Type `int` does not match `bool`
 //│ ║  
+//│ ╟── `int` comes from this type expression
+//│ ║  builtin: 	let (+): int -> int -> int
+//│ ║           	                       ^^^
+//│ ╟── this operator application has type `int`
+//│ ║  l.1: 	let f x = x + 1
+//│ ║       	          ^^^^^
+//│ ╟── this application has type `int`
+//│ ║  l.2: 	not (f 1)
+//│ ║       	    ^^^^^
+//│ ╟── `bool` comes from this type expression
+//│ ║  builtin: 	let not: bool -> bool
+//│ ╙──         	         ^^^^
+//│ U α101 += ([[bool]],ub(α101 <: [[bool]]))
+//│ α100 bounds
+//│ α99 bounds
+//│ U α99 <: [[int]] with 3 provs
+//│ U α99 = [[int]] because lb([[int]] <: α99) ()
+//│ U α99 += ([[int]],lb([[int]] <: α99))
+//│ U α99 :> [[[[α98]]]] with 5 provs
+//│ U α99 = [[[[α98]]]] because ub(α99 <: [[[[α98]]]]) ()
+//│ | U   α98 with
+//│ |     α99 = [[int]] for lb([[int]] <: α99)
+//│ | U [[int]] = α98 because lb([[int]] <: α99), ub(α99 <: [[[[α98]]]]) ()
+//│ U α99 += ([[[[α98]]]],ub(α99 <: [[[[α98]]]]))
+//│ U α99 :> [[[[[int]]]]] with 6 provs
+//│ U α99 = [[[[[int]]]]] because ub(α99 <: [[[[[int]]]]]) ()
+//│ | U Cached α99 = int
+//│ U α99 += ([[[[[int]]]]],ub(α99 <: [[[[[int]]]]]))
+//│ U α99 :> [[α97]] with 3 provs
+//│ U α99 = [[α97]] because ub(α99 <: [[α97]]) ()
+//│ | U   α97 with
+//│ |     α99 = [[int]] for ub(α99 <: [[[[[int]]]]])
+//│ | U [[int]] = α97 because ub(α99 <: [[[[[int]]]]]), ub(α99 <: [[α97]]) ()
+//│ |     α99 = [[[[α98]]]] for ub(α99 <: [[[[α98]]]])
+//│ | U [[[[α98]]]] = α97 because ub(α99 <: [[[[α98]]]]), ub(α99 <: [[α97]]) ()
+//│ U α99 += ([[α97]],ub(α99 <: [[α97]]))
+//│ α98 bounds
+//│ U α98 <: [[[[α99]]]] with 5 provs
+//│ U α98 = [[[[α99]]]] because lb([[[[α99]]]] <: α98) ()
+//│ | U Cached α98 = α99
+//│ U α98 += ([[[[α99]]]],lb([[[[α99]]]] <: α98))
+//│ U α98 <: [[[[[int]]]]] with 6 provs
+//│ U α98 = [[[[[int]]]]] because lb([[[[[int]]]]] <: α98) ()
+//│ | U Cached α98 = int
+//│ U α98 += ([[[[[int]]]]],lb([[[[[int]]]]] <: α98))
+//│ U α98 <: [[[α97]]] with 4 provs
+//│ U α98 = [[[α97]]] because lb([[[α97]]] <: α98) ()
+//│ | U Cached α98 = α97
+//│ U α98 += ([[[α97]]],lb([[[α97]]] <: α98))
+//│ U α98 :> [[int]] with 3 provs
+//│ U α98 = [[int]] because ub(α98 <: [[int]]) ()
+//│ | U Cached α98 = int
+//│ U α98 += ([[int]],ub(α98 <: [[int]]))
+//│ α97 bounds
+//│ U α97 <: [[α99]] with 3 provs
+//│ U α97 = [[α99]] because lb([[α99]] <: α97) ()
+//│ | U Cached α97 = α99
+//│ U α97 += ([[α99]],lb([[α99]] <: α97))
+//│ U α97 <: [[[int]]] with 4 provs
+//│ U α97 = [[[int]]] because lb([[[int]]] <: α97) ()
+//│ | U Cached α97 = int
+//│ U α97 += ([[[int]]],lb([[[int]]] <: α97))
+//│ U α97 :> [[[[int]]]] with 5 provs
+//│ U α97 = [[[[int]]]] because ub(α97 <: [[[[int]]]]) ()
+//│ | U Cached α97 = int
+//│ U α97 += ([[[[int]]]],ub(α97 <: [[[[int]]]]))
+//│ U α97 :> [[[α98]]] with 4 provs
+//│ U α97 = [[[α98]]] because ub(α97 <: [[[α98]]]) ()
+//│ | U Cached α97 = α98
+//│ U α97 += ([[[α98]]],ub(α97 <: [[[α98]]]))
+//│ α94' bounds
+//│ α93' bounds
+//│ U α93' <: [[int]] with 3 provs
+//│ U α93' = [[int]] because lb([[int]] <: α93') ()
+//│ U α93' += ([[int]],lb([[int]] <: α93'))
+//│ U α93' :> [[int]] with 3 provs
+//│ U α93' = [[int]] because ub(α93' <: [[int]]) ()
+//│ | U Cached α93' = int
+//│ U α93' += ([[int]],ub(α93' <: [[int]]))
+//│ α92' bounds
+//│ α91' bounds
+//│ U α91' <: [[[α90']]] with 4 provs
+//│ U α91' = [[[α90']]] because lb([[[α90']]] <: α91') ()
+//│ U α91' += ([[[α90']]],lb([[[α90']]] <: α91'))
+//│ U α91' :> [[int]] with 3 provs
+//│ U α91' = [[int]] because ub(α91' <: [[int]]) ()
+//│ | U   int with
+//│ |     α91' = [[[α90']]] for lb([[[α90']]] <: α91')
+//│ | U [[[α90']]] = int because lb([[[α90']]] <: α91'), ub(α91' <: [[int]]) ()
+//│ U α91' += ([[int]],ub(α91' <: [[int]]))
+//│ α90' bounds
+//│ U α90' :> [[[[int]]]] with 5 provs
+//│ U α90' = [[[[int]]]] because ub(α90' <: [[[[int]]]]) ()
+//│ | U Cached α90' = int
+//│ U α90' += ([[[[int]]]],ub(α90' <: [[[[int]]]]))
+//│ U α90' :> [[[α91']]] with 4 provs
+//│ U α90' = [[[α91']]] because ub(α90' <: [[[α91']]]) ()
+//│ | U Cached α90' = α91'
+//│ U α90' += ([[[α91']]],ub(α90' <: [[[α91']]]))
+//│ unified α102 with:
+//│ unified α101 with:
+//│   [[bool]]: ub(α101 <: [[bool]])
+//│   [[[[int]]]]: lb([[[[int]]]] <: α101)
+//│ unified α100 with:
+//│ unified α99 with:
+//│   [[α97]]: ub(α99 <: [[α97]])
+//│   [[int]]: ub(α99 <: [[[[[int]]]]])
+//│   [[[[α98]]]]: ub(α99 <: [[[[α98]]]])
+//│ unified α98 with:
+//│   [[[α97]]]: lb([[[α97]]] <: α98)
+//│   [[[[[int]]]]]: ub(α98 <: [[int]])
+//│   [[[[α99]]]]: lb([[[[α99]]]] <: α98)
+//│ unified α97 with:
+//│   [[[int]]]: ub(α97 <: [[[[int]]]])
+//│   [[[α98]]]: ub(α97 <: [[[α98]]])
+//│   [[α99]]: lb([[α99]] <: α97)
+//│ unified α94' with:
+//│ unified α93' with:
+//│   [[int]]: ub(α93' <: [[int]])
+//│ unified α92' with:
+//│ unified α91' with:
+//│   [[int]]: ub(α91' <: [[int]])
+//│   [[[α90']]]: lb([[[α90']]] <: α91')
+//│ unified α90' with:
+//│   [[[[int]]]]: ub(α90' <: [[[[int]]]])
+//│   [[[α91']]]: ub(α90' <: [[[α91']]])
+//│ ╔══[WARNING] ?a is unified with bool because ub(α101 <: [[bool]]))
+//│ ║  
+//│ ╟── application
+//│ ║  l.44: 	not (f 1)
+//│ ║        	    ^^^^^
+//│ ╟── type reference
+//│ ║  builtin: 	let not: bool -> bool
+//│ ║           	         ^^^^
+//│ ╟── type reference
+//│ ║  builtin: 	let not: bool -> bool
+//│ ╙──         	         ^^^^
+//│ ╔══[WARNING] ?a is unified with int because lb([[[[int]]]] <: α101))
+//│ ║  
+//│ ╟── type reference
+//│ ║  builtin: 	let (+): int -> int -> int
+//│ ║           	                       ^^^
+//│ ╟── type reference
+//│ ║  builtin: 	let (+): int -> int -> int
+//│ ║           	                       ^^^
+//│ ╟── operator application
+//│ ║  l.43: 	let f x = x + 1
+//│ ║        	          ^^^^^
+//│ ╟── application
+//│ ║  l.44: 	not (f 1)
+//│ ║        	    ^^^^^
+//│ ╟── application
+//│ ║  l.44: 	not (f 1)
+//│ ╙──      	    ^^^^^
+//│ ╔══[WARNING] ?a is unified with ?b because ub(α99 <: [[α97]]))
+//│ ║  
+//│ ╟── integer literal
+//│ ║  l.44: 	not (f 1)
+//│ ║        	       ^
 //│ ╟── variable
-//│ ║  l.25: 	let f x = x + 1
+//│ ║  l.43: 	let f x = x + 1
+//│ ║        	      ^
+//│ ╟── variable
+//│ ║  l.43: 	let f x = x + 1
+//│ ╙──      	      ^
+//│ ╔══[WARNING] ?a is unified with int because ub(α99 <: [[[[[int]]]]]))
+//│ ║  
+//│ ╟── integer literal
+//│ ║  l.44: 	not (f 1)
+//│ ║        	       ^
+//│ ╟── variable
+//│ ║  l.43: 	let f x = x + 1
 //│ ║        	      ^
 //│ ╟── reference
-//│ ║  l.25: 	let f x = x + 1
+//│ ║  l.43: 	let f x = x + 1
+//│ ║        	          ^
+//│ ╟── reference
+//│ ║  l.43: 	let f x = x + 1
 //│ ║        	          ^
 //│ ╟── type reference
 //│ ║  builtin: 	let (+): int -> int -> int
@@ -108,13 +344,41 @@ not (f 1)
 //│ ╟── type reference
 //│ ║  builtin: 	let (+): int -> int -> int
 //│ ╙──         	         ^^^
-//│ ╔══[WARNING] ?a is unified with int because ub(α82' <: [[[int]]]))
+//│ ╔══[WARNING] ?a is unified with ?b because ub(α99 <: [[[[α98]]]]))
 //│ ║  
+//│ ╟── integer literal
+//│ ║  l.44: 	not (f 1)
+//│ ║        	       ^
 //│ ╟── variable
-//│ ║  l.25: 	let f x = x + 1
+//│ ║  l.43: 	let f x = x + 1
 //│ ║        	      ^
 //│ ╟── reference
-//│ ║  l.25: 	let f x = x + 1
+//│ ║  l.43: 	let f x = x + 1
+//│ ║        	          ^
+//│ ╟── reference
+//│ ║  l.43: 	let f x = x + 1
+//│ ║        	          ^
+//│ ╟── reference
+//│ ║  l.43: 	let f x = x + 1
+//│ ╙──      	          ^
+//│ ╔══[WARNING] ?a is unified with ?b because lb([[[α97]]] <: α98))
+//│ ║  
+//│ ╟── variable
+//│ ║  l.43: 	let f x = x + 1
+//│ ║        	      ^
+//│ ╟── variable
+//│ ║  l.43: 	let f x = x + 1
+//│ ║        	      ^
+//│ ╟── reference
+//│ ║  l.43: 	let f x = x + 1
+//│ ║        	          ^
+//│ ╟── reference
+//│ ║  l.43: 	let f x = x + 1
+//│ ╙──      	          ^
+//│ ╔══[WARNING] ?a is unified with int because ub(α98 <: [[int]]))
+//│ ║  
+//│ ╟── reference
+//│ ║  l.43: 	let f x = x + 1
 //│ ║        	          ^
 //│ ╟── type reference
 //│ ║  builtin: 	let (+): int -> int -> int
@@ -122,6 +386,132 @@ not (f 1)
 //│ ╟── type reference
 //│ ║  builtin: 	let (+): int -> int -> int
 //│ ╙──         	         ^^^
+//│ ╔══[WARNING] ?a is unified with ?b because lb([[[[α99]]]] <: α98))
+//│ ║  
+//│ ╟── integer literal
+//│ ║  l.44: 	not (f 1)
+//│ ║        	       ^
+//│ ╟── integer literal
+//│ ║  l.44: 	not (f 1)
+//│ ║        	       ^
+//│ ╟── variable
+//│ ║  l.43: 	let f x = x + 1
+//│ ║        	      ^
+//│ ╟── reference
+//│ ║  l.43: 	let f x = x + 1
+//│ ║        	          ^
+//│ ╟── reference
+//│ ║  l.43: 	let f x = x + 1
+//│ ╙──      	          ^
+//│ ╔══[WARNING] ?a is unified with int because ub(α97 <: [[[[int]]]]))
+//│ ║  
+//│ ╟── variable
+//│ ║  l.43: 	let f x = x + 1
+//│ ║        	      ^
+//│ ╟── reference
+//│ ║  l.43: 	let f x = x + 1
+//│ ║        	          ^
+//│ ╟── reference
+//│ ║  l.43: 	let f x = x + 1
+//│ ║        	          ^
+//│ ╟── type reference
+//│ ║  builtin: 	let (+): int -> int -> int
+//│ ║           	         ^^^
+//│ ╟── type reference
+//│ ║  builtin: 	let (+): int -> int -> int
+//│ ╙──         	         ^^^
+//│ ╔══[WARNING] ?a is unified with ?b because ub(α97 <: [[[α98]]]))
+//│ ║  
+//│ ╟── variable
+//│ ║  l.43: 	let f x = x + 1
+//│ ║        	      ^
+//│ ╟── reference
+//│ ║  l.43: 	let f x = x + 1
+//│ ║        	          ^
+//│ ╟── reference
+//│ ║  l.43: 	let f x = x + 1
+//│ ║        	          ^
+//│ ╟── reference
+//│ ║  l.43: 	let f x = x + 1
+//│ ╙──      	          ^
+//│ ╔══[WARNING] ?a is unified with ?b because lb([[α99]] <: α97))
+//│ ║  
+//│ ╟── integer literal
+//│ ║  l.44: 	not (f 1)
+//│ ║        	       ^
+//│ ╟── integer literal
+//│ ║  l.44: 	not (f 1)
+//│ ║        	       ^
+//│ ╟── variable
+//│ ║  l.43: 	let f x = x + 1
+//│ ╙──      	      ^
+//│ ╔══[WARNING] ?a is unified with int because ub(α93' <: [[int]]))
+//│ ║  
+//│ ╟── integer literal
+//│ ║  l.43: 	let f x = x + 1
+//│ ║        	              ^
+//│ ╟── type reference
+//│ ║  builtin: 	let (+): int -> int -> int
+//│ ║           	                ^^^
+//│ ╟── type reference
+//│ ║  builtin: 	let (+): int -> int -> int
+//│ ╙──         	                ^^^
+//│ ╔══[WARNING] ?a is unified with int because ub(α91' <: [[int]]))
+//│ ║  
+//│ ╟── reference
+//│ ║  l.43: 	let f x = x + 1
+//│ ║        	          ^
+//│ ╟── type reference
+//│ ║  builtin: 	let (+): int -> int -> int
+//│ ║           	         ^^^
+//│ ╟── type reference
+//│ ║  builtin: 	let (+): int -> int -> int
+//│ ╙──         	         ^^^
+//│ ╔══[WARNING] ?a is unified with ?b because lb([[[α90']]] <: α91'))
+//│ ║  
+//│ ╟── variable
+//│ ║  l.43: 	let f x = x + 1
+//│ ║        	      ^
+//│ ╟── variable
+//│ ║  l.43: 	let f x = x + 1
+//│ ║        	      ^
+//│ ╟── reference
+//│ ║  l.43: 	let f x = x + 1
+//│ ║        	          ^
+//│ ╟── reference
+//│ ║  l.43: 	let f x = x + 1
+//│ ╙──      	          ^
+//│ ╔══[WARNING] ?a is unified with int because ub(α90' <: [[[[int]]]]))
+//│ ║  
+//│ ╟── variable
+//│ ║  l.43: 	let f x = x + 1
+//│ ║        	      ^
+//│ ╟── reference
+//│ ║  l.43: 	let f x = x + 1
+//│ ║        	          ^
+//│ ╟── reference
+//│ ║  l.43: 	let f x = x + 1
+//│ ║        	          ^
+//│ ╟── type reference
+//│ ║  builtin: 	let (+): int -> int -> int
+//│ ║           	         ^^^
+//│ ╟── type reference
+//│ ║  builtin: 	let (+): int -> int -> int
+//│ ╙──         	         ^^^
+//│ ╔══[WARNING] ?a is unified with ?b because ub(α90' <: [[[α91']]]))
+//│ ║  
+//│ ╟── variable
+//│ ║  l.43: 	let f x = x + 1
+//│ ║        	      ^
+//│ ╟── reference
+//│ ║  l.43: 	let f x = x + 1
+//│ ║        	          ^
+//│ ╟── reference
+//│ ║  l.43: 	let f x = x + 1
+//│ ║        	          ^
+//│ ╟── reference
+//│ ║  l.43: 	let f x = x + 1
+//│ ╙──      	          ^
 //│ f: int -> int
 //│ res: bool
 
@@ -137,12 +527,31 @@ not a
 //│ | 0. : [(bool -> bool)]
 //│ | 0. Typing term a
 //│ | 0. : [int]
-//│ | CONSTRAIN [int] <! bool
+//│ | CONSTRAIN [int] <! α103
 //│ |   where 
-//│ | C [int] <! bool    (0) where ProvType <: TypeRef}
-//│ | | C int <! bool    (0) where TypeRef <: TypeRef}
+//│ | C [int] <! α103    (0) where ProvType <: TypeVariable}
+//│ | | C int <! α103    (0) where TypeRef <: TypeVariable}
+//│ | CONSTRAIN α103 <! bool
+//│ |   where 
+//│ 		α103 :> [[[int]]]
+//│ | C α103 <! bool    (0) where TypeVariable <: TypeRef}
+//│ | | C [[[int]]] <! bool    (1) where ProvType <: TypeRef}
+//│ | | | C [[int]] <! bool    (1) where ProvType <: TypeRef}
+//│ | | | | C [int] <! bool    (1) where ProvType <: TypeRef}
+//│ | | | | | C int <! bool    (1) where TypeRef <: TypeRef}
 //│ 0. : [bool]
 //│ ⬤ Typed as: [bool]
 //│  where: 
+//│ ╔══[ERROR] Type `int` does not match `bool`
+//│ ║  
+//│ ╟── this integer literal has type `int`
+//│ ║  l.1: 	let a = 1
+//│ ║       	        ^
+//│ ╟── this reference has type `int`
+//│ ║  l.2: 	not a
+//│ ║       	    ^
+//│ ╟── `bool` comes from this type expression
+//│ ║  builtin: 	let not: bool -> bool
+//│ ╙──         	         ^^^^
 //│ a: int
 //│ res: bool

@@ -1,4 +1,9 @@
 let wrap x = x :: []
+//│ ╔══[ERROR] Type `?b * ?a list` does not match `?a0 * ?a0 list`
+//│ ║  
+//│ ╟── this tuple has type `?b * ?a list`
+//│ ║  l.1: 	let wrap x = x :: []
+//│ ╙──     	             ^
 //│ wrap: 'a -> list['a]
 
 
@@ -34,19 +39,19 @@ if true then wrap 1 else wrap true
 
 :unify
 if true then wrap (if true then 1 else false) else wrap true
-//│ ╔══[ERROR] Type `bool` does not match `int`
+//│ ╔══[ERROR] Type `int` does not match `bool`
 //│ ║  
-//│ ╟──        bool ---> ?a <--- int 
+//│ ╟──        int ---> ?a <--- bool 
 //│ ║  
-//│ ╟── this `else` branch has type `bool` and it flows into `?a`
+//│ ╟── this `then` branch has type `int` and it flows into `?a`
 //│ ║  l.1: 	if true then wrap (if true then 1 else false) else wrap true
-//│ ║       	                                       ^^^^^
+//│ ║       	                                ^
 //│ ╟── this if-then-else expression has type `?a`
 //│ ║  l.1: 	if true then wrap (if true then 1 else false) else wrap true
 //│ ║       	                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── this `then` branch has type `int` and it flows into `?a`
+//│ ╟── this `else` branch has type `bool` and it flows into `?a`
 //│ ║  l.1: 	if true then wrap (if true then 1 else false) else wrap true
-//│ ╙──     	                                ^
+//│ ╙──     	                                       ^^^^^
 //│ res: list[bool | int]
 
 
@@ -63,7 +68,7 @@ let rec t = test (if true then 1 else t)
 //│ ╟──        ?a list ---> ?b <--- int 
 //│ ║  
 //│ ╟── this application has type `?a list`
-//│ ║  l.-58: 	let wrap x = x :: []
+//│ ║  l.-63: 	let wrap x = x :: []
 //│ ║         	             ^^^^^^^
 //│ ╟── this `else` branch has type `?a list`
 //│ ║  l.-5: 	let test z = if true then wrap z else wrap true
@@ -91,7 +96,7 @@ let rec t = test (if true then 1 else t)
 //│ ╟──        ?a list ---> ?b <--- int 
 //│ ║  
 //│ ╟── this application has type `?a list`
-//│ ║  l.-58: 	let wrap x = x :: []
+//│ ║  l.-63: 	let wrap x = x :: []
 //│ ║         	             ^^^^^^^
 //│ ╟── this `then` branch has type `?a list`
 //│ ║  l.-5: 	let test z = if true then wrap z else wrap true
@@ -152,22 +157,24 @@ let clone x n =
 :unify
 let rec digitsOfInt n =
   ((digitsOfInt n) / 10) @ [remainder];;
-//│ ╔══[ERROR] Type `?a list` does not match `int`
+//│ ╔══[ERROR] Type `error * ?a list` does not match `?a0 * ?a0 list`
 //│ ║  
-//│ ╟── `?a list` comes from this type expression
-//│ ║  builtin: 	let (@): 'a list -> 'a list -> 'a list
-//│ ║           	                               ^^^^^^^
-//│ ╟── this operator application has type `?a list`
+//│ ╟── this tuple has type `error * ?a list`
 //│ ║  l.2: 	  ((digitsOfInt n) / 10) @ [remainder];;
-//│ ║       	  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── this application has type `?a list`
-//│ ║  l.2: 	  ((digitsOfInt n) / 10) @ [remainder];;
-//│ ║       	   ^^^^^^^^^^^^^^^
+//│ ╙──     	                            ^^^^^^^^^
+//│ ╔══[ERROR] Type `int` does not match `?a list`
+//│ ║  
 //│ ╟── `int` comes from this type expression
 //│ ║  builtin: 	let ( / ): int -> int -> int
-//│ ╙──         	           ^^^
+//│ ║           	                         ^^^
+//│ ╟── this operator application has type `int`
+//│ ║  l.2: 	  ((digitsOfInt n) / 10) @ [remainder];;
+//│ ║       	  ^^^^^^^^^^^^^^^^^^^^^^
+//│ ╟── `?a list` comes from this type expression
+//│ ║  builtin: 	let (@): 'a list -> 'a list -> 'a list
+//│ ╙──         	         ^^^^^^^
 //│ ╔══[ERROR] identifier not found: remainder
 //│ ║  
-//│ ║  l.154: 	  ((digitsOfInt n) / 10) @ [remainder];;
+//│ ║  l.159: 	  ((digitsOfInt n) / 10) @ [remainder];;
 //│ ╙──       	                            ^^^^^^^^^
 //│ digitsOfInt: anything -> list[error]

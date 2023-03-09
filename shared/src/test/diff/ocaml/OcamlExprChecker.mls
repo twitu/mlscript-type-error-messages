@@ -22,6 +22,16 @@ let List.append: 'a list -> 'a list -> 'a list
 
 let (@): 'a list -> 'a list -> 'a list
 Cons(1, Nil) @ Cons(2, Nil)
+//│ ╔══[ERROR] Type `int * ?a list` does not match `?a0 * ?a0 list`
+//│ ║  
+//│ ╟── this tuple has type `int * ?a list`
+//│ ║  l.2: 	Cons(1, Nil) @ Cons(2, Nil)
+//│ ╙──     	                   ^^^^^^^^
+//│ ╔══[ERROR] Type `int * ?a list` does not match `?a0 * ?a0 list`
+//│ ║  
+//│ ╟── this tuple has type `int * ?a list`
+//│ ║  l.2: 	Cons(1, Nil) @ Cons(2, Nil)
+//│ ╙──     	    ^^^^^^^^
 //│ @: list['a] -> list['a] -> list['a]
 //│ res: list[int]
 
@@ -38,6 +48,26 @@ let a b c d = b = c = d
 [1, 2, 3, 4]
 []
 // let a = []
+//│ ╔══[ERROR] Type `(int * int * int * int) * ?a list` does not match `?a0 * ?a0 list`
+//│ ║  
+//│ ╟── this tuple has type `(int * int * int * int) * ?a list`
+//│ ║  l.3: 	[1, 2, 3, 4]
+//│ ╙──     	 ^^^^^^^^^^
+//│ ╔══[ERROR] Type `int * ?a list` does not match `?a0 * ?a0 list`
+//│ ║  
+//│ ╟── this tuple has type `int * ?a list`
+//│ ║  l.2: 	1 :: 2 :: Nil
+//│ ╙──     	^^^^^^^^^^^^^
+//│ ╔══[ERROR] Type `int * ?a list` does not match `?a0 * ?a0 list`
+//│ ║  
+//│ ╟── this tuple has type `int * ?a list`
+//│ ║  l.2: 	1 :: 2 :: Nil
+//│ ╙──     	     ^^^^^^^^
+//│ ╔══[ERROR] Type `int * ?a list` does not match `?a0 * ?a0 list`
+//│ ║  
+//│ ╟── this tuple has type `int * ?a list`
+//│ ║  l.1: 	1 :: Nil
+//│ ╙──     	^^^^^^^^
 //│ res: list[int]
 //│ res: list[int]
 //│ res: list[(int, int, int, int,)]
@@ -59,6 +89,21 @@ let ( ** ): float -> float -> float
 
 1.0 :: Nil
 2.0 :: 3.223 :: Nil
+//│ ╔══[ERROR] Type `float * ?a list` does not match `?a0 * ?a0 list`
+//│ ║  
+//│ ╟── this tuple has type `float * ?a list`
+//│ ║  l.2: 	2.0 :: 3.223 :: Nil
+//│ ╙──     	^^^^^^^^^^^^^^^^^^^
+//│ ╔══[ERROR] Type `float * ?a list` does not match `?a0 * ?a0 list`
+//│ ║  
+//│ ╟── this tuple has type `float * ?a list`
+//│ ║  l.2: 	2.0 :: 3.223 :: Nil
+//│ ╙──     	       ^^^^^^^^^^^^
+//│ ╔══[ERROR] Type `float * ?a list` does not match `?a0 * ?a0 list`
+//│ ║  
+//│ ╟── this tuple has type `float * ?a list`
+//│ ║  l.1: 	1.0 :: Nil
+//│ ╙──     	^^^^^^^^^^
 //│ res: list[float]
 //│ res: list[float]
 
@@ -83,6 +128,16 @@ let a = a + a + 1
 let a = ("hi", 2)
 let b = ("bye", 3)
 let data = Cons (a, Cons (b, Nil))
+//│ ╔══[ERROR] Type `(string * int) * ?a list` does not match `?a0 * ?a0 list`
+//│ ║  
+//│ ╟── this tuple has type `(string * int) * ?a list`
+//│ ║  l.3: 	let data = Cons (a, Cons (b, Nil))
+//│ ╙──     	                ^^^^^^^^^^^^^^^^^^
+//│ ╔══[ERROR] Type `(string * int) * ?a list` does not match `?a0 * ?a0 list`
+//│ ║  
+//│ ╟── this tuple has type `(string * int) * ?a list`
+//│ ║  l.3: 	let data = Cons (a, Cons (b, Nil))
+//│ ╙──     	                         ^^^^^^^^
 //│ a: (string, int,)
 //│ b: (string, int,)
 //│ data: list[(string, int,)]
@@ -99,6 +154,11 @@ let c = 3.0 +. 4.0 *. 6.0
 let mktup = 1, 2, 3
 let mktup = 1, (2, 3)
 let mktup = [1, 2, 3], 4, (5, 6)
+//│ ╔══[ERROR] Type `(int * int * int) * ?a list` does not match `?a0 * ?a0 list`
+//│ ║  
+//│ ╟── this tuple has type `(int * int * int) * ?a list`
+//│ ║  l.4: 	let mktup = [1, 2, 3], 4, (5, 6)
+//│ ╙──     	             ^^^^^^^
 //│ res: (int, int, int,)
 //│ mktup: (int, int, int,)
 //│ mktup: (int, (int, int,),)
@@ -177,11 +237,36 @@ type ('a, 'b) heapD = HeapD of 'a * 'b list
 (("hi", 1) :: Nil)
 (("hi", 1) :: Nil):heap
 (("hi", 1) :: ("bye", 2) :: Nil):heap
+//│ ╔══[ERROR] Type `(string * int) * ?a list` does not match `?a0 * ?a0 list`
+//│ ║  
+//│ ╟── this tuple has type `(string * int) * ?a list`
+//│ ║  l.3: 	(("hi", 1) :: ("bye", 2) :: Nil):heap
+//│ ╙──     	  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+//│ ╔══[ERROR] Type `(string * int) * ?a list` does not match `?a0 * ?a0 list`
+//│ ║  
+//│ ╟── this tuple has type `(string * int) * ?a list`
+//│ ║  l.3: 	(("hi", 1) :: ("bye", 2) :: Nil):heap
+//│ ╙──     	               ^^^^^^^^^^^^^^^^
+//│ ╔══[ERROR] Type `(string * int) * ?a list` does not match `?a0 * ?a0 list`
+//│ ║  
+//│ ╟── this tuple has type `(string * int) * ?a list`
+//│ ║  l.2: 	(("hi", 1) :: Nil):heap
+//│ ╙──     	  ^^^^^^^^^^^^^^^
+//│ ╔══[ERROR] Type `(string * int) * ?a list` does not match `?a0 * ?a0 list`
+//│ ║  
+//│ ╟── this tuple has type `(string * int) * ?a list`
+//│ ║  l.1: 	(("hi", 1) :: Nil)
+//│ ╙──     	  ^^^^^^^^^^^^^^^
 //│ res: list[(string, int,)]
 //│ res: heap
 //│ res: heap
 
 let update h str i = (str,i)::h
+//│ ╔══[ERROR] Type `(?b * ?c) * ?d` does not match `?a * ?a list`
+//│ ║  
+//│ ╟── this tuple has type `(?b * ?c) * ?d`
+//│ ║  l.1: 	let update h str i = (str,i)::h
+//│ ╙──     	                      ^^^^^^^^^
 //│ update: list['a] -> 'b -> 'c -> list['a | ('b, 'c,)]
 
 /// FIXME
@@ -192,16 +277,16 @@ let interp2 = (fun (env:env) opt ->
      None -> 0)
 //│ ╔══[ERROR] Unsupported pattern shape:
 //│ ║  
-//│ ║  l.189: 	fun (env: env) _ -> []
+//│ ║  l.274: 	fun (env: env) _ -> []
 //│ ╙──       	    ^^^^^^^^^^^^
 //│ res: error -> list[nothing]
 //│ ╔══[ERROR] Unsupported pattern shape:
 //│ ║  
-//│ ║  l.190: 	let interp2 = (fun (env:env) opt ->
+//│ ║  l.275: 	let interp2 = (fun (env:env) opt ->
 //│ ╙──       	                   ^^^^^^^^^^^^^
 //│ ╔══[ERROR] identifier not found: opt
 //│ ║  
-//│ ║  l.191: 	  match opt with
+//│ ║  l.276: 	  match opt with
 //│ ╙──       	        ^^^
 //│ interp2: error -> int
 
@@ -256,6 +341,14 @@ let check (v: ((int, int))) =
 let checkagain (v: (int, int, (int, int))) =
   match v with
    (a, b, (k, d)) -> a + b + k + d
+//│ ╔══[ERROR] Type `error` does not match `int`
+//│ ║  
+//│ ╟── this reference has type `error`
+//│ ║  l.3: 	   (a, b, (k, d)) -> a + b + k + d
+//│ ║       	                                 ^
+//│ ╟── `int` comes from this type expression
+//│ ║  l.-223: 	let (+): int -> int -> int
+//│ ╙──        	                ^^^
 //│ ╔══[ERROR] Type `int * int` does not match `error * error`
 //│ ║  
 //│ ╟── `int * int` comes from this type expression
@@ -269,19 +362,19 @@ let checkagain (v: (int, int, (int, int))) =
 //│ ╙──     	           ^^^^
 //│ ╔══[ERROR] identifier not found: k
 //│ ║  
-//│ ║  l.258: 	   (a, b, (k, d)) -> a + b + k + d
+//│ ║  l.343: 	   (a, b, (k, d)) -> a + b + k + d
 //│ ╙──       	           ^
 //│ ╔══[ERROR] identifier not found: d
 //│ ║  
-//│ ║  l.258: 	   (a, b, (k, d)) -> a + b + k + d
+//│ ║  l.343: 	   (a, b, (k, d)) -> a + b + k + d
 //│ ╙──       	              ^
 //│ ╔══[ERROR] identifier not found: k
 //│ ║  
-//│ ║  l.258: 	   (a, b, (k, d)) -> a + b + k + d
+//│ ║  l.343: 	   (a, b, (k, d)) -> a + b + k + d
 //│ ╙──       	                             ^
 //│ ╔══[ERROR] identifier not found: d
 //│ ║  
-//│ ║  l.258: 	   (a, b, (k, d)) -> a + b + k + d
+//│ ║  l.343: 	   (a, b, (k, d)) -> a + b + k + d
 //│ ╙──       	                                 ^
 //│ checkagain: (int, int, (int, int,),) -> int
 
@@ -324,6 +417,31 @@ let g x = x, if true then x else x
 [0, 1]
 [0; 1]
 [0, 1; 2, 3]
+//│ ╔══[ERROR] Type `(int * int) * ?a list` does not match `?a0 * ?a0 list`
+//│ ║  
+//│ ╟── this tuple has type `(int * int) * ?a list`
+//│ ║  l.5: 	[0, 1; 2, 3]
+//│ ╙──     	 ^^^^^^^^^^
+//│ ╔══[ERROR] Type `(int * int) * ?a list` does not match `?a0 * ?a0 list`
+//│ ║  
+//│ ╟── this tuple has type `(int * int) * ?a list`
+//│ ║  l.5: 	[0, 1; 2, 3]
+//│ ╙──     	       ^^^^
+//│ ╔══[ERROR] Type `int * ?a list` does not match `?a0 * ?a0 list`
+//│ ║  
+//│ ╟── this tuple has type `int * ?a list`
+//│ ║  l.4: 	[0; 1]
+//│ ╙──     	 ^^^^
+//│ ╔══[ERROR] Type `int * ?a list` does not match `?a0 * ?a0 list`
+//│ ║  
+//│ ╟── this tuple has type `int * ?a list`
+//│ ║  l.4: 	[0; 1]
+//│ ╙──     	    ^
+//│ ╔══[ERROR] Type `(int * int) * ?a list` does not match `?a0 * ?a0 list`
+//│ ║  
+//│ ╟── this tuple has type `(int * int) * ?a list`
+//│ ║  l.3: 	[0, 1]
+//│ ╙──     	 ^^^^
 //│ res: (int, 'a -> 'a,)
 //│ g: 'a -> ('a, 'a,)
 //│ res: list[(int, int,)]
@@ -331,6 +449,16 @@ let g x = x, if true then x else x
 //│ res: list[(int, int,)]
 
 [0, 1; 2, 3, 4]
+//│ ╔══[ERROR] Type `(int * int) * ?a list` does not match `?a0 * ?a0 list`
+//│ ║  
+//│ ╟── this tuple has type `(int * int) * ?a list`
+//│ ║  l.1: 	[0, 1; 2, 3, 4]
+//│ ╙──     	 ^^^^^^^^^^^^^
+//│ ╔══[ERROR] Type `(int * int * int) * ?a list` does not match `?a0 * ?a0 list`
+//│ ║  
+//│ ╟── this tuple has type `(int * int * int) * ?a list`
+//│ ║  l.1: 	[0, 1; 2, 3, 4]
+//│ ╙──     	       ^^^^^^^
 //│ ╔══[ERROR] Type `int * int * int` does not match `int * int`
 //│ ║  
 //│ ╟──        int * int * int ---> ?a <--- int * int 
@@ -338,7 +466,7 @@ let g x = x, if true then x else x
 //│ ╟── this tuple literal has type `int * int * int` and it flows into `?a`
 //│ ║  l.1: 	[0, 1; 2, 3, 4]
 //│ ║       	       ^^^^^^^
-//│ ╟── this tuple literal has type `int * int` and it flows into `?a`
+//│ ╟── this tuple literal has type `int * int` and it flows into `?a0`
 //│ ║  l.1: 	[0, 1; 2, 3, 4]
 //│ ╙──     	 ^^^^
 //│ res: list[Array[int] & {_1: int, _2: int}]

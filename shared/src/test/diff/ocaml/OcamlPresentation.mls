@@ -81,20 +81,20 @@ let destructEither x = if x then
 //│ ╟── `bool` comes from this type expression
 //│ ║  builtin: 	let (&&): bool -> bool -> bool
 //│ ║           	                          ^^^^
-//│ ╟── this operator application has type `bool` and it flows into `?c`
+//│ ╟── this operator application has type `bool`
 //│ ║  l.4: 	   | Right r -> r && true
 //│ ║       	                ^^^^^^^^^
-//│ ╟── this match expression has type `?c`
+//│ ╟── this match expression has type `bool` and it flows into `?c`
 //│ ║  l.2: 	  match x with
 //│ ║       	  ^^^^^^^^^^^^
 //│ ║  l.3: 	   | Left l -> l + 1 ...
 //│ ║       	^^^^^^^^^^^^^^^^^^^^
-//│ ╟── this if-then-else expression has type `?e`
+//│ ╟── this if-then-else expression has type `?c`
 //│ ║  l.1: 	let destructEither x = if x then
 //│ ║       	                       ^^^^^^^^^
 //│ ║  l.2: 	  match x with ...
 //│ ║       	^^^^^^^^^^^^^^
-//│ ╟── this `else` branch has type `?e` and it flows from `?d`
+//│ ╟── this `else` branch has type `?c` and it flows from `?d`
 //│ ║  l.5: 	  else x
 //│ ║       	       ^^
 //│ ╟── this variable has type `?d`
@@ -113,20 +113,20 @@ let destructEither x = if x then
 //│ ╟── `int` comes from this type expression
 //│ ║  builtin: 	let (+): int -> int -> int
 //│ ║           	                       ^^^
-//│ ╟── this operator application has type `int` and it flows into `?c`
+//│ ╟── this operator application has type `int`
 //│ ║  l.3: 	   | Left l -> l + 1
 //│ ║       	               ^^^^^
-//│ ╟── this match expression has type `?c`
+//│ ╟── this match expression has type `int` and it flows into `?c`
 //│ ║  l.2: 	  match x with
 //│ ║       	  ^^^^^^^^^^^^
 //│ ║  l.3: 	   | Left l -> l + 1 ...
 //│ ║       	^^^^^^^^^^^^^^^^^^^^
-//│ ╟── this if-then-else expression has type `?e`
+//│ ╟── this if-then-else expression has type `?c`
 //│ ║  l.1: 	let destructEither x = if x then
 //│ ║       	                       ^^^^^^^^^
 //│ ║  l.2: 	  match x with ...
 //│ ║       	^^^^^^^^^^^^^^
-//│ ╟── this `else` branch has type `?e` and it flows from `?d`
+//│ ╟── this `else` branch has type `?c` and it flows from `?d`
 //│ ║  l.5: 	  else x
 //│ ║       	       ^^
 //│ ╟── this variable has type `?d`
@@ -177,6 +177,17 @@ let f: string list -> unit
 // TODO: this won't show error because there are no type variables
 :unify
 f x
+//│ ╔══[ERROR] Type `int list` does not match `string list`
+//│ ║  
+//│ ╟── `int list` comes from this type expression
+//│ ║  l.-8: 	let x: int list
+//│ ║        	       ^^^^^^^^
+//│ ╟── this reference has type `int list`
+//│ ║  l.1: 	f x
+//│ ║       	  ^
+//│ ╟── `string list` comes from this type expression
+//│ ║  l.-6: 	let f: string list -> unit
+//│ ╙──      	       ^^^^^^^^^^^
 
 :unify
 if true then x else y
@@ -185,7 +196,7 @@ if true then x else y
 //│ ╟──        string list ---> ?a <--- int list 
 //│ ║  
 //│ ╟── `string list` comes from this type expression
-//│ ║  l.-10: 	let y: string list
+//│ ║  l.-21: 	let y: string list
 //│ ║         	       ^^^^^^^^^^^
 //│ ╟── this `else` branch has type `string list` and it flows into `?a`
 //│ ║  l.1: 	if true then x else y
@@ -197,7 +208,7 @@ if true then x else y
 //│ ║  l.1: 	if true then x else y
 //│ ║       	             ^
 //│ ╟── this applied type reference has type `int list`
-//│ ║  l.-11: 	let x: int list
+//│ ║  l.-22: 	let x: int list
 //│ ╙──       	       ^^^^^^^^
 //│ res: list[int | string]
 

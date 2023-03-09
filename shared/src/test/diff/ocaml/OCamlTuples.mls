@@ -6,17 +6,52 @@ let g x = x, if true then x else x
 //│ g: 'a -> ('a, 'a,)
 
 [0, 1]
+//│ ╔══[ERROR] Type `(int * int) * ?a list` does not match `?a0 * ?a0 list`
+//│ ║  
+//│ ╟── this tuple has type `(int * int) * ?a list`
+//│ ║  l.1: 	[0, 1]
+//│ ╙──     	 ^^^^
 //│ res: list[(int, int,)]
 
 [0; 1]
+//│ ╔══[ERROR] Type `int * ?a list` does not match `?a0 * ?a0 list`
+//│ ║  
+//│ ╟── this tuple has type `int * ?a list`
+//│ ║  l.1: 	[0; 1]
+//│ ╙──     	 ^^^^
+//│ ╔══[ERROR] Type `int * ?a list` does not match `?a0 * ?a0 list`
+//│ ║  
+//│ ╟── this tuple has type `int * ?a list`
+//│ ║  l.1: 	[0; 1]
+//│ ╙──     	    ^
 //│ res: list[int]
 
 [0, 1; 2, 3]
+//│ ╔══[ERROR] Type `(int * int) * ?a list` does not match `?a0 * ?a0 list`
+//│ ║  
+//│ ╟── this tuple has type `(int * int) * ?a list`
+//│ ║  l.1: 	[0, 1; 2, 3]
+//│ ╙──     	 ^^^^^^^^^^
+//│ ╔══[ERROR] Type `(int * int) * ?a list` does not match `?a0 * ?a0 list`
+//│ ║  
+//│ ╟── this tuple has type `(int * int) * ?a list`
+//│ ║  l.1: 	[0, 1; 2, 3]
+//│ ╙──     	       ^^^^
 //│ res: list[(int, int,)]
 
 
 :e
 [0, 1; 2, 3, 4]
+//│ ╔══[ERROR] Type `(int * int) * ?a list` does not match `?a0 * ?a0 list`
+//│ ║  
+//│ ╟── this tuple has type `(int * int) * ?a list`
+//│ ║  l.1: 	[0, 1; 2, 3, 4]
+//│ ╙──     	 ^^^^^^^^^^^^^
+//│ ╔══[ERROR] Type `(int * int * int) * ?a list` does not match `?a0 * ?a0 list`
+//│ ║  
+//│ ╟── this tuple has type `(int * int * int) * ?a list`
+//│ ║  l.1: 	[0, 1; 2, 3, 4]
+//│ ╙──     	       ^^^^^^^
 //│ ╔══[ERROR] Type `int * int * int` does not match `int * int`
 //│ ║  
 //│ ╟──        int * int * int ---> ?a <--- int * int 
