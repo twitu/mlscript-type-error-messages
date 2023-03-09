@@ -45,19 +45,19 @@ let conflict x = mkpair (not x) x
 //│ ╟── this if-then-else expression has type `?a`
 //│ ║  l.-35: 	let confluence z = if true then z else 5
 //│ ║         	                   ^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── this `then` branch has type `?a`
+//│ ╟── this `then` branch has type `?c`
 //│ ║  l.-35: 	let confluence z = if true then z else 5
 //│ ║         	                                ^
-//│ ╟── this variable has type `?a`
+//│ ╟── this variable has type `?c`
 //│ ║  l.-35: 	let confluence z = if true then z else 5
 //│ ║         	               ^
-//│ ╟── this reference has type `?a`
+//│ ╟── this reference has type `?c`
 //│ ║  l.-32: 	let mkpair x y = (x, confluence y)
 //│ ║         	                                ^
-//│ ╟── this variable has type `?a`
+//│ ╟── this variable has type `?c`
 //│ ║  l.-32: 	let mkpair x y = (x, confluence y)
 //│ ║         	             ^
-//│ ╟── this reference has type `?a` and it flows from `?b`
+//│ ╟── this reference has type `?c` and it flows from `?b`
 //│ ║  l.1: 	let conflict x = mkpair (not x) x
 //│ ║       	                                ^
 //│ ╟── this variable has type `?b`
