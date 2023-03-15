@@ -1,24 +1,27 @@
-let destructEither x = match x with
- | Left l -> l + 1
- | Right r -> r && true
-//│ [ERROR] Type `bool` does not match `int`
+let increment result = match result with
+ | Left n -> n + 1
+ | Right msg -> "ERROR: " ^ msg
+ 
+(* (^): string -> string -> string is a string concatenation operator *)
+//│ [ERROR] Type `string` does not match `int`
 //│    
-//│         (bool) ---> (?a) <--- (int) 
+//│         (string) ---> (?a) <--- (int) 
 //│    
-//│ (bool) comes from
-//│    builtin:  let (&&): bool -> bool -> bool
-//│                                        ^^^^
+//│ (string) comes from
+//│    builtin:  let (^): string -> string -> string
+//│                                           ^^^^^^
 //│ 
-//│    l.3:   | Right r -> r && true
-//│                        ^^^^^^^^^^
+//│    l.3:   | Right msg -> "ERROR: " ^ msg
+//│                          ^^^^^^^^^^^^^^^
 //│ (?a) is assumed for
-//│    l.1:  let destructEither x = match x with
-//│                                 ^^^^^^^^^^^^
-//│           | Left l -> l + 1 ...
+//│    l.1:  let increment result = match result with
+//│                                 ^^^^^^^^^^^^^^^^^
+//│           | Left n -> n + 1 ...
 //│           ^^^^^^^^^^^^^^^^^^^^^
 //│ 
-//│    l.2:   | Left l -> l + 1
+//│    l.2:   | Left n -> n + 1
 //│                       ^^^^^
 //│ (int) comes from
 //│    builtin:  let (+): int -> int -> int
 //│                                  ^^^
+

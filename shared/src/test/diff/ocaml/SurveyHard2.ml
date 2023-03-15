@@ -20,6 +20,12 @@ let bigAdd l1 l2 =
     let args = List.map addTuple (List.combine l1 l2) in
     let (_,res) = List.fold_left f base args in res in
   removeZero (add (padZero l1 l2))
+ 
+(* (@): 'a list -> 'a list -> 'a list is a list concatenation operator *)
+(* List.length: 'a list -> int *)
+(* List.fold_left: ('a -> 'b -> 'a) -> 'a -> 'b list -> 'a *)
+(* List.combine: 'a list -> 'b list -> ('a * 'b) list zips two lists together *)
+(* List.map: ('a -> 'b) -> 'a list -> 'b list map elements of a list *)
 //│ [ERROR] Type `_ * _` does not match `_ list * _`
 //│    
 //│         (_ * _) ---> (?a) <--- (_ list * _) 

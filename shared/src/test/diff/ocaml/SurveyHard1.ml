@@ -6,6 +6,9 @@ let rec sepConcat sep sl =
       let base = h in let l = t in List.fold_left f base l
   
 let stringOfList f l = "[" ^ ((sepConcat "; " List.map (f, l)) ^ "]")
+ 
+(* (^): string -> string -> string is a string concatenation operator *)
+(* List.fold_left: ('a -> 'b -> 'a) -> 'a -> 'b list -> 'a *)
 //│ [ERROR] Type `(_ * _) -> _` does not match `string`
 //│    
 //│ this application has type `(_ * _) -> _`. However it flows into `string`
