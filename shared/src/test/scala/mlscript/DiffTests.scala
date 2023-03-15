@@ -379,7 +379,7 @@ class DiffTests
                 }
               case _: UnificationReport =>
                 totalTypeErrors += 1
-                s"╔══[ERROR] "
+                s"[ERROR] "
               case WarningReport(msg, loco, src) =>
                 totalWarnings += 1
                 s"╔══[WARNING] "
@@ -391,7 +391,7 @@ class DiffTests
               }
               case _ => false
             }
-            val prepre = "║  "
+            val prepre = "   "
             val lastMsgNum = diag.allMsgs.size - 1
             var globalLineNum = blockLineNum  // solely used for reporting useful test failure messages
             val tex = mode.tex
@@ -407,11 +407,11 @@ class DiffTests
               }
               // unification error has seq string
               else if (msgNum =:= 1 && seqStr) {
-                output(s"╟── ${msgStr}")
+                output(s"    ${msgStr}")
                 output(prepre)
               }
-              else output(s"${if (isLast && loco.isEmpty) "╙──" else "╟──"} ${msgStr}")
-              if (loco.isEmpty && diag.allMsgs.size =:= 1) output("╙──")
+              else output(s"${if (isLast && loco.isEmpty) "" else ""}${msgStr}")
+              if (loco.isEmpty && diag.allMsgs.size =:= 1) output("")
               loco.foreach { loc =>
                 val (startLineNum, startLineStr, startLineCol) =
                   loc.origin.fph.getLineColAt(loc.spanStart)
@@ -467,15 +467,15 @@ class DiffTests
                     // truncate large output second line onwards
                     if (l - startLineNum =:= 1 && l != endLineNum) {
                       dotextend = true
-                      output(prepre + lineNumber + "\t" + curLine + " ...")
+                      output(prepre + lineNumber + "  " + curLine + " ...")
                       l = endLineNum + 1
                     } else {
-                      output(prepre + lineNumber + "\t" + curLine)
+                      output(prepre + lineNumber + "  " + curLine)
                     }
                     val tickBuilder = new StringBuilder()
                     tickBuilder ++= (
-                      (if (isLast && l =:= endLineNum) "╙──" else prepre)
-                      + " " * lineNumber.length + "\t" + " " * (c - 1))
+                      (if (isLast && l =:= endLineNum) "" else prepre)
+                      + " " * lineNumber.length + "  " + " " * (c - 1))
                     val lastCol = if (l =:= endLineNum) endLineCol else curLine.length + 1
                     while (c < lastCol) {
                       if (c > whitespace) tickBuilder += '^'

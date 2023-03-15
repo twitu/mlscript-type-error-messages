@@ -155,12 +155,29 @@ trait UnificationSolver extends TyperDatatypes {
       }
   }
 
+  def toSequenceTypes(u: Unification): Ls[ST] = u.unificationChain match {
+    case Nil => Nil
+    case head :: tail => val first = head match {
+      case (LB(st, tv, _), true) => st :: tv :: Nil
+      case (LB(st, tv, _), false) => tv :: st :: Nil
+      case (UB(tv, st, _), false) => st :: tv :: Nil
+      case (UB(tv, st, _), true) => tv :: st :: Nil
+    }
+
+      tail.foldLeft(first) {
+        case (prev, (LB(st, tv, _), true)) => prev ::: tv :: Nil
+        case (prev, (LB(st, tv, _), false)) => prev ::: st :: Nil
+        case (prev, (UB(tv, st, _), false)) => prev ::: tv :: Nil
+        case (prev, (UB(tv, st, _), true)) => prev ::: st :: Nil
+      }
+  }
+
   def collisionErrorMessage(u: Unification)(implicit ctx: Ctx): Ls[Message -> Opt[Loc]] = {
     implicit val showTV: Set[TV] = Set()
 
     val firstthismsg = (st: ST, prov: TP) => prov match {
-      case TypeProvenance(loco, desc, _, false) => msg"this ${desc} has type `${st.expOcamlTy()}`" -> loco
-      case TypeProvenance(loco, _, _, true) => msg"`${st.expOcamlTy()}` comes from this type expression" -> loco
+      case TypeProvenance(loco, desc, _, false) => msg"`${st.expOcamlTy()}` comes from" -> loco
+      case TypeProvenance(loco, _, _, true) => msg"`${st.expOcamlTy()}` comes from" -> loco
     }
     val firstsomsg = (st: ST, prov: TP) => prov match {
       case TypeProvenance(loco, desc, _, false) => msg"so this ${desc} has type `${st.expOcamlTy()}`" -> loco
@@ -225,7 +242,7 @@ trait UnificationSolver extends TyperDatatypes {
 
         raise(UnificationReport(
           msgdoesnotmatch(u.a, u.b) -> N ::
-            msg"       " + toSequenceString(u) -> N :: messages
+            msg"    " + toSequenceString(u) -> N :: messages
           , true))
     }
   }
@@ -256,23 +273,23 @@ trait UnificationSolver extends TyperDatatypes {
                         (implicit ctx: Ctx, showTV: Set[TV]): Ls[Message -> Opt[Loc]] = {
     val diagistypeof = (st: ST, tp: TP, marker: Bool) => if (marker) {
       st match {
-        case tv: TV => msg"(${tv.expOcamlTy()}) is assumed as the type of this ${tp.desc}" -> tp.loco
-        case _ => msg"(${st.expOcamlTy()}) is assumed as the type of this ${tp.desc}" -> tp.loco
+        case tv: TV => msg"(${tv.expOcamlTy()}) is assumed for" -> tp.loco
+        case _ => msg"(${st.expOcamlTy()}) comes from" -> tp.loco
       }
       } else {
-        msg"so this ${tp.desc} has type `${st.expOcamlTy()}`" -> tp.loco
+        msg"" -> tp.loco
       }
-    val diagishere = (st: ST, tp: TP) => msg"(${st.expOcamlTy()}) comes from this type expression" -> tp.loco
+    val diagishere = (st: ST, tp: TP) => msg"(${st.expOcamlTy()}) comes from" -> tp.loco
     val msgistypeof = (st: ST, tp: TP, marker: Bool) => if (tp.isType) {
-      msg"(${st.expOcamlTy()}) comes from this type expression"
+      msg"(${st.expOcamlTy()}) comes from"
     } else {
       if (marker) {
         st match {
-          case tv: TV => msg"(${tv.expOcamlTy()}) is the assumed type of this ${tp.desc}"
-          case _ => msg"(${st.expOcamlTy()}) is the type of this ${tp.desc}"
+          case tv: TV => msg"(${tv.expOcamlTy()}) is assumed for"
+          case _ => msg"(${st.expOcamlTy()}) comes from"
         }
       } else {
-        msg"so this ${tp.desc} has type `${st.expOcamlTy()}`"
+        msg""
       }
     }
     val msgflowintoit = (a: ST, b: ST) => msg". However `${a.expOcamlTy()}` flows into `${b.expOcamlTy()}`"
@@ -316,8 +333,8 @@ trait UnificationSolver extends TyperDatatypes {
         val b = ur._1.b.unwrapProvs
         provs.reverse match {
           case last :: Nil => msgistypeof(a, last, true) + msgitflowinto(b) -> last.loco :: Nil
-          case last :: sndLast :: Nil => diagistypeof(b, last, true) :: msgistypeof(a, sndLast, showFirst) + msgitflowinto(b) -> sndLast.loco :: Nil
-          case last :: sndLast :: tail => diagistypeof(b, last, true) :: msgistypeof(a, sndLast, false) + msgitflowinto(b) -> sndLast.loco :: makeMessagesST(a, tail)
+          case last :: sndLast :: Nil => diagistypeof(b, last, true) :: msgistypeof(a, sndLast, showFirst) -> sndLast.loco :: Nil
+          case last :: sndLast :: tail => diagistypeof(b, last, true) :: msgistypeof(a, sndLast, false) -> sndLast.loco :: makeMessagesST(a, tail)
           case Nil => msg"TODO: Exception empty list for ${ur.toString()}" -> N :: Nil
         }
       }.reverse
@@ -331,9 +348,9 @@ trait UnificationSolver extends TyperDatatypes {
         val a = ur._1.a.unwrapProvs
         val b = ur._1.b.unwrapProvs
         provs match {
-          case fst :: Nil => msgistypeof(a, fst, true) + msgitflowinto(b) -> fst.loco :: Nil
-          case fst :: snd :: Nil => diagistypeof(a, fst, true) :: msgistypeof(b, snd, showFirst) + msgflowintoit(a, b) -> snd.loco :: Nil
-          case fst :: snd :: tail => diagistypeof(a, fst, true) :: msgistypeof(b, snd, false) + msgflowintoit(a, b) -> snd.loco :: makeMessagesST(b, tail)
+          case fst :: Nil => msgistypeof(a, fst, true) -> fst.loco :: Nil
+          case fst :: snd :: Nil => diagistypeof(a, fst, true) :: msgistypeof(b, snd, showFirst) -> snd.loco :: Nil
+          case fst :: snd :: tail => diagistypeof(a, fst, true) :: msgistypeof(b, snd, false) -> snd.loco :: makeMessagesST(b, tail)
           case Nil => msg"Exception empty list for ${ur.toString()}" -> N :: Nil
         }
       }.reverse
