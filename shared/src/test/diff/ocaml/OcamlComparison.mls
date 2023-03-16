@@ -689,27 +689,27 @@ let bigMul l1 l2 =
 //│ `_ * _` comes from
 //│    l.8:    let (carry,res) = List.fold_left f base args in [carry] @ res;;
 //│                ^^^^^^^^^^^
-//│ so this application has type `_ * _`
+//│ 
 //│    l.8:    let (carry,res) = List.fold_left f base args in [carry] @ res;;
 //│                              ^^^^^^^^^^^^^^^^^^^^^^^^^^
 //│ TODO No common prov
-//│ because this let expression has type `_ -> _`
+//│ 
 //│    l.3:      let (x1,x2) = x in
 //│              ^^^^^^^^^^^^^^^^^^
 //│              let (carry,res) = a in ...
 //│              ^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ because this let expression has type `_ -> _`
+//│ 
 //│    l.4:      let (carry,res) = a in
 //│              ^^^^^^^^^^^^^^^^^^^^^^
 //│              match x2 with | [] -> [] | h::t -> bigAdd ((mulByDigit h l1), res) in
 //│              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ because this match expression has type `_ -> _`
+//│ 
 //│    l.5:      match x2 with | [] -> [] | h::t -> bigAdd ((mulByDigit h l1), res) in
 //│              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ because this application has type `_ -> _`
+//│ 
 //│    l.5:      match x2 with | [] -> [] | h::t -> bigAdd ((mulByDigit h l1), res) in
 //│                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ because this function has type `_ -> _`
+//│ 
 //│    l.-159:  let bigAdd l1 l2 =
 //│                           ^^^^
 //│            let add (l1,l2) = ...
@@ -719,24 +719,24 @@ let bigMul l1 l2 =
 //│ `_ * _` comes from
 //│    l.8:    let (carry,res) = List.fold_left f base args in [carry] @ res;;
 //│                ^^^^^^^^^^^
-//│ so this application has type `_ * _`
+//│ 
 //│    l.8:    let (carry,res) = List.fold_left f base args in [carry] @ res;;
 //│                              ^^^^^^^^^^^^^^^^^^^^^^^^^^
 //│ TODO No common prov
-//│ because this let expression has type `_ list`
+//│ 
 //│    l.3:      let (x1,x2) = x in
 //│              ^^^^^^^^^^^^^^^^^^
 //│              let (carry,res) = a in ...
 //│              ^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ because this let expression has type `_ list`
+//│ 
 //│    l.4:      let (carry,res) = a in
 //│              ^^^^^^^^^^^^^^^^^^^^^^
 //│              match x2 with | [] -> [] | h::t -> bigAdd ((mulByDigit h l1), res) in
 //│              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ because this match expression has type `_ list`
+//│ 
 //│    l.5:      match x2 with | [] -> [] | h::t -> bigAdd ((mulByDigit h l1), res) in
 //│              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ because this reference has type `_ list`
+//│ 
 //│    l.5:      match x2 with | [] -> [] | h::t -> bigAdd ((mulByDigit h l1), res) in
 //│                                 ^^
 //│ [ERROR] Type `_ * _` does not match `_ list`
@@ -744,25 +744,25 @@ let bigMul l1 l2 =
 //│ `_ * _` comes from
 //│    l.5:      match x2 with | [] -> [] | h::t -> bigAdd ((mulByDigit h l1), res) in
 //│                                                        ^^^^^^^^^^^^^^^^^^^^^^^^
-//│ so this variable has type `_ * _`
+//│ 
 //│    l.-159:  let bigAdd l1 l2 =
 //│                        ^^
-//│ so this reference has type `_ * _`
+//│ 
 //│    l.-150:    removeZero (add (padZero l1 l2));;
 //│                                        ^^
-//│ so this variable has type `_ * _`. However it flows into `_ list`
+//│ `_ * _` comes from
 //│    l.-170:  let padZero l1 l2 =
 //│                         ^^
-//│ because this reference has type `_ list`
+//│ 
 //│    l.-164:      else (l1, l2);;
 //│                       ^^
-//│ because this variable has type `_ list`
+//│ 
 //│    l.-158:    let add (l1,l2) =
 //│                        ^^
-//│ because this reference has type `_ list`
+//│ 
 //│    l.-152:      let args = List.rev (List.combine l1 l2) in
 //│                                                   ^^
-//│ because `_ list` comes from this type expression
+//│ 
 //│    builtin:  let List.combine: 'a list -> 'b list -> ('a * 'b) list
 //│                             ^^^^^^^
 //│ [ERROR] Type `_ * _` does not match `_ list`
@@ -770,19 +770,19 @@ let bigMul l1 l2 =
 //│ `_ * _` comes from
 //│    l.5:      match x2 with | [] -> [] | h::t -> bigAdd ((mulByDigit h l1), res) in
 //│                                                        ^^^^^^^^^^^^^^^^^^^^^^^^
-//│ so this variable has type `_ * _`
+//│ 
 //│    l.-159:  let bigAdd l1 l2 =
 //│                        ^^
-//│ so this reference has type `_ * _`
+//│ 
 //│    l.-150:    removeZero (add (padZero l1 l2));;
 //│                                        ^^
-//│ so this variable has type `_ * _`. However it flows into `_ list`
+//│ `_ * _` comes from
 //│    l.-170:  let padZero l1 l2 =
 //│                         ^^
-//│ because this reference has type `_ list`
+//│ 
 //│    l.-165:      then (((clone 0 ((List.length l2) - (List.length l1))) @ l1), l2)
 //│                                                                          ^^
-//│ because `_ list` comes from this type expression
+//│ 
 //│    builtin:  let (@): 'a list -> 'a list -> 'a list
 //│                               ^^^^^^^
 //│ [ERROR] Type `_ * _` does not match `_ list`
@@ -790,19 +790,19 @@ let bigMul l1 l2 =
 //│ `_ * _` comes from
 //│    l.5:      match x2 with | [] -> [] | h::t -> bigAdd ((mulByDigit h l1), res) in
 //│                                                        ^^^^^^^^^^^^^^^^^^^^^^^^
-//│ so this variable has type `_ * _`
+//│ 
 //│    l.-159:  let bigAdd l1 l2 =
 //│                        ^^
-//│ so this reference has type `_ * _`
+//│ 
 //│    l.-150:    removeZero (add (padZero l1 l2));;
 //│                                        ^^
-//│ so this variable has type `_ * _`. However it flows into `_ list`
+//│ `_ * _` comes from
 //│    l.-170:  let padZero l1 l2 =
 //│                         ^^
-//│ because this reference has type `_ list`
+//│ 
 //│    l.-166:      if (List.length l1) < (List.length l2)
 //│                                 ^^
-//│ because `_ list` comes from this type expression
+//│ 
 //│    builtin:  let List.length: 'a list -> int
 //│                            ^^^^^^^
 //│ [ERROR] Type `_ * _` does not match `_ -> _`
@@ -810,30 +810,30 @@ let bigMul l1 l2 =
 //│ `_ * _` comes from
 //│    l.4:      let (carry,res) = a in
 //│                  ^^^^^^^^^^^
-//│ so this reference has type `_ * _`
+//│ 
 //│    l.4:      let (carry,res) = a in
 //│                                ^
-//│ so this variable has type `_ * _`
+//│ 
 //│    l.2:    let f a x =
 //│                  ^
 //│ TODO No common prov
-//│ because this let expression has type `_ -> _`
+//│ 
 //│    l.3:      let (x1,x2) = x in
 //│              ^^^^^^^^^^^^^^^^^^
 //│              let (carry,res) = a in ...
 //│              ^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ because this let expression has type `_ -> _`
+//│ 
 //│    l.4:      let (carry,res) = a in
 //│              ^^^^^^^^^^^^^^^^^^^^^^
 //│              match x2 with | [] -> [] | h::t -> bigAdd ((mulByDigit h l1), res) in
 //│              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ because this match expression has type `_ -> _`
+//│ 
 //│    l.5:      match x2 with | [] -> [] | h::t -> bigAdd ((mulByDigit h l1), res) in
 //│              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ because this application has type `_ -> _`
+//│ 
 //│    l.5:      match x2 with | [] -> [] | h::t -> bigAdd ((mulByDigit h l1), res) in
 //│                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ because this function has type `_ -> _`
+//│ 
 //│    l.-159:  let bigAdd l1 l2 =
 //│                           ^^^^
 //│            let add (l1,l2) = ...
@@ -843,27 +843,27 @@ let bigMul l1 l2 =
 //│ `_ * _` comes from
 //│    l.4:      let (carry,res) = a in
 //│                  ^^^^^^^^^^^
-//│ so this reference has type `_ * _`
+//│ 
 //│    l.4:      let (carry,res) = a in
 //│                                ^
-//│ so this variable has type `_ * _`
+//│ 
 //│    l.2:    let f a x =
 //│                  ^
 //│ TODO No common prov
-//│ because this let expression has type `_ list`
+//│ 
 //│    l.3:      let (x1,x2) = x in
 //│              ^^^^^^^^^^^^^^^^^^
 //│              let (carry,res) = a in ...
 //│              ^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ because this let expression has type `_ list`
+//│ 
 //│    l.4:      let (carry,res) = a in
 //│              ^^^^^^^^^^^^^^^^^^^^^^
 //│              match x2 with | [] -> [] | h::t -> bigAdd ((mulByDigit h l1), res) in
 //│              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ because this match expression has type `_ list`
+//│ 
 //│    l.5:      match x2 with | [] -> [] | h::t -> bigAdd ((mulByDigit h l1), res) in
 //│              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ because this reference has type `_ list`
+//│ 
 //│    l.5:      match x2 with | [] -> [] | h::t -> bigAdd ((mulByDigit h l1), res) in
 //│                                 ^^
 //│ [ERROR] Type `_ list` does not match `_ -> _`
@@ -889,19 +889,19 @@ let bigMul l1 l2 =
 //│ `_ list` comes from
 //│    builtin:  let List.length: 'a list -> int
 //│                               ^^^^^^^
-//│ so this reference has type `_ list`
+//│ 
 //│    l.-165:      then (((clone 0 ((List.length l2) - (List.length l1))) @ l1), l2)
 //│                                                                  ^^
-//│ so this variable has type `_ list`. However it flows into `_ * _`
+//│ `_ list` comes from
 //│    l.-170:  let padZero l1 l2 =
 //│                         ^^
-//│ because this reference has type `_ * _`
+//│ 
 //│    l.-150:    removeZero (add (padZero l1 l2));;
 //│                                        ^^
-//│ because this variable has type `_ * _`
+//│ 
 //│    l.-159:  let bigAdd l1 l2 =
 //│                        ^^
-//│ because this tuple literal has type `_ * _`
+//│ 
 //│    l.5:      match x2 with | [] -> [] | h::t -> bigAdd ((mulByDigit h l1), res) in
 //│                                                     ^^^^^^^^^^^^^^^^^^^^^^^^
 //│ [ERROR] Type `_ list` does not match `_ * _`
@@ -909,19 +909,19 @@ let bigMul l1 l2 =
 //│ `_ list` comes from
 //│    builtin:  let List.length: 'a list -> int
 //│                               ^^^^^^^
-//│ so this reference has type `_ list`
+//│ 
 //│    l.-168:    then (l1, ((clone 0 ((List.length l1) - (List.length l2))) @ l2))
 //│                                                 ^^
-//│ so this variable has type `_ list`. However it flows into `_ * _`
+//│ `_ list` comes from
 //│    l.-170:  let padZero l1 l2 =
 //│                         ^^
-//│ because this reference has type `_ * _`
+//│ 
 //│    l.-150:    removeZero (add (padZero l1 l2));;
 //│                                        ^^
-//│ because this variable has type `_ * _`
+//│ 
 //│    l.-159:  let bigAdd l1 l2 =
 //│                        ^^
-//│ because this tuple literal has type `_ * _`
+//│ 
 //│    l.5:      match x2 with | [] -> [] | h::t -> bigAdd ((mulByDigit h l1), res) in
 //│                                                     ^^^^^^^^^^^^^^^^^^^^^^^^
 //│ [ERROR] Type `_ list` does not match `_ * _`
@@ -929,19 +929,19 @@ let bigMul l1 l2 =
 //│ `_ list` comes from
 //│    builtin:  let List.length: 'a list -> int
 //│                               ^^^^^^^
-//│ so this reference has type `_ list`
+//│ 
 //│    l.-169:    if (List.length l1) > (List.length l2)
 //│                               ^^
-//│ so this variable has type `_ list`. However it flows into `_ * _`
+//│ `_ list` comes from
 //│    l.-170:  let padZero l1 l2 =
 //│                         ^^
-//│ because this reference has type `_ * _`
+//│ 
 //│    l.-150:    removeZero (add (padZero l1 l2));;
 //│                                        ^^
-//│ because this variable has type `_ * _`
+//│ 
 //│    l.-159:  let bigAdd l1 l2 =
 //│                        ^^
-//│ because this tuple literal has type `_ * _`
+//│ 
 //│    l.5:      match x2 with | [] -> [] | h::t -> bigAdd ((mulByDigit h l1), res) in
 //│                                                     ^^^^^^^^^^^^^^^^^^^^^^^^
 //│ bigMul: nothing -> list[int] -> list[int]

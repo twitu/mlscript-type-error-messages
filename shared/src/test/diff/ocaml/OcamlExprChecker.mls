@@ -261,10 +261,10 @@ let checkagain (v: (int, int, (int, int))) =
 //│ `error * error` comes from
 //│    l.3:     (a, b, (k, d)) -> a + b + k + d
 //│                     ^^^^
-//│ so this 2 element of this tuple has type `error * error`. However it flows into `int * int`
+//│ `error * error` comes from
 //│    l.3:     (a, b, (k, d)) -> a + b + k + d
 //│             ^^^^^^^^^^^^^^
-//│ because `int * int` comes from this type expression
+//│ 
 //│    l.1:  let checkagain (v: (int, int, (int, int))) =
 //│                                     ^^^^^^^^^^
 //│ ╔══[ERROR] identifier not found: k

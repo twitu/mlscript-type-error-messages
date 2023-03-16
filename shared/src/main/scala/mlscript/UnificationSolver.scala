@@ -180,22 +180,22 @@ trait UnificationSolver extends TyperDatatypes {
       case TypeProvenance(loco, _, _, true) => msg"`${st.expOcamlTy()}` comes from" -> loco
     }
     val firstsomsg = (st: ST, prov: TP) => prov match {
-      case TypeProvenance(loco, desc, _, false) => msg"so this ${desc} has type `${st.expOcamlTy()}`" -> loco
-      case TypeProvenance(loco, _, _, true) => msg"`${st.expOcamlTy()}` comes from this type expression" -> loco
+      case TypeProvenance(loco, desc, _, false) => msg"" -> loco
+      case TypeProvenance(loco, _, _, true) => msg"" -> loco
     }
     val sndbutmsg = (st: ST, prov: TP) => prov match {
-      case TypeProvenance(loco, desc, _, false) => msg"but this ${desc} has type `${st.expOcamlTy()}`" -> loco
-      case TypeProvenance(loco, _, _, true) => msg"but `${st.expOcamlTy()}` comes from this type expression" -> loco
+      case TypeProvenance(loco, desc, _, false) => msg"" -> loco
+      case TypeProvenance(loco, _, _, true) => msg"" -> loco
     }
     val sndbecausemsg = (st: ST, prov: TP) => prov match {
-      case TypeProvenance(loco, desc, _, false) => msg"because this ${desc} has type `${st.expOcamlTy()}`" -> loco
-      case TypeProvenance(loco, _, _, true) => msg"because `${st.expOcamlTy()}` comes from this type expression" -> loco
+      case TypeProvenance(loco, desc, _, false) => msg"" -> loco
+      case TypeProvenance(loco, _, _, true) => msg"" -> loco
     }
     val commonmsg = (a: ST, b: ST, prov: TP, firstLoc: Bool) => {
       val prefix = if (firstLoc) "" else "so "
       prov match {
-        case TypeProvenance(loco, desc, _, false) => msg"${prefix}this ${desc} has type `${a.expOcamlTy()}`. However it flows into `${b.expOcamlTy()}`" -> loco
-        case TypeProvenance(loco, _, _, true) => msg"`${a.expOcamlTy()}` comes from this type expression. However it flows into `${b.expOcamlTy()}`" -> loco
+        case TypeProvenance(loco, desc, _, false) => msg"`${a.expOcamlTy()}` comes from" -> loco
+        case TypeProvenance(loco, _, _, true) => msg"`${a.expOcamlTy()}` comes from" -> loco
       }
     }
 

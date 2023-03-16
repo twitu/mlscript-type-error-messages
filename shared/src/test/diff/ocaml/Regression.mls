@@ -10,10 +10,10 @@ let test =
 //│ `bool` comes from
 //│    l.3:    (f 1 + f true)
 //│                     ^^^^
-//│ so this variable has type `bool`. However it flows into `int`
+//│ `bool` comes from
 //│    l.2:    let f x = x in
 //│                  ^
-//│ because this integer literal has type `int`
+//│ 
 //│    l.3:    (f 1 + f true)
 //│            ^
 //│ test: int
@@ -179,10 +179,10 @@ g b
 //│ `bool` comes from
 //│    l.3:  let f x = if x then true else false
 //│                       ^
-//│ so this variable has type `bool`. However it flows into `string list`
+//│ `bool` comes from
 //│    l.3:  let f x = if x then true else false
 //│                ^
-//│ because `string list` comes from this type expression
+//│ 
 //│    l.-88:  let f: string list -> unit
 //│                ^^^^^^^^^^^
 //│ [ERROR] Type `bool` does not match `unit`
@@ -190,10 +190,10 @@ g b
 //│ `bool` comes from
 //│    l.3:  let f x = if x then true else false
 //│                                        ^^^^^
-//│ so this if-then-else expression has type `bool`. However it flows into `unit`
+//│ `bool` comes from
 //│    l.3:  let f x = if x then true else false
 //│                    ^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ because `unit` comes from this type expression
+//│ 
 //│    l.-88:  let f: string list -> unit
 //│                               ^^^^
 //│ a: int
@@ -328,13 +328,13 @@ let rec digitsOfInt n =
 //│ `_ list` comes from
 //│    builtin:  let (@): 'a list -> 'a list -> 'a list
 //│                                             ^^^^^^^
-//│ so this operator application has type `_ list`
+//│ 
 //│    l.2:    ((digitsOfInt n) / 10) @ [remainder];;
 //│            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ so this application has type `_ list`. However it flows into `int`
+//│ `_ list` comes from
 //│    l.2:    ((digitsOfInt n) / 10) @ [remainder];;
 //│             ^^^^^^^^^^^^^^^
-//│ because `int` comes from this type expression
+//│ 
 //│    builtin:  let ( / ): int -> int -> int
 //│                      ^^^
 //│ [ERROR] Type `error` does not match `error`

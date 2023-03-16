@@ -197,17 +197,17 @@ let bigAdd l1 l2 =
 //│ `_ * _ list` comes from
 //│    builtin:  let List.combine: 'a list -> 'b list -> ('a * 'b) list
 //│                                                       ^^^^^^^^^^^^^
-//│ so this application has type `_ * _ list`
+//│ 
 //│    l.14:      let base = List.combine l1 l2 in
 //│                          ^^^^^^^^^^^^^^^^^^
-//│ so this reference has type `_ * _ list`
+//│ 
 //│    l.16:      let (_,res) = List.fold_left f base args in res in
 //│                                              ^^^^
 //│ TODO No common prov
-//│ because this application has type `_ * _`
+//│ 
 //│    l.16:      let (_,res) = List.fold_left f base args in res in
 //│                             ^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ because this pattern has type `_ * _`
+//│ 
 //│    l.16:      let (_,res) = List.fold_left f base args in res in
 //│                ^^^^^^^
 //│ [ERROR] Type `_ * _ list` does not match `_ list * _`
@@ -350,16 +350,16 @@ let stringOfList f l = "[" ^ ((sepConcat "; " List.map (f, l)) ^ "]");;
 //│ `(_ -> _) -> _ list -> _ list` comes from
 //│    builtin:  let List.map: ('a -> 'b) -> 'a list -> 'b list
 //│                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ so this reference has type `(_ -> _) -> _ list -> _ list`
+//│ 
 //│    l.7:  let stringOfList f l = "[" ^ ((sepConcat "; " List.map (f, l)) ^ "]");;
 //│                                                        ^^^^^^^^
-//│ so this variable has type `(_ -> _) -> _ list -> _ list`. However it flows into `_ list`
+//│ `(_ -> _) -> _ list -> _ list` comes from
 //│    l.1:  let rec sepConcat sep sl =
 //│                                ^^
-//│ because this reference has type `_ list`
+//│ 
 //│    l.2:    match sl with
 //│                  ^^
-//│ because this pattern has type `_ list`
+//│ 
 //│    l.3:    | [] -> ""
 //│           ^^
 //│ [ERROR] Type `string` does not match `(_ * _) -> _`
@@ -367,18 +367,18 @@ let stringOfList f l = "[" ^ ((sepConcat "; " List.map (f, l)) ^ "]");;
 //│ `string` comes from
 //│    builtin:  let (^): string -> string -> string
 //│                                           ^^^^^^
-//│ so this operator application has type `string`
+//│ 
 //│    l.5:        let f a x = a ^ (sep ^ x) in
 //│                            ^^^^^^^^^^^^^
-//│ so this application has type `string`
+//│ 
 //│    l.6:        let base = h in let l = t in List.fold_left f base l;;
 //│                                             ^^^^^^^^^^^^^^^^^^^^^^^
-//│ so this match expression has type `string`
+//│ 
 //│    l.2:    match sl with
 //│            ^^^^^^^^^^^^^
 //│            | [] -> "" ...
 //│            ^^^^^^^^^^^^^^
-//│ so this application has type `string`. However it flows into `(_ * _) -> _`
+//│ `string` comes from
 //│    l.7:  let stringOfList f l = "[" ^ ((sepConcat "; " List.map (f, l)) ^ "]");;
 //│                                      ^^^^^^^^^^^^^^^^^^^^^^^
 //│ sepConcat: string -> list[string] -> string
@@ -707,25 +707,25 @@ let rec additivePersistence n = sumList digitsOfInt n;;
 //│ `int` comes from
 //│    l.8:  let rec sumList xs = sumListHelper 0 xs;;
 //│                                             ^
-//│ so this variable has type `int`
+//│ 
 //│    l.1:  let rec sumListHelper total xs =
 //│                                ^^^^^
-//│ so this reference has type `int`
+//│ 
 //│    l.2:    match xs with | [] -> total | hd::tail -> sumListHelper (total + hd) tail;;
 //│                                  ^^^^^
-//│ so this match expression has type `int`
+//│ 
 //│    l.2:    match xs with | [] -> total | hd::tail -> sumListHelper (total + hd) tail;;
 //│            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ so this application has type `int`
+//│ 
 //│    l.2:    match xs with | [] -> total | hd::tail -> sumListHelper (total + hd) tail;;
 //│                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ so this match expression has type `int`
+//│ 
 //│    l.2:    match xs with | [] -> total | hd::tail -> sumListHelper (total + hd) tail;;
 //│            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ so this application has type `int`
+//│ 
 //│    l.8:  let rec sumList xs = sumListHelper 0 xs;;
 //│                               ^^^^^^^^^^^^^^^^^^
-//│ so this application has type `int`. However it flows into `_ -> _`
+//│ `int` comes from
 //│    l.9:  let rec additivePersistence n = sumList digitsOfInt n;;
 //│                                       ^^^^^^^^^^^^^^^^^^^
 //│ [ERROR] Type `_ list` does not match `_ -> _`
@@ -733,25 +733,25 @@ let rec additivePersistence n = sumList digitsOfInt n;;
 //│ `_ list` comes from
 //│    l.2:    match xs with | [] -> total | hd::tail -> sumListHelper (total + hd) tail;;
 //│                            ^^
-//│ so this reference has type `_ list`
+//│ 
 //│    l.2:    match xs with | [] -> total | hd::tail -> sumListHelper (total + hd) tail;;
 //│                  ^^
-//│ so this variable has type `_ list`
+//│ 
 //│    l.1:  let rec sumListHelper total xs =
 //│                                      ^^
-//│ so this reference has type `_ list`
+//│ 
 //│    l.8:  let rec sumList xs = sumListHelper 0 xs;;
 //│                                               ^^
-//│ so this variable has type `_ list`
+//│ 
 //│    l.8:  let rec sumList xs = sumListHelper 0 xs;;
 //│                          ^^
-//│ so this reference has type `_ list`
+//│ 
 //│    l.9:  let rec additivePersistence n = sumList digitsOfInt n;;
 //│                                                  ^^^^^^^^^^^
-//│ so this recursive binding has type `_ list`. However it flows into `_ -> _`
+//│ `_ list` comes from
 //│    l.7:  let rec digitsOfInt n = digitsOfIntHelper n;;
 //│                  ^^^^^^^^^^^
-//│ because this function has type `_ -> _`
+//│ 
 //│    l.7:  let rec digitsOfInt n = digitsOfIntHelper n;;
 //│                           ^^^^^^^^^^^^^^^^^^^^^^^
 //│ sumListHelper: (int & 'a & 'b) -> list[int] -> 'a
@@ -880,25 +880,25 @@ let rec matchHeads x =
 //│ `_ Array` comes from
 //│    l.-367:      if i >= (String_length s) then [] else (s[i]) :: (go (i + 1)) in
 //│                                                        ^^^^^^
-//│ so this reference has type `_ Array`
+//│ 
 //│    l.-367:      if i >= (String_length s) then [] else (s[i]) :: (go (i + 1)) in
 //│                                                         ^
-//│ so this variable has type `_ Array`
+//│ 
 //│    l.-369:  let explode s =
 //│                         ^
-//│ so this reference has type `_ Array`
+//│ 
 //│    l.6:    match explode x with
 //│                          ^
-//│ so this variable has type `_ Array`
+//│ 
 //│    l.5:  let rec matchHeads x =
 //│                             ^
-//│ so this application has type `_ Array`
+//│ 
 //│    l.10:        else if [h] = (getHeads t) then matchHeads (loseTail t) else false;;
 //│                                                            ^^^^^^^^^^^^
-//│ so this match expression has type `_ Array`. However it flows into `_ list`
+//│ `_ Array` comes from
 //│    l.4:  let loseTail z = match listReverse z with | [] -> [] | h::t -> t;;
 //│                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ because this reference has type `_ list`
+//│ 
 //│    l.4:  let loseTail z = match listReverse z with | [] -> [] | h::t -> t;;
 //│                                                                      ^
 //│ [ERROR] Type `_ Array` does not match `_ list`
@@ -906,25 +906,25 @@ let rec matchHeads x =
 //│ `_ Array` comes from
 //│    l.-367:      if i >= (String_length s) then [] else (s[i]) :: (go (i + 1)) in
 //│                                                        ^^^^^^
-//│ so this reference has type `_ Array`
+//│ 
 //│    l.-367:      if i >= (String_length s) then [] else (s[i]) :: (go (i + 1)) in
 //│                                                         ^
-//│ so this variable has type `_ Array`
+//│ 
 //│    l.-369:  let explode s =
 //│                         ^
-//│ so this reference has type `_ Array`
+//│ 
 //│    l.6:    match explode x with
 //│                          ^
-//│ so this variable has type `_ Array`
+//│ 
 //│    l.5:  let rec matchHeads x =
 //│                             ^
-//│ so this application has type `_ Array`
+//│ 
 //│    l.10:        else if [h] = (getHeads t) then matchHeads (loseTail t) else false;;
 //│                                                            ^^^^^^^^^^^^
-//│ so this match expression has type `_ Array`. However it flows into `_ list`
+//│ `_ Array` comes from
 //│    l.4:  let loseTail z = match listReverse z with | [] -> [] | h::t -> t;;
 //│                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ because this reference has type `_ list`
+//│ 
 //│    l.4:  let loseTail z = match listReverse z with | [] -> [] | h::t -> t;;
 //│                                                         ^^
 //│ [ERROR] Type `_ Array` does not match `string`
@@ -951,25 +951,25 @@ let rec matchHeads x =
 //│ `_ Array` comes from
 //│    l.-367:      if i >= (String_length s) then [] else (s[i]) :: (go (i + 1)) in
 //│                                                        ^^^^^^
-//│ so this reference has type `_ Array`
+//│ 
 //│    l.-367:      if i >= (String_length s) then [] else (s[i]) :: (go (i + 1)) in
 //│                                                         ^
-//│ so this variable has type `_ Array`
+//│ 
 //│    l.-369:  let explode s =
 //│                         ^
-//│ so this reference has type `_ Array`
+//│ 
 //│    l.8:        if (getHeads (explode x)) = []
 //│                                      ^
-//│ so this variable has type `_ Array`
+//│ 
 //│    l.5:  let rec matchHeads x =
 //│                             ^
-//│ so this application has type `_ Array`
+//│ 
 //│    l.10:        else if [h] = (getHeads t) then matchHeads (loseTail t) else false;;
 //│                                                            ^^^^^^^^^^^^
-//│ so this match expression has type `_ Array`. However it flows into `_ list`
+//│ `_ Array` comes from
 //│    l.4:  let loseTail z = match listReverse z with | [] -> [] | h::t -> t;;
 //│                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ because this reference has type `_ list`
+//│ 
 //│    l.4:  let loseTail z = match listReverse z with | [] -> [] | h::t -> t;;
 //│                                                                      ^
 //│ [ERROR] Type `_ Array` does not match `_ list`
@@ -977,25 +977,25 @@ let rec matchHeads x =
 //│ `_ Array` comes from
 //│    l.-367:      if i >= (String_length s) then [] else (s[i]) :: (go (i + 1)) in
 //│                                                        ^^^^^^
-//│ so this reference has type `_ Array`
+//│ 
 //│    l.-367:      if i >= (String_length s) then [] else (s[i]) :: (go (i + 1)) in
 //│                                                         ^
-//│ so this variable has type `_ Array`
+//│ 
 //│    l.-369:  let explode s =
 //│                         ^
-//│ so this reference has type `_ Array`
+//│ 
 //│    l.8:        if (getHeads (explode x)) = []
 //│                                      ^
-//│ so this variable has type `_ Array`
+//│ 
 //│    l.5:  let rec matchHeads x =
 //│                             ^
-//│ so this application has type `_ Array`
+//│ 
 //│    l.10:        else if [h] = (getHeads t) then matchHeads (loseTail t) else false;;
 //│                                                            ^^^^^^^^^^^^
-//│ so this match expression has type `_ Array`. However it flows into `_ list`
+//│ `_ Array` comes from
 //│    l.4:  let loseTail z = match listReverse z with | [] -> [] | h::t -> t;;
 //│                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ because this reference has type `_ list`
+//│ 
 //│    l.4:  let loseTail z = match listReverse z with | [] -> [] | h::t -> t;;
 //│                                                         ^^
 //│ [ERROR] Type `string` does not match `_ list`
@@ -1003,25 +1003,25 @@ let rec matchHeads x =
 //│ `string` comes from
 //│    builtin:  let String_length: string -> int
 //│                                 ^^^^^^
-//│ so this reference has type `string`
+//│ 
 //│    l.-367:      if i >= (String_length s) then [] else (s[i]) :: (go (i + 1)) in
 //│                                        ^
-//│ so this variable has type `string`
+//│ 
 //│    l.-369:  let explode s =
 //│                         ^
-//│ so this reference has type `string`
+//│ 
 //│    l.8:        if (getHeads (explode x)) = []
 //│                                      ^
-//│ so this variable has type `string`
+//│ 
 //│    l.5:  let rec matchHeads x =
 //│                             ^
-//│ so this application has type `string`
+//│ 
 //│    l.10:        else if [h] = (getHeads t) then matchHeads (loseTail t) else false;;
 //│                                                            ^^^^^^^^^^^^
-//│ so this match expression has type `string`. However it flows into `_ list`
+//│ `string` comes from
 //│    l.4:  let loseTail z = match listReverse z with | [] -> [] | h::t -> t;;
 //│                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ because this reference has type `_ list`
+//│ 
 //│    l.4:  let loseTail z = match listReverse z with | [] -> [] | h::t -> t;;
 //│                                                                      ^
 //│ [ERROR] Type `string` does not match `_ list`
@@ -1029,25 +1029,25 @@ let rec matchHeads x =
 //│ `string` comes from
 //│    builtin:  let String_length: string -> int
 //│                                 ^^^^^^
-//│ so this reference has type `string`
+//│ 
 //│    l.-367:      if i >= (String_length s) then [] else (s[i]) :: (go (i + 1)) in
 //│                                        ^
-//│ so this variable has type `string`
+//│ 
 //│    l.-369:  let explode s =
 //│                         ^
-//│ so this reference has type `string`
+//│ 
 //│    l.8:        if (getHeads (explode x)) = []
 //│                                      ^
-//│ so this variable has type `string`
+//│ 
 //│    l.5:  let rec matchHeads x =
 //│                             ^
-//│ so this application has type `string`
+//│ 
 //│    l.10:        else if [h] = (getHeads t) then matchHeads (loseTail t) else false;;
 //│                                                            ^^^^^^^^^^^^
-//│ so this match expression has type `string`. However it flows into `_ list`
+//│ `string` comes from
 //│    l.4:  let loseTail z = match listReverse z with | [] -> [] | h::t -> t;;
 //│                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ because this reference has type `_ list`
+//│ 
 //│    l.4:  let loseTail z = match listReverse z with | [] -> [] | h::t -> t;;
 //│                                                         ^^
 //│ listReverse: list['a] -> list['a]
@@ -1194,16 +1194,16 @@ let rec mulByDigit i l =
 //│ `int` comes from
 //│    builtin:  let ( * ): int -> int -> int
 //│                         ^^^
-//│ so this reference has type `int`
+//│ 
 //│    l.1:  let remainder x y = if (x * y) > 10 then mod (x * y) 10 else 0;;
 //│                                                        ^
-//│ so this variable has type `int`. However it flows into `_ -> _ list -> _ list`
+//│ `int` comes from
 //│    l.1:  let remainder x y = if (x * y) > 10 then mod (x * y) 10 else 0;;
 //│                        ^
-//│ because this reference has type `_ -> _ list -> _ list`
+//│ 
 //│    l.7:    | h::t -> [remainder x y] @ (mulByDigit i t);;
 //│                                 ^
-//│ because this function has type `_ -> _ list -> _ list`
+//│ 
 //│    l.2:  let x l = List.map string_of_int;;
 //│             ^^^^^^^^^^^^^^^^^^^^^^^^^^
 //│ [ERROR] Type `int` does not match `_ list`
@@ -1211,16 +1211,16 @@ let rec mulByDigit i l =
 //│ `int` comes from
 //│    builtin:  let ( * ): int -> int -> int
 //│                                ^^^
-//│ so this reference has type `int`
+//│ 
 //│    l.1:  let remainder x y = if (x * y) > 10 then mod (x * y) 10 else 0;;
 //│                                                            ^
-//│ so this variable has type `int`. However it flows into `_ list`
+//│ `int` comes from
 //│    l.1:  let remainder x y = if (x * y) > 10 then mod (x * y) 10 else 0;;
 //│                          ^
-//│ because this reference has type `_ list`
+//│ 
 //│    l.7:    | h::t -> [remainder x y] @ (mulByDigit i t);;
 //│                                   ^
-//│ because this application has type `_ list`
+//│ 
 //│    l.3:  let y = [1, 2, 3];;
 //│               ^^^^^^^^^
 //│ remainder: int -> int -> int
@@ -1241,10 +1241,10 @@ let padZero l1 l2 =
 //│ `_ list` comes from
 //│    l.1:  let rec clone x n = if n > 0 then x :: (clone x (n - 1)) else [];;
 //│                                            ^^^^^^^^^^^^^^^^^^^^^^
-//│ so this if-then-else expression has type `_ list`
+//│ 
 //│    l.1:  let rec clone x n = if n > 0 then x :: (clone x (n - 1)) else [];;
 //│                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ so this application has type `_ list`. However it flows into `_ -> _`
+//│ `_ list` comes from
 //│    l.6:    else (clone 0 (padLength l1 l2)) l2;;
 //│              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 //│ [ERROR] Type `_ list` does not match `_ -> _`
@@ -1252,10 +1252,10 @@ let padZero l1 l2 =
 //│ `_ list` comes from
 //│    l.1:  let rec clone x n = if n > 0 then x :: (clone x (n - 1)) else [];;
 //│                                                                        ^^
-//│ so this if-then-else expression has type `_ list`
+//│ 
 //│    l.1:  let rec clone x n = if n > 0 then x :: (clone x (n - 1)) else [];;
 //│                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ so this application has type `_ list`. However it flows into `_ -> _`
+//│ `_ list` comes from
 //│    l.6:    else (clone 0 (padLength l1 l2)) l2;;
 //│              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 //│ clone: 'a -> int -> list['a]
@@ -1361,19 +1361,19 @@ let bigMul l1 l2 =
 //│ `_ * _` comes from
 //│    l.8:      match x2 with | [] -> [] | h::t -> bigAdd ((mulByDigit h l1), res) in
 //│                                                        ^^^^^^^^^^^^^^^^^^^^^^^^
-//│ so this variable has type `_ * _`
+//│ 
 //│    l.-1266:  let bigAdd l1 l2 =
 //│                         ^^
-//│ so this reference has type `_ * _`
+//│ 
 //│    l.-1260:    removeZero (add (padZero l1 l2));;
 //│                                         ^^
-//│ so this variable has type `_ * _`. However it flows into `_ list`
+//│ `_ * _` comes from
 //│    l.-1273:  let padZero l1 l2 =
 //│                          ^^
-//│ because this reference has type `_ list`
+//│ 
 //│    l.-1270:    then (((clone 0 (-1 * diff)) @ l1), l2)
 //│                                               ^^
-//│ because `_ list` comes from this type expression
+//│ 
 //│    builtin:  let (@): 'a list -> 'a list -> 'a list
 //│                               ^^^^^^^
 //│ [ERROR] Type `_ * _` does not match `_ -> _`
@@ -1381,30 +1381,30 @@ let bigMul l1 l2 =
 //│ `_ * _` comes from
 //│    l.7:      let (carry,res) = a in
 //│                  ^^^^^^^^^^^
-//│ so this reference has type `_ * _`
+//│ 
 //│    l.7:      let (carry,res) = a in
 //│                                ^
-//│ so this variable has type `_ * _`
+//│ 
 //│    l.5:    let f a x =
 //│                  ^
 //│ TODO No common prov
-//│ because this let expression has type `_ -> _`
+//│ 
 //│    l.6:      let (x1,x2) = x in
 //│              ^^^^^^^^^^^^^^^^^^
 //│              let (carry,res) = a in ...
 //│              ^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ because this let expression has type `_ -> _`
+//│ 
 //│    l.7:      let (carry,res) = a in
 //│              ^^^^^^^^^^^^^^^^^^^^^^
 //│              match x2 with | [] -> [] | h::t -> bigAdd ((mulByDigit h l1), res) in
 //│              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ because this match expression has type `_ -> _`
+//│ 
 //│    l.8:      match x2 with | [] -> [] | h::t -> bigAdd ((mulByDigit h l1), res) in
 //│              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ because this application has type `_ -> _`
+//│ 
 //│    l.8:      match x2 with | [] -> [] | h::t -> bigAdd ((mulByDigit h l1), res) in
 //│                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ because this function has type `_ -> _`
+//│ 
 //│    l.-1266:  let bigAdd l1 l2 =
 //│                            ^^^^
 //│            let add (l1,l2) = ...
@@ -1414,27 +1414,27 @@ let bigMul l1 l2 =
 //│ `_ * _` comes from
 //│    l.7:      let (carry,res) = a in
 //│                  ^^^^^^^^^^^
-//│ so this reference has type `_ * _`
+//│ 
 //│    l.7:      let (carry,res) = a in
 //│                                ^
-//│ so this variable has type `_ * _`
+//│ 
 //│    l.5:    let f a x =
 //│                  ^
 //│ TODO No common prov
-//│ because this let expression has type `_ list`
+//│ 
 //│    l.6:      let (x1,x2) = x in
 //│              ^^^^^^^^^^^^^^^^^^
 //│              let (carry,res) = a in ...
 //│              ^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ because this let expression has type `_ list`
+//│ 
 //│    l.7:      let (carry,res) = a in
 //│              ^^^^^^^^^^^^^^^^^^^^^^
 //│              match x2 with | [] -> [] | h::t -> bigAdd ((mulByDigit h l1), res) in
 //│              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ because this match expression has type `_ list`
+//│ 
 //│    l.8:      match x2 with | [] -> [] | h::t -> bigAdd ((mulByDigit h l1), res) in
 //│              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ because this reference has type `_ list`
+//│ 
 //│    l.8:      match x2 with | [] -> [] | h::t -> bigAdd ((mulByDigit h l1), res) in
 //│                                 ^^
 //│ [ERROR] Type `_ -> _` does not match `int * _ list`
@@ -1475,27 +1475,27 @@ let bigMul l1 l2 =
 //│                            ^^^^
 //│            let add (l1,l2) = ...
 //│            ^^^^^^^^^^^^^^^^^^^^^
-//│ so this application has type `_ -> _`
+//│ 
 //│    l.8:      match x2 with | [] -> [] | h::t -> bigAdd ((mulByDigit h l1), res) in
 //│                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ so this match expression has type `_ -> _`
+//│ 
 //│    l.8:      match x2 with | [] -> [] | h::t -> bigAdd ((mulByDigit h l1), res) in
 //│              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ so this let expression has type `_ -> _`
+//│ 
 //│    l.7:      let (carry,res) = a in
 //│              ^^^^^^^^^^^^^^^^^^^^^^
 //│              match x2 with | [] -> [] | h::t -> bigAdd ((mulByDigit h l1), res) in
 //│              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ so this let expression has type `_ -> _`
+//│ 
 //│    l.6:      let (x1,x2) = x in
 //│              ^^^^^^^^^^^^^^^^^^
 //│              let (carry,res) = a in ...
 //│              ^^^^^^^^^^^^^^^^^^^^^^^^^^
 //│ TODO No common prov
-//│ because this application has type `_ * _`
+//│ 
 //│    l.11:    let (carry,res) = List.fold_left f base args in [carry] @ res;;
 //│                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ because this pattern has type `_ * _`
+//│ 
 //│    l.11:    let (carry,res) = List.fold_left f base args in [carry] @ res;;
 //│              ^^^^^^^^^^^
 //│ [ERROR] Type `_ -> _` does not match `_ list`
@@ -1521,31 +1521,31 @@ let bigMul l1 l2 =
 //│ `_ * _` comes from
 //│    l.8:      match x2 with | [] -> [] | h::t -> bigAdd ((mulByDigit h l1), res) in
 //│                                                        ^^^^^^^^^^^^^^^^^^^^^^^^
-//│ so this variable has type `_ * _`
+//│ 
 //│    l.-1266:  let bigAdd l1 l2 =
 //│                         ^^
-//│ so this reference has type `_ * _`
+//│ 
 //│    l.-1260:    removeZero (add (padZero l1 l2));;
 //│                                         ^^
-//│ so this variable has type `_ * _`
+//│ 
 //│    l.-1273:  let padZero l1 l2 =
 //│                          ^^
-//│ so this reference has type `_ * _`
+//│ 
 //│    l.-1269:    else if diff > 0 then (l1, ((clone 0 diff) @ l2)) else (l1, l2);;
 //│                                                                        ^^
-//│ so this variable has type `_ * _`. However it flows into `_ list`
+//│ `_ * _` comes from
 //│    l.-1265:    let add (l1,l2) =
 //│                         ^^
-//│ because this reference has type `_ list`
+//│ 
 //│    l.-1264:      let f a x = padZero l1 l2 in
 //│                                      ^^
-//│ because this variable has type `_ list`
+//│ 
 //│    l.-1273:  let padZero l1 l2 =
 //│                          ^^
-//│ because this reference has type `_ list`
+//│ 
 //│    l.-1270:    then (((clone 0 (-1 * diff)) @ l1), l2)
 //│                                               ^^
-//│ because `_ list` comes from this type expression
+//│ 
 //│    builtin:  let (@): 'a list -> 'a list -> 'a list
 //│                               ^^^^^^^
 //│ [ERROR] Type `_ * _` does not match `_ list`
@@ -1553,31 +1553,31 @@ let bigMul l1 l2 =
 //│ `_ * _` comes from
 //│    l.8:      match x2 with | [] -> [] | h::t -> bigAdd ((mulByDigit h l1), res) in
 //│                                                        ^^^^^^^^^^^^^^^^^^^^^^^^
-//│ so this variable has type `_ * _`
+//│ 
 //│    l.-1266:  let bigAdd l1 l2 =
 //│                         ^^
-//│ so this reference has type `_ * _`
+//│ 
 //│    l.-1260:    removeZero (add (padZero l1 l2));;
 //│                                         ^^
-//│ so this variable has type `_ * _`
+//│ 
 //│    l.-1273:  let padZero l1 l2 =
 //│                          ^^
-//│ so this reference has type `_ * _`
+//│ 
 //│    l.-1269:    else if diff > 0 then (l1, ((clone 0 diff) @ l2)) else (l1, l2);;
 //│                                                                        ^^
-//│ so this variable has type `_ * _`. However it flows into `_ list`
+//│ `_ * _` comes from
 //│    l.-1265:    let add (l1,l2) =
 //│                         ^^
-//│ because this reference has type `_ list`
+//│ 
 //│    l.-1264:      let f a x = padZero l1 l2 in
 //│                                      ^^
-//│ because this variable has type `_ list`
+//│ 
 //│    l.-1273:  let padZero l1 l2 =
 //│                          ^^
-//│ because this reference has type `_ list`
+//│ 
 //│    l.-1272:    let diff = (List.length l1) - (List.length l2) in
 //│                                        ^^
-//│ because `_ list` comes from this type expression
+//│ 
 //│    builtin:  let List.length: 'a list -> int
 //│                            ^^^^^^^
 //│ [ERROR] Type `_ list` does not match `_ * _`
@@ -1585,24 +1585,24 @@ let bigMul l1 l2 =
 //│ `_ list` comes from
 //│    l.8:      match x2 with | [] -> [] | h::t -> bigAdd ((mulByDigit h l1), res) in
 //│                                    ^^
-//│ so this match expression has type `_ list`
+//│ 
 //│    l.8:      match x2 with | [] -> [] | h::t -> bigAdd ((mulByDigit h l1), res) in
 //│              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ so this let expression has type `_ list`
+//│ 
 //│    l.7:      let (carry,res) = a in
 //│              ^^^^^^^^^^^^^^^^^^^^^^
 //│              match x2 with | [] -> [] | h::t -> bigAdd ((mulByDigit h l1), res) in
 //│              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ so this let expression has type `_ list`
+//│ 
 //│    l.6:      let (x1,x2) = x in
 //│              ^^^^^^^^^^^^^^^^^^
 //│              let (carry,res) = a in ...
 //│              ^^^^^^^^^^^^^^^^^^^^^^^^^^
 //│ TODO No common prov
-//│ because this application has type `_ * _`
+//│ 
 //│    l.11:    let (carry,res) = List.fold_left f base args in [carry] @ res;;
 //│                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ because this pattern has type `_ * _`
+//│ 
 //│    l.11:    let (carry,res) = List.fold_left f base args in [carry] @ res;;
 //│              ^^^^^^^^^^^
 //│ [ERROR] Type `_ list` does not match `_ * _`
@@ -1610,25 +1610,25 @@ let bigMul l1 l2 =
 //│ `_ list` comes from
 //│    builtin:  let List.combine: 'a list -> 'b list -> ('a * 'b) list
 //│                                ^^^^^^^
-//│ so this reference has type `_ list`
+//│ 
 //│    l.-1263:      let base = List.combine l1 l2 in
 //│                                          ^^
-//│ so this variable has type `_ list`. However it flows into `_ * _`
+//│ `_ list` comes from
 //│    l.-1265:    let add (l1,l2) =
 //│                         ^^
-//│ because this reference has type `_ * _`
+//│ 
 //│    l.-1269:    else if diff > 0 then (l1, ((clone 0 diff) @ l2)) else (l1, l2);;
 //│                                                                        ^^
-//│ because this variable has type `_ * _`
+//│ 
 //│    l.-1273:  let padZero l1 l2 =
 //│                          ^^
-//│ because this reference has type `_ * _`
+//│ 
 //│    l.-1260:    removeZero (add (padZero l1 l2));;
 //│                                         ^^
-//│ because this variable has type `_ * _`
+//│ 
 //│    l.-1266:  let bigAdd l1 l2 =
 //│                         ^^
-//│ because this tuple literal has type `_ * _`
+//│ 
 //│    l.8:      match x2 with | [] -> [] | h::t -> bigAdd ((mulByDigit h l1), res) in
 //│                                                     ^^^^^^^^^^^^^^^^^^^^^^^^
 //│ [ERROR] Type `_ list` does not match `_ * _`
@@ -1636,19 +1636,19 @@ let bigMul l1 l2 =
 //│ `_ list` comes from
 //│    builtin:  let List.length: 'a list -> int
 //│                               ^^^^^^^
-//│ so this reference has type `_ list`
+//│ 
 //│    l.-1272:    let diff = (List.length l1) - (List.length l2) in
 //│                                        ^^
-//│ so this variable has type `_ list`. However it flows into `_ * _`
+//│ `_ list` comes from
 //│    l.-1273:  let padZero l1 l2 =
 //│                          ^^
-//│ because this reference has type `_ * _`
+//│ 
 //│    l.-1260:    removeZero (add (padZero l1 l2));;
 //│                                         ^^
-//│ because this variable has type `_ * _`
+//│ 
 //│    l.-1266:  let bigAdd l1 l2 =
 //│                         ^^
-//│ because this tuple literal has type `_ * _`
+//│ 
 //│    l.8:      match x2 with | [] -> [] | h::t -> bigAdd ((mulByDigit h l1), res) in
 //│                                                     ^^^^^^^^^^^^^^^^^^^^^^^^
 //│ helper: int -> int
@@ -1666,19 +1666,19 @@ let fixpoint (f,b) = wwhile ((fixpointHelper f), b);;
 //│ `_ * bool` comes from
 //│    l.2:    match f with | (num,expr) -> if expr then (num, true) else (num, false);;
 //│                                                                       ^^^^^^^^^^^^
-//│ so this if-then-else expression has type `_ * bool`. However it flows into `_ -> _`
+//│ `_ * bool` comes from
 //│    l.2:    match f with | (num,expr) -> if expr then (num, true) else (num, false);;
 //│                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ because this let expression has type `_ -> _`
+//│ 
 //│    l.2:    match f with | (num,expr) -> if expr then (num, true) else (num, false);;
 //│            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ because this application has type `_ -> _`
+//│ 
 //│    l.5:  let fixpoint (f,b) = wwhile ((fixpointHelper f), b);;
 //│                                       ^^^^^^^^^^^^^^^^^^
-//│ because this variable has type `_ -> _`
+//│ 
 //│    l.3:  let rec wwhile (f,b) =
 //│                          ^
-//│ because this reference has type `_ -> _`
+//│ 
 //│    l.4:    match f b with | (num,expr) -> if expr then wwhile (f, num) else num;;
 //│               ^
 //│ fixpointHelper: ('a, bool,) -> ('a, bool,)
@@ -2098,10 +2098,10 @@ let rec wwhile (f,b) =
 //│ `_ -> (_ * bool)` comes from
 //│    l.1:  let intboolf f x = ((f x), ((f x) < 1));;
 //│                         ^^^^^^^^^^^^^^^^^^^^^^^^
-//│ so this application has type `_ -> (_ * bool)`. However it flows into `_ * _`
+//│ `_ -> (_ * bool)` comes from
 //│    l.-429:    match f b with | (num,expr) -> if expr then wwhile (f, num) else num;;
 //│                     ^^^
-//│ because this pattern has type `_ * _`
+//│ 
 //│    l.-429:    match f b with | (num,expr) -> if expr then wwhile (f, num) else num;;
 //│                             ^^^^^^^^^^
 //│ intboolf: ('a -> 'b) -> 'a -> ('b, bool,)
@@ -2169,7 +2169,7 @@ let removeDuplicates l =
 //│                           ^^^
 //│            match l with ...
 //│            ^^^^^^^^^^^^^^^^
-//│ so this application has type `_ -> _`. However it flows into `_ list`
+//│ `_ -> _` comes from
 //│    l.11:          let rest' = h :: (filter (t h)) in helper (seen', rest') in
 //│                                 ^^^^^^^^^^^^^^
 //│ filter: list['a] -> anything -> list['a]
