@@ -2,28 +2,28 @@
 :e
 :unify
 let h y = (not y, (if true then y else 5))
-//│ ╔══[ERROR] Type `bool` does not match `int`
-//│ ║  
-//│ ╟──        (bool) <--- (?a) ---> (?b) <--- (int) 
-//│ ║  
-//│ ╟── (bool) comes from this type expression
-//│ ║  builtin:	let not: bool -> bool
-//│ ║          	         ^^^^
-//│ ╟── so this reference has type `bool`. However `?a` flows into `bool`
-//│ ║  l.1:	let h y = (not y, (if true then y else 5))
-//│ ║      	               ^
-//│ ╟── (?a) is assumed as the type of this variable
-//│ ║  l.1:	let h y = (not y, (if true then y else 5))
-//│ ║      	      ^
-//│ ╟── so this `then` branch has type `?a` and it flows into `?b`
-//│ ║  l.1:	let h y = (not y, (if true then y else 5))
-//│ ║      	                                ^
-//│ ╟── (?b) is assumed as the type of this if-then-else expression
-//│ ║  l.1:	let h y = (not y, (if true then y else 5))
-//│ ║      	                  ^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── (int) is the type of this `else` branch and it flows into `?b`
-//│ ║  l.1:	let h y = (not y, (if true then y else 5))
-//│ ╙──    	                                       ^
+//│ [ERROR] Type `bool` does not match `int`
+//│    
+//│         (bool) <--- (?a) ---> (?b) <--- (int) 
+//│    
+//│ (bool) comes from
+//│    builtin:  let not: bool -> bool
+//│                       ^^^^
+//│ 
+//│    l.1:  let h y = (not y, (if true then y else 5))
+//│                         ^
+//│ (?a) is assumed for
+//│    l.1:  let h y = (not y, (if true then y else 5))
+//│                ^
+//│ 
+//│    l.1:  let h y = (not y, (if true then y else 5))
+//│                                          ^
+//│ (?b) is assumed for
+//│    l.1:  let h y = (not y, (if true then y else 5))
+//│                            ^^^^^^^^^^^^^^^^^^^^^^^
+//│ (int) comes from
+//│    l.1:  let h y = (not y, (if true then y else 5))
+//│                                              ^
 //│ h: (bool & 'a) -> (bool, int | 'a,)
 
 
@@ -33,28 +33,28 @@ let h y = (not y, (if true then y else 5))
 :e
 :unify
 let h y = (not y, (if true then y else 5))
-//│ ╔══[ERROR] Type `bool` does not match `int`
-//│ ║  
-//│ ╟──        (bool) <--- (?a) ---> (?b) <--- (int) 
-//│ ║  
-//│ ╟── (bool) comes from this type expression
-//│ ║  builtin:	let not: bool -> bool
-//│ ║          	         ^^^^
-//│ ╟── so this reference has type `bool`. However `?a` flows into `bool`
-//│ ║  l.1:	let h y = (not y, (if true then y else 5))
-//│ ║      	               ^
-//│ ╟── (?a) is assumed as the type of this variable
-//│ ║  l.1:	let h y = (not y, (if true then y else 5))
-//│ ║      	      ^
-//│ ╟── so this `then` branch has type `?a` and it flows into `?b`
-//│ ║  l.1:	let h y = (not y, (if true then y else 5))
-//│ ║      	                                ^
-//│ ╟── (?b) is assumed as the type of this if-then-else expression
-//│ ║  l.1:	let h y = (not y, (if true then y else 5))
-//│ ║      	                  ^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── (int) is the type of this `else` branch and it flows into `?b`
-//│ ║  l.1:	let h y = (not y, (if true then y else 5))
-//│ ╙──    	                                       ^
+//│ [ERROR] Type `bool` does not match `int`
+//│    
+//│         (bool) <--- (?a) ---> (?b) <--- (int) 
+//│    
+//│ (bool) comes from
+//│    builtin:  let not: bool -> bool
+//│                       ^^^^
+//│ 
+//│    l.1:  let h y = (not y, (if true then y else 5))
+//│                         ^
+//│ (?a) is assumed for
+//│    l.1:  let h y = (not y, (if true then y else 5))
+//│                ^
+//│ 
+//│    l.1:  let h y = (not y, (if true then y else 5))
+//│                                          ^
+//│ (?b) is assumed for
+//│    l.1:  let h y = (not y, (if true then y else 5))
+//│                            ^^^^^^^^^^^^^^^^^^^^^^^
+//│ (int) comes from
+//│    l.1:  let h y = (not y, (if true then y else 5))
+//│                                              ^
 //│ h: (bool & 'a) -> (bool, int | 'a,)
 
 
@@ -63,65 +63,65 @@ let h y = (not y, (if true then y else 5))
 :unify
 let confluence z = if true then z else 5
 confluence true
-//│ ╔══[ERROR] Type `bool` does not match `int`
-//│ ║  
-//│ ╟──        (bool) ---> (?a) <--- (int) 
-//│ ║  
-//│ ╟── (bool) is assumed as the type of this reference
-//│ ║  l.2:	confluence true
-//│ ║      	           ^^^^
-//│ ╟── so this variable has type `bool`
-//│ ║  l.1:	let confluence z = if true then z else 5
-//│ ║      	               ^
-//│ ╟── so this `then` branch has type `bool` and it flows into `?a`
-//│ ║  l.1:	let confluence z = if true then z else 5
-//│ ║      	                                ^
-//│ ╟── (?a) is assumed as the type of this if-then-else expression
-//│ ║  l.1:	let confluence z = if true then z else 5
-//│ ║      	                   ^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── (int) is the type of this `else` branch and it flows into `?a`
-//│ ║  l.1:	let confluence z = if true then z else 5
-//│ ╙──    	                                       ^
+//│ [ERROR] Type `bool` does not match `int`
+//│    
+//│         (bool) ---> (?a) <--- (int) 
+//│    
+//│ (bool) comes from
+//│    l.2:  confluence true
+//│                     ^^^^
+//│ 
+//│    l.1:  let confluence z = if true then z else 5
+//│                         ^
+//│ 
+//│    l.1:  let confluence z = if true then z else 5
+//│                                          ^
+//│ (?a) is assumed for
+//│    l.1:  let confluence z = if true then z else 5
+//│                             ^^^^^^^^^^^^^^^^^^^^^
+//│ (int) comes from
+//│    l.1:  let confluence z = if true then z else 5
+//│                                              ^
 //│ confluence: 'a -> (int | 'a)
 //│ res: bool | int
 
 
 let mkpair x y = (x, confluence y)
 let conflict x = mkpair (not x) x
-//│ ╔══[ERROR] Type `bool` does not match `int`
-//│ ║  
-//│ ╟──        (bool) <--- (?a) ---> (?b) <--- (int) 
-//│ ║  
-//│ ╟── (bool) comes from this type expression
-//│ ║  builtin:	let not: bool -> bool
-//│ ║          	         ^^^^
-//│ ╟── so this reference has type `bool`. However `?a` flows into `bool`
-//│ ║  l.2:	let conflict x = mkpair (not x) x
-//│ ║      	                             ^
-//│ ╟── (?a) is assumed as the type of this variable
-//│ ║  l.2:	let conflict x = mkpair (not x) x
-//│ ║      	             ^
-//│ ╟── so this reference has type `?a`
-//│ ║  l.2:	let conflict x = mkpair (not x) x
-//│ ║      	                                ^
-//│ ╟── so this variable has type `?a`
-//│ ║  l.1:	let mkpair x y = (x, confluence y)
-//│ ║      	             ^
-//│ ╟── so this reference has type `?a`
-//│ ║  l.1:	let mkpair x y = (x, confluence y)
-//│ ║      	                                ^
-//│ ╟── so this variable has type `?a`
-//│ ║  l.-24:	let confluence z = if true then z else 5
-//│ ║        	               ^
-//│ ╟── so this `then` branch has type `?a` and it flows into `?b`
-//│ ║  l.-24:	let confluence z = if true then z else 5
-//│ ║        	                                ^
-//│ ╟── (?b) is assumed as the type of this if-then-else expression
-//│ ║  l.-24:	let confluence z = if true then z else 5
-//│ ║        	                   ^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── (int) is the type of this `else` branch and it flows into `?b`
-//│ ║  l.-24:	let confluence z = if true then z else 5
-//│ ╙──      	                                       ^
+//│ [ERROR] Type `bool` does not match `int`
+//│    
+//│         (bool) <--- (?a) ---> (?b) <--- (int) 
+//│    
+//│ (bool) comes from
+//│    builtin:  let not: bool -> bool
+//│                       ^^^^
+//│ 
+//│    l.2:  let conflict x = mkpair (not x) x
+//│                                       ^
+//│ (?a) is assumed for
+//│    l.2:  let conflict x = mkpair (not x) x
+//│                       ^
+//│ 
+//│    l.2:  let conflict x = mkpair (not x) x
+//│                                          ^
+//│ 
+//│    l.1:  let mkpair x y = (x, confluence y)
+//│                       ^
+//│ 
+//│    l.1:  let mkpair x y = (x, confluence y)
+//│                                          ^
+//│ 
+//│    l.-24:  let confluence z = if true then z else 5
+//│                           ^
+//│ 
+//│    l.-24:  let confluence z = if true then z else 5
+//│                                            ^
+//│ (?b) is assumed for
+//│    l.-24:  let confluence z = if true then z else 5
+//│                               ^^^^^^^^^^^^^^^^^^^^^
+//│ (int) comes from
+//│    l.-24:  let confluence z = if true then z else 5
+//│                                                ^
 //│ mkpair: 'a -> 'b -> ('a, int | 'b,)
 //│ conflict: (bool & 'a) -> (bool, int | 'a,)
 
@@ -147,24 +147,24 @@ let rec additivePersistence n =
   match digits n with
   | [] -> 0
   | h::t -> if (addNumbs (h :: t)) >= 10 then false else true
-//│ ╔══[ERROR] Type `bool` does not match `int`
-//│ ║  
-//│ ╟──        (bool) ---> (?a) <--- (int) 
-//│ ║  
-//│ ╟── (bool) is assumed as the type of this `else` branch
-//│ ║  l.4:	  | h::t -> if (addNumbs (h :: t)) >= 10 then false else true
-//│ ║      	                                                         ^^^^^
-//│ ╟── so this if-then-else expression has type `bool` and it flows into `?a`
-//│ ║  l.4:	  | h::t -> if (addNumbs (h :: t)) >= 10 then false else true
-//│ ║      	            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//│ ╟── (?a) is assumed as the type of this match expression
-//│ ║  l.2:	  match digits n with
-//│ ║      	  ^^^^^^^^^^^^^^^^^^^
-//│ ║      	  | [] -> 0 ...
-//│ ║      	  ^^^^^^^^^^^^^
-//│ ╟── (int) is the type of this integer literal and it flows into `?a`
-//│ ║  l.3:	  | [] -> 0
-//│ ╙──    	          ^
+//│ [ERROR] Type `bool` does not match `int`
+//│    
+//│         (bool) ---> (?a) <--- (int) 
+//│    
+//│ (bool) comes from
+//│    l.4:    | h::t -> if (addNumbs (h :: t)) >= 10 then false else true
+//│                                                                   ^^^^^
+//│ 
+//│    l.4:    | h::t -> if (addNumbs (h :: t)) >= 10 then false else true
+//│                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+//│ (?a) is assumed for
+//│    l.2:    match digits n with
+//│            ^^^^^^^^^^^^^^^^^^^
+//│            | [] -> 0 ...
+//│            ^^^^^^^^^^^^^
+//│ (int) comes from
+//│    l.3:    | [] -> 0
+//│                 ^
 //│ additivePersistence: int -> (bool | int)
 
 

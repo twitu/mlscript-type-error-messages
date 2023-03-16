@@ -13,6 +13,8 @@ import org.scalatest.time._
 import org.scalatest.concurrent.{Signaler, TimeLimitedTests}
 import os.Path
 
+import java.io.FileWriter
+
 
 abstract class ModeType {
   def expectTypeErrors: Bool
@@ -349,8 +351,11 @@ class DiffTests
         var totalRuntimeErrors = 0
         var totalCodeGenErrors = 0
 
-        def report(diags: Ls[mlscript.Diagnostic], output: Str => Unit = reportOutput): Unit =
-          if (mode.tex) reportBase(diags, str => output(fixTex(str))) else reportBase(diags, output)
+        def report(diags: Ls[mlscript.Diagnostic], output: Str => Unit = reportOutput): Unit = {
+          if (file.ext =:= "ml") reportSurvey(diags)
+          else if (mode.tex) reportBase(diags, str => output(fixTex(str)))
+          else reportBase(diags, output)
+        }
 
         def fixTex(output: Str): Str =
           output
@@ -508,7 +513,137 @@ class DiffTests
             ()
           }
         }
-        
+
+        def reportSurvey(diags: Ls[mlscript.Diagnostic]): Unit = {
+          val strw = new FileWriter(file.baseName + ".simplesub")
+          val out = new java.io.PrintWriter(strw) {
+            override def println(): Unit = print('\n') // to avoid inserting CRLF on Windows
+          }
+          def output(str: Str) = out.println(str)
+          diags.foreach { diag =>
+            var unificationRelativeLineNums = false
+            val sctx = Message.mkCtx(diag.allMsgs.iterator.map(_._1), "?")
+            val headStr = diag match {
+              case ErrorReport(msg, loco, src) =>
+                src match {
+                  case Diagnostic.Lexing =>
+                    totalParseErrors += 1
+                    s"╔══[LEXICAL ERROR] "
+                  case Diagnostic.Parsing =>
+                    totalParseErrors += 1
+                    s"╔══[PARSE ERROR] "
+                  case _ => // TODO customize too
+                    totalTypeErrors += 1
+                    s"╔══[ERROR] "
+                }
+              case _: UnificationReport =>
+                totalTypeErrors += 1
+                s"[ERROR] "
+              case WarningReport(msg, loco, src) =>
+                totalWarnings += 1
+                s"╔══[WARNING] "
+            }
+            val seqStr = diag match {
+              case UnificationReport(_, _, seqStr, _) => {
+                unificationRelativeLineNums = true
+                seqStr
+              }
+              case _ => false
+            }
+            var globalLineNum = blockLineNum  // solely used for reporting useful test failure messages
+            val lastMsgNum = diag.allMsgs.size - 1
+
+            diag.allMsgs.zipWithIndex.foreach { case ((msg, loco), msgNum) =>
+              val msgStr = msg.showIn(sctx)
+              val pre = " - "
+              val isLast = msgNum =:= lastMsgNum
+
+              if (msgNum =:= 0) {
+                output(headStr + msgStr)
+                output("")
+              } // unification error has seq string
+              else if (msgNum =:= 1 && seqStr) {
+                output(s"    ${msgStr}")
+                output("")
+              } else if (isLast) {
+                output("◉ " + msgStr)
+              } else if (msgStr.isEmpty) {
+                output("│ " + msgStr)
+              } else {
+                output("◉ " + msgStr)
+              }
+
+              loco.foreach { loc =>
+                val (startLineNum, startLineStr, startLineCol) =
+                  loc.origin.fph.getLineColAt(loc.spanStart)
+                if (globalLineNum =:= 0) globalLineNum += startLineNum - 1
+                val (endLineNum, endLineStr, endLineCol) =
+                  loc.origin.fph.getLineColAt(loc.spanEnd)
+
+                val border = if (isLast) "  " else "│ "
+                var l = startLineNum
+                var c = startLineCol
+                while (l <= endLineNum) {
+                  val globalLineNum = loc.origin.startLineNum + l - 1
+                  val relativeLineNum = globalLineNum - blockLineNum + 1
+                  val lineNumber = {
+                    if (loc.origin.fileName == "builtin") "builtin:"
+                    else if (l == startLineNum) {
+                      s"l.$relativeLineNum:"
+                    } else {
+                      "    "  // about the same space as if it had a 2 digit line number
+                    }
+                  }
+
+                  val curLine = loc.origin.fph.lines(l - 1)
+                  val whitespace = curLine.takeWhile(c => c == ' ').length
+                  var dotextend = false
+
+                  // show location
+                  // truncate large output second line onwards
+                  if (l - startLineNum =:= 1 && l != endLineNum) {
+                    dotextend = true
+                    output(border + "   " + lineNumber + "  " + curLine + " ...")  // second line should not have pre
+                    l = endLineNum + 1
+                  } else {
+                    output(border + pre + lineNumber + "  " + curLine)
+                  }
+
+                  // highlight expression in location with ^ markers
+                  val tickBuilder = new StringBuilder()
+                  tickBuilder ++= (border + " " * pre.length + " " * lineNumber.length + "  " + " " * (c - 1))
+                  val lastCol = if (l =:= endLineNum) endLineCol else curLine.length + 1
+                  while (c < lastCol) {
+                    if (c > whitespace) tickBuilder += '^'
+//                    else tickBuilder += ' '
+                    c += 1
+                  }
+                  if (c =:= startLineCol) tickBuilder += ('^')
+                  if (dotextend) tickBuilder ++= "^^^^"
+                  output(tickBuilder.toString)
+                  c = 1
+                  l += 1
+                }
+              }
+            }
+
+            if (!mode.fixme) {
+              if (!allowTypeErrors
+                && !mode.expectTypeErrors && diag.isInstanceOf[ErrorReport] && diag.source =:= Diagnostic.Typing)
+                failures += globalLineNum
+              if (!allowParseErrors
+                && !mode.expectParseErrors && diag.isInstanceOf[ErrorReport] && (diag.source =:= Diagnostic.Lexing || diag.source =:= Diagnostic.Parsing))
+                failures += globalLineNum
+              if (!allowTypeErrors && !allowParseErrors
+                && !mode.expectWarnings && diag.isInstanceOf[WarningReport])
+                failures += globalLineNum
+            }
+
+            ()
+          }
+
+          out.close()
+        }
         val raise: typer.Raise = d => report(d :: Nil)
         
         // try to parse block of text into mlscript ast
@@ -541,7 +676,7 @@ class DiffTests
             typer.explainErrors = mode.explainErrors
             typer.setErrorSimplification(mode.simplifyError)
             // survey programs should only output diagnostics
-            stdout = mode.stdout || file.baseName.contains("Survey")
+            stdout = mode.stdout || file.baseName.contains("Survey") || file.ext.is("ml")
 
             // In parseOnly mode file only parse and print desugared blocks for file
             // do not perform type checking or codegen or results
