@@ -515,8 +515,8 @@ class DiffTests
         }
 
         def reportSurvey(diags: Ls[mlscript.Diagnostic]): Unit = {
-          val strw = new FileWriter(file.baseName + ".simplesub")
-          val out = new java.io.PrintWriter(strw) {
+          val filewriter = new FileWriter(file.baseName + ".simplesub", true)
+          val out = new java.io.PrintWriter(filewriter) {
             override def println(): Unit = print('\n') // to avoid inserting CRLF on Windows
           }
           def output(str: Str) = out.println(str)
